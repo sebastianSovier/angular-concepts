@@ -6,6 +6,9 @@ import { MantenedorComponent } from './mantenedor/mantenedor.component';
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'mantenedor', component: MantenedorComponent },
+	{ path: '', pathMatch: 'full', redirectTo: '' },
+	// cambiar
+	{ path: '**', redirectTo: '/notfound' },
 ];
 
 @NgModule({

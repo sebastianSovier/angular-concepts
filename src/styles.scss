@@ -24,7 +24,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 .carta-mantenedor{
     width: 70%;
-    height: 80%;
+    height: 90%;
     margin-left: auto;
     margin-right: auto;
     margin-top: auto;
@@ -42,4 +42,7 @@ table {
   
   td, th {
     width: 25%;
+  }
+  .mat-horizontal-stepper-header {
+    pointer-events: none;
   }

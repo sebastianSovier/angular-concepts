@@ -1,7 +1,9 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
 import { LoadingPageService } from '../loading-page/loading-page.service';
 import { MantenedorService } from './mantenedor.service';
@@ -27,23 +29,38 @@ export class MantenedorComponent implements OnInit {
   selection = new SelectionModel<Paises>(true, []);
   @ViewChild(MatPaginator, { static: true })
   paginator!: MatPaginator;
-  
+  isLinear = false;
+  ingresarFormGroup= new FormGroup({});
+
   @ViewChild(MatSort, { static: true })
   sort!: MatSort;
-  constructor(private mantenedorService:MantenedorService,private loading: LoadingPageService,) { }
+  
+  constructor(private mantenedorService:MantenedorService,private loading: LoadingPageService,private _formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;
     this.ConsultarPaises();
     this.dataSource.paginator = this.paginator;
+    this.ingresarFormGroup = this._formBuilder.group({
+      nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
+        capital: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
+        region: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
+        poblacion: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]]
+    });
    
   }
+  get nombre() { return this.ingresarFormGroup.value.nombre }
+
+  get capital() { return this.ingresarFormGroup.value.capital; }
+  get region() { return this.ingresarFormGroup.value.region }
+
+  get poblacion() { return this.ingresarFormGroup.value.poblacion; }
+
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     
   }
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();

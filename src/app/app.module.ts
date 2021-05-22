@@ -24,6 +24,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import {MatStepperModule} from '@angular/material/stepper';
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,7 +51,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatTableModule,
     MatCheckboxModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatStepperModule
 
   ],
   providers: [
