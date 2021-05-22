@@ -120,6 +120,15 @@ export class MantenedorComponent implements OnInit {
       console.log(datos);
     });
   }
+  volverListaModifica() {
+    this.myStepper.previous();
+    this.myStepper.previous();
+    this.myStepper.reset();
+  }
+  volverListaIngresa() {
+    this.myStepper.previous();
+    this.myStepper.reset();
+  }
   IrIngresarPais() {
     this.myStepper.next();
   }

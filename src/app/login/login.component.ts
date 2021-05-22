@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    sessionStorage.clear();
     this.loading.cambiarestadoloading(false);
   }
 
@@ -47,7 +48,7 @@ export class LoginComponent implements OnInit {
         if(datos.Error !== undefined){
           sessionStorage.clear();
           this.loading.cambiarestadoloading(false);
-          this.openSnackBar("Credenciales Invalidas.","Reintente");
+          this.openSnackBar("Credenciales Inválidas.","Reintente");
         }else{
         if(datos.access_Token.length > 0){
           sessionStorage.setItem('token',datos.access_Token);

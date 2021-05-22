@@ -83,53 +83,53 @@
     </mat-step>
     <mat-step [stepControl]="ingresarFormGroup" label="Ingrese Pais">
       <form [formGroup]="ingresarFormGroup" (ngSubmit)="IngresarPais()">
-        <mat-form-field>
+        <mat-form-field style="width: 80%;">
           <mat-label>Nombre Pais</mat-label>
           <input matInput formControlName="nombre" placeholder="Chile" required>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field style="width: 80%;">
           <mat-label>Capital</mat-label>
           <input matInput formControlName="capital" placeholder="Santiago" required>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field style="width: 80%;">
           <mat-label>Region</mat-label>
           <input matInput formControlName="region" placeholder="América del Sur" required>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field style="width: 80%;"> 
           <mat-label>Población</mat-label>
           <input matInput formControlName="poblacion" placeholder="150000000" required>
         </mat-form-field>
         <div class="col-md-5 text-right" style="margin-top:5%;">
           <button mat-raised-button color="primary" [disabled]="!ingresarFormGroup.valid">Ingresar</button>
-          <button mat-raised-button color="accent" style="margin-left: 10%;">Volver</button>
+          <button mat-raised-button color="accent" type="button" (click)="volverListaIngresa();" style="margin-left: 10%;">Volver</button>
       </div>
       </form>
     </mat-step>
     <mat-step [stepControl]="modificarFormGroup" label="Modificar Pais">
       <form [formGroup]="modificarFormGroup" (ngSubmit)="ModificarPais()">
-        <mat-form-field class="invisible">
+        <mat-form-field class="invisible" style="width: 80%;">
           <mat-label>Pais Id</mat-label>
           <input matInput formControlName="pais_id" >
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field style="width: 80%;">
           <mat-label>Nombre Pais</mat-label>
           <input matInput formControlName="nombre" placeholder="Chile" required>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field style="width: 80%;">
           <mat-label>Capital</mat-label>
           <input matInput formControlName="capital" placeholder="Santiago" required>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field style="width: 80%;">
           <mat-label>Region</mat-label>
           <input matInput formControlName="region" placeholder="América del Sur" required>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field style="width: 80%;">
           <mat-label>Población</mat-label>
           <input matInput formControlName="poblacion" placeholder="150000000" required>
         </mat-form-field>
         <div class="col-md-5 text-right" style="margin-top:5%;">
           <button mat-raised-button color="primary" [disabled]="!modificarFormGroup.valid">Guardar Modificación</button>
-          <button mat-raised-button color="accent" style="margin-left: 10%;">Volver Atrás</button>
+          <button mat-raised-button color="accent" type="button" (click)="volverListaModifica();" style="margin-left: 10%;">Volver Atrás</button>
       </div>
       </form>
     </mat-step>
