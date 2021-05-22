@@ -1,1 +1,45 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%;width: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.carta-principal{
+    background: rgba(255, 255, 255, 0.767);
+    width: 98%;
+    height: 98%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    box-shadow: 0 2px 1px 2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
+}
+.carta-login{
+    width: 50%;
+    height: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    box-shadow: 2px 2px 2px 2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%)!important;
+}
+.carta-mantenedor{
+    width: 70%;
+    height: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    box-shadow: 2px 2px 2px 2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%)!important;
+}
+table {
+    width: 100%;
+  }
+  
+.mat-form-field {
+    font-size: 14px;
+    width: 30%;
+  }
+  
+  td, th {
+    width: 25%;
+  }

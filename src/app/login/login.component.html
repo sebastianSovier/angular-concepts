@@ -1,0 +1,50 @@
+<mat-card class="carta-login">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)">
+        <div class="example-container" style="color: black;text-align: center;margin-top: 8%;margin-bottom: 20%;">
+            <div>
+                <div>
+                    <mat-label style="font-size: 30px;">Login</mat-label>
+                </div>
+                <div style="margin-top: 6%;">
+
+                    <mat-form-field style="display: contents;" appearance="fill">
+                        <mat-label>Usuario</mat-label>
+                        <input matInput type="text" class="example-right-align" name="usuario" id="usuario"
+                            class="form-control" required minlength="5" formControlName="usuario" >
+                    </mat-form-field>
+                    <div *ngIf="!loginForm.valid" class="alert alert-danger">
+
+                        <div *ngIf="!loginForm.value.usuario">
+                            Name is required.
+                        </div>
+                        <div *ngIf="usuario.errors?.minlength">
+                            Name must be at least 4 characters long.
+                        </div>
+                        </div>
+                        <mat-form-field style="display: contents;" appearance="fill">
+                            <mat-label>Contraseña</mat-label>
+                            <input matInput [type]="hide ? 'password' : 'text'" name="contrasena" id="contrasena"
+                                class="form-control" required minlength="6" formControlName="contrasena">
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                        </mat-form-field>
+                        <div *ngIf="contrasena.invalid && (contrasena.dirty || contrasena.touched)" class="alert alert-danger">
+
+                            <div *ngIf="contrasena.errors?.required">
+                                Name is required.
+                            </div>
+                            <div *ngIf="contrasena.errors?.minlength">
+                                Name must be at least 4 characters long.
+                            </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="col-md-5 text-right" style="margin-top:5%;">
+                    <button mat-raised-button color="primary" [disabled]="!loginForm.valid">Ingresar</button>
+                    <button mat-raised-button color="accent" style="margin-left: 10%;">Salir</button>
+                </div>
+            </div>
+    </form>
+</mat-card>
