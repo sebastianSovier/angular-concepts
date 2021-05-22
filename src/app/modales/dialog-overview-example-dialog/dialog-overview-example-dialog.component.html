@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Confirmación de Eliminacion de Pais</h1>
+<div mat-dialog-content>
+  <p>¿Esta seguro que desea eliminar este pais?</p>
+</div>
+<div mat-dialog-actions>  
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Si</button>
+  <button mat-button (click)="onNoClick()">No</button>
+</div>

@@ -1,20 +1,26 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
 import { LoadingPageService } from '../loading-page/loading-page.service';
+import { DialogOverviewExampleDialogComponent } from '../modales/dialog-overview-example-dialog/dialog-overview-example-dialog.component';
 import { MantenedorService } from './mantenedor.service';
 
 
 export interface Paises {
-  position:number;
-  name: string;
+  pais_id: number;
+  nombre_pais: string;
   capital: string;
   region: string;
-  population: string;
+  poblacion: string;
+}
+export interface DialogData {
+  animal: string;
+  name: string;
 }
 
 @Component({
@@ -23,43 +29,59 @@ export interface Paises {
   styleUrls: ['./mantenedor.component.scss']
 })
 export class MantenedorComponent implements OnInit {
-  displayedColumns: string[] = ['select', 'name', 'capital', 'region', 'population'];
-  paisesData:any[] = [];
+  animal = '';
+  name = '';
+  displayedColumns: string[] = ['nombre_pais', 'capital', 'region', 'poblacion', 'acciones'];
+  paisesData: any[] = [];
   dataSource = new MatTableDataSource<Paises>(this.paisesData);
   selection = new SelectionModel<Paises>(true, []);
   @ViewChild(MatPaginator, { static: true })
   paginator!: MatPaginator;
   isLinear = false;
-  ingresarFormGroup= new FormGroup({});
-
+  tituloSecondStep = 'Ingrese Nuevo Pais';
+  ingresarFormGroup = new FormGroup({});
+  modificarFormGroup = new FormGroup({});
   @ViewChild(MatSort, { static: true })
   sort!: MatSort;
-  
-  constructor(private mantenedorService:MantenedorService,private loading: LoadingPageService,private _formBuilder: FormBuilder) { }
+  @ViewChild('stepper')
+  myStepper!: MatStepper;
+
+  constructor(public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;
     this.ConsultarPaises();
     this.dataSource.paginator = this.paginator;
     this.ingresarFormGroup = this._formBuilder.group({
-      nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
-        capital: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
-        region: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
-        poblacion: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]]
+      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+      capital: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]]
     });
-   
+    this.modificarFormGroup = this._formBuilder.group({
+      pais_id: [''],
+      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+      capital: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
+      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]]
+    });
+
   }
-  get nombre() { return this.ingresarFormGroup.value.nombre }
+  get Ingresanombre() { return this.ingresarFormGroup.value.nombre }
+  get Ingresacapital() { return this.ingresarFormGroup.value.capital; }
+  get Ingresaregion() { return this.ingresarFormGroup.value.region }
+  get Ingresapoblacion() { return this.ingresarFormGroup.value.poblacion; }
 
-  get capital() { return this.ingresarFormGroup.value.capital; }
-  get region() { return this.ingresarFormGroup.value.region }
-
-  get poblacion() { return this.ingresarFormGroup.value.poblacion; }
+  get ModificaIdPais() { return this.modificarFormGroup.value.pais_id; }
+  get Modificanombre() { return this.modificarFormGroup.value.nombre }
+  get Modificacapital() { return this.modificarFormGroup.value.capital; }
+  get Modificaregion() { return this.modificarFormGroup.value.region }
+  get Modificapoblacion() { return this.modificarFormGroup.value.poblacion; }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    
+
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -69,7 +91,7 @@ export class MantenedorComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  isAllSelected() {
+  /*isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
@@ -79,19 +101,18 @@ export class MantenedorComponent implements OnInit {
       this.selection.clear();
       return;
     }
-
+   
     this.selection.select(...this.dataSource.data);
   }
 
-  /** The label for the checkbox on the passed row */
   checkboxLabel(row?: Paises): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
-  }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.pais_id + 1}`;
+  }*/
 
-  ConsultarPaises(){
+  ConsultarPaises() {
     this.mantenedorService.ObtenerPaises().subscribe((datos) => {
       this.paisesData = datos;
       this.dataSource.data = this.paisesData;
@@ -99,9 +120,59 @@ export class MantenedorComponent implements OnInit {
       console.log(datos);
     });
   }
-  IngresarPais(){}
-  ModificarPais(){
-    console.log(this.selection.selected);
+  IrIngresarPais() {
+    this.myStepper.next();
   }
-  EliminarPais(){}
+  irAModificar(elemento: Paises) {
+    this.modificarFormGroup.setValue({ pais_id: elemento.pais_id, nombre: elemento.nombre_pais, capital: elemento.capital, region: elemento.region, poblacion: elemento.poblacion });
+    this.myStepper.next();
+    this.myStepper.next();
+  }
+  IngresarPais() {
+    if (this.ingresarFormGroup.valid) {
+      const objeto = { nombre_pais: this.Ingresanombre, capital: this.Ingresaregion, region: this.Ingresaregion, poblacion: this.Ingresapoblacion };
+      this.mantenedorService.IngresarPais(objeto).subscribe((datos) => {
+        this.paisesData = datos;
+        this.dataSource.data = this.paisesData;
+        this.loading.cambiarestadoloading(false);
+        this.myStepper.previous();
+      });
+    }
+  }
+  ModificarPais() {
+    if (this.modificarFormGroup.valid) {
+      const objeto = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion };
+      this.mantenedorService.ModificarPais(objeto).subscribe((datos) => {
+        this.paisesData = datos;
+        this.dataSource.data = this.paisesData;
+        this.loading.cambiarestadoloading(false);
+        this.myStepper.reset();
+        this.myStepper.previous();
+        this.myStepper.previous();
+
+      });
+    }
+  }
+  EliminarPais(element: any) {
+    if (element === undefined) {
+    } else {
+      this.mantenedorService.EliminarPais(element.element.pais_id.toString()).subscribe((datos) => {
+        this.paisesData = datos;
+        this.dataSource.data = this.paisesData;
+        this.loading.cambiarestadoloading(false);
+
+      });
+    }
+  }
+  openDialog(element: Paises): void {
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
+      width: '250px',
+      data: { element }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.EliminarPais(result);
+    });
+  }
+
 }

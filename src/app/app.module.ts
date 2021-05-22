@@ -1,4 +1,4 @@
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -8,7 +8,6 @@ import { MantenedorComponent } from './mantenedor/mantenedor.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import {MatCardModule} from '@angular/material/card';
-import { LoadingPageComponent } from './loading-page/loading-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LoadingPageModule } from './loading-page/loading-page.module';
 import { LoadingPageService } from './loading-page/loading-page.service';
@@ -25,11 +24,16 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import {MatStepperModule} from '@angular/material/stepper';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatDialogModule} from '@angular/material/dialog';
+import { DialogOverviewExampleDialogComponent } from './modales/dialog-overview-example-dialog/dialog-overview-example-dialog.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    MantenedorComponent
+    MantenedorComponent,
+    DialogOverviewExampleDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +56,9 @@ import {MatStepperModule} from '@angular/material/stepper';
     MatCheckboxModule,
     MatPaginatorModule,
     MatSortModule,
-    MatStepperModule
+    MatStepperModule,
+    MatSnackBarModule,
+    MatDialogModule
 
   ],
   providers: [
