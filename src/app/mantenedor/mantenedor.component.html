@@ -186,9 +186,17 @@
 
           </table>
           <mat-paginator style="margin-right: 10%;"[pageSizeOptions]="[5]" #paginatorCiudad></mat-paginator>
+          <div class="col-md-5 text-right" style="margin-top:2%;">
+            <button mat-raised-button color="primary"  type="button" (click)="IrIngresarCiudad();" >Ingresar Nueva Ciudad</button>
+          </div>
         </mat-step>
         <mat-step [stepControl]="ingresarCiudadFormGroup" label="Ingresar Ciudad">
           <form style="margin-top: 2% !important;" [formGroup]="ingresarCiudadFormGroup" (ngSubmit)="IngresarCiudad()">
+           
+            <mat-form-field class="invisible" style="width: 80%;">
+              <mat-label>Pais Id</mat-label>
+              <input matInput formControlName="pais_id">
+            </mat-form-field>
             <mat-form-field class="invisible" style="width: 80%;">
               <mat-label>Ciudad Id</mat-label>
               <input matInput formControlName="ciudad_id">
@@ -209,12 +217,18 @@
             <div class="col-md-5 text-right" style="margin-top:5%;">
               <button mat-raised-button color="primary" [disabled]="!ingresarCiudadFormGroup.valid">Ingresar
                 Ciudad</button>
+                <button mat-raised-button type="button" style="margin-left: 5%;" color="secondary" (click)="volverListaCiudadIngresa();">Volver Atrás</button>
             </div>
           </form>
         </mat-step>
         <mat-step [stepControl]="modificarCiudadFormGroup" label="Modificar Ciudad">
-          <form style="margin-top: 15% !important;" [formGroup]="modificarCiudadFormGroup"
+          <form style="margin-top: 2% !important;" [formGroup]="modificarCiudadFormGroup"
             (ngSubmit)="ModificarCiudad()">
+
+            <mat-form-field class="invisible" style="width: 80%;">
+              <mat-label>Pais Id</mat-label>
+              <input matInput formControlName="pais_id">
+            </mat-form-field>
             <mat-form-field class="invisible" style="width: 80%;">
               <mat-label>Ciudad Id</mat-label>
               <input matInput formControlName="ciudad_id">
@@ -235,6 +249,7 @@
             <div class="col-md-5 text-right" style="margin-top:5%;">
               <button mat-raised-button color="primary" [disabled]="!modificarCiudadFormGroup.valid">Modificar
                 Ciudad</button>
+                <button mat-raised-button type="button" style="margin-left: 5%;" color="secondary" (click)="volverListaCiudad();">Volver Atrás</button>
             </div>
           </form>
         </mat-step>

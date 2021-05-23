@@ -46,9 +46,9 @@ export class MantenedorService {
       const result: Observable<any> = this.http.put('https://localhost:44385/Countries/ModificarCiudad',ciudad ,{headers: headers});
       return result;
     }
-    EliminarCiudad(ciudad_id:string) {
+    EliminarCiudad(element:any) {
      const headers = new HttpHeaders({'Authorization':'Bearer '+sessionStorage.getItem('token')});
-      const result: Observable<any> = this.http.delete('https://localhost:44385/Countries/EliminarCiudad?ciudad_id='+ciudad_id,{headers: headers});
+      const result: Observable<any> = this.http.delete('https://localhost:44385/Countries/EliminarCiudad?ciudad_id='+element.ciudad_id+'&pais_id='+element.pais_id,{headers: headers});
       return result;
     }
 }
