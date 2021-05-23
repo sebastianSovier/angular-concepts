@@ -27,6 +27,7 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDialogModule} from '@angular/material/dialog';
 import { DialogOverviewExampleDialogComponent } from './modales/dialog-overview-example-dialog/dialog-overview-example-dialog.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { DialogOverviewExampleDialogComponent } from './modales/dialog-overview-
     MatSortModule,
     MatStepperModule,
     MatSnackBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatExpansionModule
 
   ],
   providers: [

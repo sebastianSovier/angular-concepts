@@ -10,64 +10,63 @@
           <input matInput (keyup)="applyFilter($event)" placeholder="Buscar registro" #input>
         </mat-form-field>
 
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
-
-          <!-- <!-- Checkbox Column -->
-          <!-- <ng-container matColumnDef="select">
-                    <th mat-header-cell *matHeaderCellDef>
-                        <mat-checkbox (change)="$event ? masterToggle() : null"
-                            [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
-                        </mat-checkbox>
-                    </th>
-                    <td mat-cell *matCellDef="let row">
-                        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                            [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
-                        </mat-checkbox>
-                    </td>
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows  matSort>
+         
+                <!-- Name Column -->
+                <ng-container matColumnDef="nombre_pais">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Pais </th>
+                  <td mat-cell *matCellDef="let element"> {{element.nombre_pais}} </td>
                 </ng-container>
-              -->
 
-          <!-- Name Column -->
-          <ng-container matColumnDef="nombre_pais">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Pais </th>
-            <td mat-cell *matCellDef="let element"> {{element.nombre_pais}} </td>
-          </ng-container>
+                <!-- Weight Column -->
+                <ng-container matColumnDef="capital">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Capital </th>
+                  <td mat-cell *matCellDef="let element"> {{element.capital}} </td>
+                </ng-container>
 
-          <!-- Weight Column -->
-          <ng-container matColumnDef="capital">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Capital </th>
-            <td mat-cell *matCellDef="let element"> {{element.capital}} </td>
-          </ng-container>
-
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="region">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Region </th>
-            <td mat-cell *matCellDef="let element"> {{element.region}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="poblacion">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Población</th>
-            <td mat-cell *matCellDef="let element"> {{element.poblacion}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="acciones">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
-            <td mat-cell *matCellDef="let element" style="padding: 4px!important;">
-              <button mat-mini-fab color="primary" aria-label="modificar pais"
-                (click)="irAModificar(element);">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-mini-fab color="secondary" aria-label="eliminar pais"
-                (click)="openDialog(element);">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="region">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Region </th>
+                  <td mat-cell *matCellDef="let element"> {{element.region}} </td>
+                </ng-container>
+              
+                <ng-container matColumnDef="poblacion">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Población</th>
+                  <td mat-cell *matCellDef="let element"> {{element.poblacion}} </td>
+                </ng-container>
+               
+                <ng-container matColumnDef="acciones">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
+                  <td mat-cell *matCellDef="let element" style="padding: 4px!important;">
+                    <button mat-mini-fab color="primary" aria-label="modificar pais" (click)="irAModificar(element);">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-mini-fab color="secondary" aria-label="eliminar pais" (click)="openDialog(element);">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="expandedDetail">
+                  <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                    <div class="example-element-detail"
+                         [@detailExpand]="element.ciudades == expandedElement ? 'expanded' : 'collapsed'">
+                         <div *ngFor="let ciudad of ciudades">
+                        <div class="example-element-ciudad_id" *ngIf="ciudad && ciudad.pais_id === element.pais_id"> {{ciudad.ciudad_id}} </div>
+                        <div class="example-element-nombre_ciudad" *ngIf="ciudad && ciudad.pais_id === element.pais_id"> {{ciudad.nombre_ciudad}} </div>
+                        <div class="example-element-poblacion" *ngIf="ciudad && ciudad.pais_id === element.pais_id"> {{ciudad.poblacion}} </div>
+                        <div class="example-element-region" *ngIf="ciudad && ciudad.pais_id === element.pais_id"> {{ciudad.region}} </div>
+                    </div>
+                      </div>
+                  </td>
+                </ng-container>
+              
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+          <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+              class="example-element-row"
+              [class.example-expanded-row]="expandedElement === element.ciudades"
+              (click)="expandedElement = expandedElement === element.ciudades ? null : element.ciudades;ConsultarCiudades(element);">
           </tr>
+          <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
           </tr>
@@ -75,8 +74,8 @@
         </table>
         <mat-paginator [pageSizeOptions]="[10]"></mat-paginator>
         <div class="col-md-5 text-right" style="margin-top:1%;margin-left: 2%;">
-          <button mat-raised-button style="margin-right: 2%;" color="primary"
-            (click)="IrIngresarPais();">Ingresar Nuevo Pais</button>
+          <button mat-raised-button style="margin-right: 2%;" color="primary" (click)="IrIngresarPais();">Ingresar Nuevo
+            Pais</button>
         </div>
 
       </form>
@@ -95,21 +94,22 @@
           <mat-label>Region</mat-label>
           <input matInput formControlName="region" placeholder="América del Sur" required>
         </mat-form-field>
-        <mat-form-field style="width: 80%;"> 
+        <mat-form-field style="width: 80%;">
           <mat-label>Población</mat-label>
           <input matInput formControlName="poblacion" placeholder="150000000" required>
         </mat-form-field>
         <div class="col-md-5 text-right" style="margin-top:5%;">
           <button mat-raised-button color="primary" [disabled]="!ingresarFormGroup.valid">Ingresar</button>
-          <button mat-raised-button color="accent" type="button" (click)="volverListaIngresa();" style="margin-left: 10%;">Volver</button>
-      </div>
+          <button mat-raised-button color="accent" type="button" (click)="volverListaIngresa();"
+            style="margin-left: 10%;">Volver</button>
+        </div>
       </form>
     </mat-step>
     <mat-step [stepControl]="modificarFormGroup" label="Modificar Pais">
       <form [formGroup]="modificarFormGroup" (ngSubmit)="ModificarPais()">
         <mat-form-field class="invisible" style="width: 80%;">
           <mat-label>Pais Id</mat-label>
-          <input matInput formControlName="pais_id" >
+          <input matInput formControlName="pais_id">
         </mat-form-field>
         <mat-form-field style="width: 80%;">
           <mat-label>Nombre Pais</mat-label>
@@ -129,10 +129,11 @@
         </mat-form-field>
         <div class="col-md-5 text-right" style="margin-top:5%;">
           <button mat-raised-button color="primary" [disabled]="!modificarFormGroup.valid">Guardar Modificación</button>
-          <button mat-raised-button color="accent" type="button" (click)="volverListaModifica();" style="margin-left: 10%;">Volver Atrás</button>
-      </div>
+          <button mat-raised-button color="accent" type="button" (click)="volverListaModifica();"
+            style="margin-left: 10%;">Volver Atrás</button>
+        </div>
       </form>
     </mat-step>
   </mat-horizontal-stepper>
- 
+
 </mat-card>

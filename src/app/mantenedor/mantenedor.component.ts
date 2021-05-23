@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -11,12 +12,21 @@ import { DialogOverviewExampleDialogComponent } from '../modales/dialog-overview
 import { MantenedorService } from './mantenedor.service';
 
 
-export interface Paises {
-  pais_id: number;
-  nombre_pais: string;
-  capital: string;
-  region: string;
-  poblacion: string;
+
+export class Ciudades {
+  pais_id!: number;
+  ciudad_id!: number;
+  nombre_ciudad!: string;
+  region!: string;
+  poblacion!: string;
+}
+export class Paises {
+  pais_id!: number;
+  nombre_pais!: string;
+  capital!: string;
+  region!: string;
+  poblacion!: string;
+  ciudades: Ciudades[] = [];
 }
 export interface DialogData {
   animal: string;
@@ -26,13 +36,21 @@ export interface DialogData {
 @Component({
   selector: 'app-mantenedor',
   templateUrl: './mantenedor.component.html',
-  styleUrls: ['./mantenedor.component.scss']
+  styleUrls: ['./mantenedor.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class MantenedorComponent implements OnInit {
+  expandedElement: Ciudades | null | undefined;
   animal = '';
   name = '';
   displayedColumns: string[] = ['nombre_pais', 'capital', 'region', 'poblacion', 'acciones'];
-  paisesData: any[] = [];
+  paisesData: Paises[] = [];
   dataSource = new MatTableDataSource<Paises>(this.paisesData);
   selection = new SelectionModel<Paises>(true, []);
   @ViewChild(MatPaginator, { static: true })
@@ -45,10 +63,13 @@ export class MantenedorComponent implements OnInit {
   sort!: MatSort;
   @ViewChild('stepper')
   myStepper!: MatStepper;
+  panelOpenState = false;
+  ciudades: Ciudades[] = [];
 
   constructor(public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
+    this.loading.cambiarestadoloading(true);
     this.dataSource.sort = this.sort;
     this.ConsultarPaises();
     this.dataSource.paginator = this.paginator;
@@ -91,26 +112,6 @@ export class MantenedorComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  /*isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-  masterToggle() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-   
-    this.selection.select(...this.dataSource.data);
-  }
-
-  checkboxLabel(row?: Paises): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.pais_id + 1}`;
-  }*/
 
   ConsultarPaises() {
     this.mantenedorService.ObtenerPaises().subscribe((datos) => {
@@ -120,14 +121,34 @@ export class MantenedorComponent implements OnInit {
       console.log(datos);
     });
   }
+  ConsultarCiudades(elemento: Paises) {
+    this.mantenedorService.ObtenerCiudades(elemento.pais_id.toString()).subscribe((datos) => {
+      this.ciudades = datos;
+     /* this.paisesData.forEach(element => {
+        for (let index = 0; index < ciudades.length; index++) {
+          const elementCiudad = ciudades[index];
+          if (element.pais_id === elementCiudad.pais_id) {
+            element.ciudades = ciudades
+          }
+        }*/
+
+    //  this.dataSource.data = this.paisesData;
+
+      console.log(datos);
+    });
+  }
   volverListaModifica() {
+    this.loading.cambiarestadoloading(true);
     this.myStepper.previous();
     this.myStepper.previous();
     this.myStepper.reset();
+    this.loading.cambiarestadoloading(false);
   }
   volverListaIngresa() {
+    this.loading.cambiarestadoloading(true);
     this.myStepper.previous();
     this.myStepper.reset();
+    this.loading.cambiarestadoloading(false);
   }
   IrIngresarPais() {
     this.myStepper.next();
@@ -138,42 +159,46 @@ export class MantenedorComponent implements OnInit {
     this.myStepper.next();
   }
   IngresarPais() {
+    this.loading.cambiarestadoloading(true);
     if (this.ingresarFormGroup.valid) {
       const objeto = { nombre_pais: this.Ingresanombre, capital: this.Ingresaregion, region: this.Ingresaregion, poblacion: this.Ingresapoblacion };
       this.mantenedorService.IngresarPais(objeto).subscribe((datos) => {
         this.paisesData = datos;
         this.dataSource.data = this.paisesData;
-        this.loading.cambiarestadoloading(false);
         this.myStepper.previous();
+        this.loading.cambiarestadoloading(false);
       });
+    } else {
+
     }
   }
   ModificarPais() {
+    this.loading.cambiarestadoloading(true);
     if (this.modificarFormGroup.valid) {
       const objeto = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion };
       this.mantenedorService.ModificarPais(objeto).subscribe((datos) => {
         this.paisesData = datos;
         this.dataSource.data = this.paisesData;
-        this.loading.cambiarestadoloading(false);
         this.myStepper.reset();
         this.myStepper.previous();
         this.myStepper.previous();
-
+        this.loading.cambiarestadoloading(false);
       });
     }
   }
   EliminarPais(element: any) {
     if (element === undefined) {
+      this.loading.cambiarestadoloading(false);
     } else {
       this.mantenedorService.EliminarPais(element.element.pais_id.toString()).subscribe((datos) => {
         this.paisesData = datos;
         this.dataSource.data = this.paisesData;
         this.loading.cambiarestadoloading(false);
-
       });
     }
   }
   openDialog(element: Paises): void {
+    this.loading.cambiarestadoloading(true);
     const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
       width: '250px',
       data: { element }
