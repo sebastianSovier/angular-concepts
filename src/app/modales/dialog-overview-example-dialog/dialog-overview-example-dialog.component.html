@@ -1,8 +1,8 @@
-<h1 mat-dialog-title>Confirmación de Eliminacion de Pais</h1>
+<h1 mat-dialog-title>Confirmación de Eliminacion {{titulo}}</h1>
 <div mat-dialog-content>
-  <p>¿Esta seguro que desea eliminar este pais?</p>
+  <p>¿Esta seguro que desea eliminar {{subtitulo}}?</p>
 </div>
 <div mat-dialog-actions>  
-  <button mat-button color="secondary" [mat-dialog-close]="data" cdkFocusInitial>Si</button>
+  <button mat-button color="secondary" [mat-dialog-close]="dataCiudad ? dataCiudad : dataPais" cdkFocusInitial>Si</button>
   <button mat-button  color="primary" (click)="onNoClick()">No</button>
 </div>

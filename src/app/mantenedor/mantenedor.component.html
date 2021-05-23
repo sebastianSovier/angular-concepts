@@ -10,65 +10,68 @@
           <input matInput (keyup)="applyFilter($event)" placeholder="Buscar registro" #input>
         </mat-form-field>
 
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows  matSort>
-         
-                <!-- Name Column -->
-                <ng-container matColumnDef="nombre_pais">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Pais </th>
-                  <td mat-cell *matCellDef="let element"> {{element.nombre_pais}} </td>
-                </ng-container>
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows matSort>
 
-                <!-- Weight Column -->
-                <ng-container matColumnDef="capital">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Capital </th>
-                  <td mat-cell *matCellDef="let element"> {{element.capital}} </td>
-                </ng-container>
+          <!-- Name Column -->
+          <ng-container matColumnDef="nombre_pais">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Pais </th>
+            <td mat-cell *matCellDef="let element"> {{element.nombre_pais}} </td>
+          </ng-container>
 
-                <!-- Symbol Column -->
-                <ng-container matColumnDef="region">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Region </th>
-                  <td mat-cell *matCellDef="let element"> {{element.region}} </td>
-                </ng-container>
-              
-                <ng-container matColumnDef="poblacion">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Población</th>
-                  <td mat-cell *matCellDef="let element"> {{element.poblacion}} </td>
-                </ng-container>
-               
-                <ng-container matColumnDef="acciones">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
-                  <td mat-cell *matCellDef="let element" style="padding: 4px!important;">
-                    <button mat-mini-fab color="primary" aria-label="modificar pais" (click)="irAModificar(element);">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-mini-fab color="secondary" aria-label="eliminar pais" (click)="openDialog(element);">
-                      <mat-icon>delete</mat-icon>
-                    </button>
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="expandedDetail">
-                  <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-                    <div class="example-element-detail"
-                         [@detailExpand]="element.ciudades == expandedElement ? 'expanded' : 'collapsed'">
-                         <div *ngFor="let ciudad of ciudades">
-                        <div class="example-element-ciudad_id" *ngIf="ciudad && ciudad.pais_id === element.pais_id"> {{ciudad.ciudad_id}} </div>
-                        <div class="example-element-nombre_ciudad" *ngIf="ciudad && ciudad.pais_id === element.pais_id"> {{ciudad.nombre_ciudad}} </div>
-                        <div class="example-element-poblacion" *ngIf="ciudad && ciudad.pais_id === element.pais_id"> {{ciudad.poblacion}} </div>
-                        <div class="example-element-region" *ngIf="ciudad && ciudad.pais_id === element.pais_id"> {{ciudad.region}} </div>
-                    </div>
-                      </div>
-                  </td>
-                </ng-container>
-              
+          <!-- Weight Column -->
+          <ng-container matColumnDef="capital">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Capital </th>
+            <td mat-cell *matCellDef="let element"> {{element.capital}} </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="region">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Region </th>
+            <td mat-cell *matCellDef="let element"> {{element.region}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="poblacion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Población</th>
+            <td mat-cell *matCellDef="let element"> {{element.poblacion}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
+            <td mat-cell *matCellDef="let element" style="padding: 4px!important;">
+              <button style="margin-left: -25%;" mat-mini-fab color="primary" aria-label="modificar pais" (click)="irAModificar(element);">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button style="margin-left: 10%;" mat-mini-fab color="secondary" aria-label="eliminar pais" (click)="openDialog(element);">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+              <div *ngFor="let ciudad of ciudades">
+                <div class="example-element-detail"
+                  [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                  <div class="invisible" *ngIf="ciudad && ciudad.pais_id === element.pais_id"> {{ciudad.ciudad_id}}
+                  </div>
+                  <div style="width: 5.5%;" *ngIf="ciudad && ciudad.pais_id === element.pais_id">
+                    {{ciudad.nombre_ciudad}} </div>
+                  <div style="margin-left: 16%;width: 4%;" *ngIf="ciudad && ciudad.pais_id === element.pais_id">
+                    {{ciudad.poblacion}} </div>
+                  <div style="margin-left: 20%;width: 9%;" *ngIf="ciudad && ciudad.pais_id === element.pais_id">
+                    {{ciudad.region}} </div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let element; columns: displayedColumns;"
-              class="example-element-row"
-              [class.example-expanded-row]="expandedElement === element.ciudades"
-              (click)="expandedElement = expandedElement === element.ciudades ? null : element.ciudades;ConsultarCiudades(element);">
+          <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+            [class.example-expanded-row]="expandedElement === element"
+            (click)="expandedElement = expandedElement === element ? null : element;ConsultarCiudades(element);">
           </tr>
           <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
           <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            <td class="mat-cell" colspan="4">No existen registros para este filtro "{{input.value}}"</td>
           </tr>
 
         </table>
@@ -106,6 +109,7 @@
       </form>
     </mat-step>
     <mat-step [stepControl]="modificarFormGroup" label="Modificar Pais">
+      <ng-template matStepLabel>Modificar Pais</ng-template>
       <form [formGroup]="modificarFormGroup" (ngSubmit)="ModificarPais()">
         <mat-form-field class="invisible" style="width: 80%;">
           <mat-label>Pais Id</mat-label>
@@ -127,12 +131,114 @@
           <mat-label>Población</mat-label>
           <input matInput formControlName="poblacion" placeholder="150000000" required>
         </mat-form-field>
-        <div class="col-md-5 text-right" style="margin-top:5%;">
-          <button mat-raised-button color="primary" [disabled]="!modificarFormGroup.valid">Guardar Modificación</button>
+        <div class="col-md-5 text-right" style="margin-top:1%;">
+          <button mat-raised-button color="primary" [disabled]="!modificarFormGroup.valid">Guardar Modificación
+            Pais</button>
           <button mat-raised-button color="accent" type="button" (click)="volverListaModifica();"
             style="margin-left: 10%;">Volver Atrás</button>
         </div>
       </form>
+      <mat-horizontal-stepper style="margin-top:1%;" [linear]="isLinearCiudad" #stepperCiudad>
+        <mat-step completed="false">
+          <ng-template matStepLabel>Tabla Ciudades</ng-template>
+
+          <mat-form-field>
+            <mat-label>Buscador</mat-label>
+            <input matInput (keyup)="applyFilterCiudad($event)" placeholder="Buscar ciudad" #inputCiudad>
+          </mat-form-field>
+
+          <table style="width: 80%;margin-left: 10%;" mat-table [dataSource]="dataSourceCiudad" class="mat-elevation-z8" matSort>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="nombre_ciudad">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Ciudad </th>
+              <td mat-cell *matCellDef="let element"> {{element.nombre_ciudad}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="region">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Region </th>
+              <td mat-cell *matCellDef="let element"> {{element.region}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="poblacion">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header > Población</th>
+              <td mat-cell *matCellDef="let element"> {{element.poblacion}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
+              <td mat-cell *matCellDef="let element" style="padding: 4px!important;">
+                <button style="margin-left: -10%;" mat-mini-fab color="primary" aria-label="modificar Ciudad" (click)="irAModificarCiudad(element);">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button style="margin-left: 5%;" mat-mini-fab color="secondary" aria-label="eliminar Ciudad" (click)="openDialogCiudad(element);">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsCiudad"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsCiudad;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No existen registros para este filtro "{{input.value}}"</td>
+            </tr>
+
+          </table>
+          <mat-paginator style="margin-right: 10%;"[pageSizeOptions]="[5]" #paginatorCiudad></mat-paginator>
+        </mat-step>
+        <mat-step [stepControl]="ingresarCiudadFormGroup" label="Ingresar Ciudad">
+          <form style="margin-top: 2% !important;" [formGroup]="ingresarCiudadFormGroup" (ngSubmit)="IngresarCiudad()">
+            <mat-form-field class="invisible" style="width: 80%;">
+              <mat-label>Ciudad Id</mat-label>
+              <input matInput formControlName="ciudad_id">
+            </mat-form-field>
+            <mat-form-field style="width: 80%;">
+              <mat-label>Nombre Ciudad</mat-label>
+              <input matInput formControlName="nombre_ciudad" placeholder="Santiago" required>
+            </mat-form-field>
+
+            <mat-form-field style="width: 80%;">
+              <mat-label>Region Perteneciente</mat-label>
+              <input matInput formControlName="region" placeholder="Region metropolitana" required>
+            </mat-form-field>
+            <mat-form-field style="width: 80%;">
+              <mat-label>Población Ciudad</mat-label>
+              <input matInput formControlName="poblacion" placeholder="150000000" required>
+            </mat-form-field>
+            <div class="col-md-5 text-right" style="margin-top:5%;">
+              <button mat-raised-button color="primary" [disabled]="!ingresarCiudadFormGroup.valid">Ingresar
+                Ciudad</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="modificarCiudadFormGroup" label="Modificar Ciudad">
+          <form style="margin-top: 15% !important;" [formGroup]="modificarCiudadFormGroup"
+            (ngSubmit)="ModificarCiudad()">
+            <mat-form-field class="invisible" style="width: 80%;">
+              <mat-label>Ciudad Id</mat-label>
+              <input matInput formControlName="ciudad_id">
+            </mat-form-field>
+            <mat-form-field style="width: 80%;">
+              <mat-label>Nombre Ciudad</mat-label>
+              <input matInput formControlName="nombre_ciudad" placeholder="Santiago" required>
+            </mat-form-field>
+
+            <mat-form-field style="width: 80%;">
+              <mat-label>Region Perteneciente</mat-label>
+              <input matInput formControlName="region" placeholder="Region metropolitana" required>
+            </mat-form-field>
+            <mat-form-field style="width: 80%;">
+              <mat-label>Población Ciudad</mat-label>
+              <input matInput formControlName="poblacion" placeholder="150000000" required>
+            </mat-form-field>
+            <div class="col-md-5 text-right" style="margin-top:5%;">
+              <button mat-raised-button color="primary" [disabled]="!modificarCiudadFormGroup.valid">Modificar
+                Ciudad</button>
+            </div>
+          </form>
+        </mat-step>
+      </mat-horizontal-stepper>
     </mat-step>
   </mat-horizontal-stepper>
 

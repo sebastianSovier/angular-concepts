@@ -24,7 +24,6 @@ export class LoginComponent implements OnInit {
 
       }
     );
-
   }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action);
@@ -39,6 +38,10 @@ export class LoginComponent implements OnInit {
 
   get contrasena() { return this.loginForm.value.contrasena; }
 
+  isValidInput(fieldName: string | number): boolean {
+    return this.loginForm.controls[fieldName].invalid &&
+      (this.loginForm.controls[fieldName].dirty || this.loginForm.controls[fieldName].touched);
+}
 
   onSubmit(f: FormGroup) {
     if (f.valid) {

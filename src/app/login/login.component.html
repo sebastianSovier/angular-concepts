@@ -12,13 +12,13 @@
                         <input matInput type="text" class="example-right-align" name="usuario" id="usuario"
                             class="form-control" required minlength="5" formControlName="usuario" >
                     </mat-form-field>
-                    <div *ngIf="!loginForm.valid" class="alert alert-danger">
+                    <div *ngIf="isValidInput('usuario')" class="alert alert-danger">
 
-                        <div *ngIf="!loginForm.value.usuario">
-                            Name is required.
+                        <div *ngIf="loginForm.controls['usuario'].errors?.required">
+                            Ingrese su Usuario.
                         </div>
-                        <div *ngIf="usuario.errors?.minlength">
-                            Name must be at least 4 characters long.
+                        <div *ngIf="loginForm.controls['usuario'].errors?.minlength">
+                            Usuario debe ser mayor de 4 letras.
                         </div>
                         </div>
                         <mat-form-field style="display: contents;" appearance="fill">
@@ -30,13 +30,13 @@
                                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                             </button>
                         </mat-form-field>
-                        <div *ngIf="contrasena.invalid && (contrasena.dirty || contrasena.touched)" class="alert alert-danger">
+                        <div *ngIf="isValidInput('contrasena')" class="alert alert-danger">
 
-                            <div *ngIf="contrasena.errors?.required">
-                                Name is required.
+                            <div *ngIf="loginForm.controls['contrasena'].errors?.required">
+                                Ingrese Password.
                             </div>
-                            <div *ngIf="contrasena.errors?.minlength">
-                                Name must be at least 4 characters long.
+                            <div *ngIf="loginForm.controls['contrasena'].errors?.minlength">
+                                Password debe ser mayor de 4 letras.
                             </div>
                             </div>
                     </div>
