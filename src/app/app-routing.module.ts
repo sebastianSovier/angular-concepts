@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'mantenedor', component: MantenedorComponent },
 	{ path: '', pathMatch: 'full', redirectTo: '' },
 	// cambiar
-	{ path: '**', redirectTo: '/notfound' },
+	{ path: '**', redirectTo: '' },
 ];
 
 @NgModule({

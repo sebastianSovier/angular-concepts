@@ -1,7 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%;width: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; overflow-y: hidden; overflow-x: hidden; }
+
 
 .carta-principal{
     background: rgba(255, 255, 255, 0.767);
@@ -13,18 +14,30 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     margin-bottom: auto;
     box-shadow: 0 2px 1px 2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
 }
+
+
+
 .carta-login{
     width: 50%;
-    height: 50%;
+    height: 52%;
     margin-left: auto;
     margin-right: auto;
     margin-top: 10%;
     margin-bottom: 10%;
     box-shadow: 2px 2px 2px 2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%)!important;
 }
+.carta-crearusuario{
+  width: 70%;
+  height: 72%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1%;
+  margin-bottom: 2%;
+  box-shadow: 2px 2px 2px 2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%)!important;
+}
 .carta-mantenedor{
     width: 90%;
-    height: 95%;
+    height: 88%;
     margin-left: auto;
     margin-right: auto;
     margin-top: auto;
@@ -49,4 +62,33 @@ table {
 .mat-snack-bar-container{
   background:firebrick!important;
   color: white!important;
+}
+
+.example-container {
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  
+  width: 102%;
+  height: 100%;
+ // border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.example-sidenav-content {
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-sidenav {
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  width: 12%;
+  padding: 10px;
 }

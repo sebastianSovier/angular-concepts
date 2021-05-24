@@ -185,7 +185,7 @@
             </tr>
 
           </table>
-          <mat-paginator style="margin-right: 10%;"[pageSizeOptions]="[5]" #paginatorCiudad></mat-paginator>
+          <mat-paginator style="margin-right: 10%;"[pageSizeOptions]="[3]" #paginatorCiudad></mat-paginator>
           <div class="col-md-5 text-right" style="margin-top:2%;">
             <button mat-raised-button color="primary"  type="button" (click)="IrIngresarCiudad();" >Ingresar Nueva Ciudad</button>
           </div>
@@ -217,7 +217,7 @@
             <div class="col-md-5 text-right" style="margin-top:5%;">
               <button mat-raised-button color="primary" [disabled]="!ingresarCiudadFormGroup.valid">Ingresar
                 Ciudad</button>
-                <button mat-raised-button type="button" style="margin-left: 5%;" color="secondary" (click)="volverListaCiudadIngresa();">Volver Atrás</button>
+                <button mat-raised-button type="button" style="margin-left: 5%;" color="accent" (click)="volverListaCiudadIngresa();">Volver Atrás</button>
             </div>
           </form>
         </mat-step>

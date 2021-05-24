@@ -28,31 +28,32 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDialogModule} from '@angular/material/dialog';
 import { DialogOverviewExampleDialogComponent } from './modales/dialog-overview-example-dialog/dialog-overview-example-dialog.component';
 import {MatExpansionModule} from '@angular/material/expansion';
-
+import {MatSidenavModule} from '@angular/material/sidenav';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     MantenedorComponent,
-    DialogOverviewExampleDialogComponent
+    DialogOverviewExampleDialogComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    LoadingPageModule,
+//componenetes angular material
     MatSliderModule,
     MatCardModule,
-    LoadingPageModule,
     MatToolbarModule,
     MatButtonModule,
     MatMenuModule,
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule,
-    ReactiveFormsModule,
-    CommonModule,
     MatTableModule,
     MatCheckboxModule,
     MatPaginatorModule,
@@ -60,7 +61,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatStepperModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSidenavModule
 
   ],
   providers: [

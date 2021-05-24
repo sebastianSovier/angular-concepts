@@ -8,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { LoadingPageService } from '../loading-page/loading-page.service';
 import { DialogOverviewExampleDialogComponent } from '../modales/dialog-overview-example-dialog/dialog-overview-example-dialog.component';
 import { MantenedorService } from './mantenedor.service';
@@ -73,9 +74,12 @@ export class MantenedorComponent implements OnInit {
   ingresarCiudadFormGroup = new FormGroup({});
   pais_id_cache = 0;
 
-  constructor(public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: FormBuilder) { }
+  constructor(private route:Router,public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
+    if(sessionStorage.length === 0 ||sessionStorage.getItem('token') === undefined){
+      this.route.navigateByUrl('');
+    }
     this.loading.cambiarestadoloading(true);
     this.dataSource.sort = this.sort;
     this.dataSourceCiudad.sort = this.sortCiudades
@@ -184,7 +188,7 @@ export class MantenedorComponent implements OnInit {
     this.ConsultarPaises();
   }
   volverListaIngresa() {
-    this.loading.cambiarestadoloading(true);
+    this.loading.cambiarestadoloading(false);
     this.myStepper.previous();
     this.myStepper.reset();
    

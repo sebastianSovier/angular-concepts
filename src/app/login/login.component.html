@@ -1,16 +1,16 @@
-<mat-card class="carta-login">
+<mat-card class="carta-login" *ngIf="login; else crearUsuario ">
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)">
-        <div class="example-container" style="color: black;text-align: center;margin-top: 8%;margin-bottom: 20%;">
-            <div>
+        <div class="example-container" style="color: black;text-align: center;margin-top: 4%;margin-bottom: 20%;">
+            <div style="margin-right: 2%;">
                 <div>
                     <mat-label style="font-size: 30px;">Login</mat-label>
                 </div>
-                <div style="margin-top: 6%;">
+                <div style="margin-top: 2%;">
 
                     <mat-form-field style="display: contents;" appearance="fill">
                         <mat-label>Usuario</mat-label>
                         <input matInput type="text" class="example-right-align" name="usuario" id="usuario"
-                            class="form-control" required minlength="5" formControlName="usuario" >
+                            class="form-control" required minlength="5" formControlName="usuario">
                     </mat-form-field>
                     <div *ngIf="isValidInput('usuario')" class="alert alert-danger">
 
@@ -18,33 +18,92 @@
                             Ingrese su Usuario.
                         </div>
                         <div *ngIf="loginForm.controls['usuario'].errors?.minlength">
-                            Usuario debe ser mayor de 4 letras.
+                            Usuario debe ser mayor de 5 caracteres.
                         </div>
-                        </div>
-                        <mat-form-field style="display: contents;" appearance="fill">
-                            <mat-label>Contraseña</mat-label>
-                            <input matInput [type]="hide ? 'password' : 'text'" name="contrasena" id="contrasena"
-                                class="form-control" required minlength="6" formControlName="contrasena">
-                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-                                [attr.aria-pressed]="hide">
-                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                            </button>
-                        </mat-form-field>
-                        <div *ngIf="isValidInput('contrasena')" class="alert alert-danger">
+                    </div>
+                    <mat-form-field style="display: contents;" appearance="fill">
+                        <mat-label>Contraseña</mat-label>
+                        <input matInput [type]="hide ? 'password' : 'text'" name="contrasena" id="contrasena"
+                            class="form-control" required minlength="6" formControlName="contrasena">
+                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                            [attr.aria-pressed]="hide">
+                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <div *ngIf="isValidInput('contrasena')" class="alert alert-danger">
 
-                            <div *ngIf="loginForm.controls['contrasena'].errors?.required">
-                                Ingrese Password.
-                            </div>
-                            <div *ngIf="loginForm.controls['contrasena'].errors?.minlength">
-                                Password debe ser mayor de 4 letras.
-                            </div>
-                            </div>
+                        <div *ngIf="loginForm.controls['contrasena'].errors?.required">
+                            Ingrese Password.
+                        </div>
+                        <div *ngIf="loginForm.controls['contrasena'].errors?.minlength">
+                            Password debe ser mayor de 5 caracteres.
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-5 text-right" style="margin-top:5%;">
-                    <button mat-raised-button color="primary" [disabled]="!loginForm.valid">Ingresar</button>
-                    <button mat-raised-button color="accent" style="margin-left: 10%;">Salir</button>
-                </div>
             </div>
+            <div>
+                <a target="_blank" (click)="nuevoUsuario();" style="color: white;margin-right: 15%;">Crear cuenta</a>
+                <a target="_blank" style="color: white;">Recuperar cuenta</a>
+            </div>
+            <div class="col-md-5 text-right" style="margin-top:5%;">
+                <button mat-raised-button color="primary" [disabled]="!loginForm.valid">Ingresar</button>
+                <button mat-raised-button color="accent" type="button" style="margin-left: 10%;">Salir</button>
+            </div>
+        </div>
     </form>
 </mat-card>
+<ng-template #crearUsuario>
+    <mat-card class="carta-crearusuario">
+        <form [formGroup]="crearCuentaForm" (ngSubmit)="CrearUsuario(crearCuentaForm)">
+            <div class="example-container" style="color: black;text-align: center;margin-top: 6%;margin-bottom: 20%;">
+                <div style="margin-right: 2%;">
+                    <div>
+                        <mat-label style="font-size: 30px;">Crear Nuevo Usuario</mat-label>
+                    </div>
+                    <div style="margin-top: 2%;">
+
+                        <mat-form-field style="display: contents;" appearance="fill">
+                            <mat-label>Usuario</mat-label>
+                            <input matInput type="text" class="example-right-align" name="usuario" id="usuario"
+                                class="form-control" required minlength="5" formControlName="usuario">
+                        </mat-form-field>
+                        <mat-form-field style="display: contents;" appearance="fill">
+                            <mat-label>Nombre Completo</mat-label>
+                            <input matInput type="text" class="example-right-align" name="nombre_completo"
+                                id="nombre_completo" class="form-control" required minlength="5"
+                                formControlName="nombre_completo">
+                        </mat-form-field>
+
+                        <mat-form-field style="display: contents;" appearance="fill">
+                            <mat-label>Correo</mat-label>
+                            <input matInput type="email" class="example-right-align" name="correo" id="correo"
+                                class="form-control" required minlength="5" formControlName="correo">
+                        </mat-form-field>
+
+                        <mat-form-field style="display: contents;" appearance="fill">
+                            <mat-label>Contraseña</mat-label>
+                            <input matInput type="password" name="contrasena" id="contrasena" class="form-control"
+                                required minlength="6" formControlName="contrasena">
+
+                        </mat-form-field>
+                       
+                        <mat-form-field style="display: contents;" appearance="fill">
+                            <mat-label>Repita Contraseña</mat-label>
+                            <input matInput type="password" (keyup)="comparaContrasenas();" name="contrasenaRepetir" id="contrasenaRepetir"
+                                class="form-control" required minlength="6" formControlName="contrasenaRepetir">
+
+                        </mat-form-field>
+                        <div *ngIf="isValidInputCrear('contrasenaRepetir')" class="alert alert-danger">
+                        <div *ngIf="crearCuentaForm.controls['contrasenaRepetir'].errors">Contraseñas deben ser iguales.</div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-md-5 text-right" style="margin-top:5%;">
+                    <button mat-raised-button color="primary" [disabled]="!crearCuentaForm.valid && !contrasenaIguales">Crear Usuario</button>
+                    <button mat-raised-button color="accent" type="button" (click)="volver();"
+                        style="margin-left: 10%;">Volver</button>
+                </div>
+            </div>
+        </form>
+    </mat-card>
+</ng-template>
