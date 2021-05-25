@@ -1,4 +1,5 @@
-<mat-card class="carta-mantenedor">
+<mat-card class="carta-mantenedor" >
+  <div *ngIf="!consultaCiudades">
   <mat-horizontal-stepper [linear]="isLinear" #stepper>
     <mat-step completed="false">
       <form>
@@ -38,11 +39,15 @@
           <ng-container matColumnDef="acciones">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
             <td mat-cell *matCellDef="let element" style="padding: 4px!important;">
-              <button style="margin-left: -25%;" mat-mini-fab color="primary" aria-label="modificar pais"
+              <button style="margin-left: -61%;" mat-mini-fab color="primary" aria-label="ver ciudades"
+                (click)="iraVerCiudades(element);">
+                <mat-icon>remove_red_eye</mat-icon>
+              </button>
+              <button style="margin-left: 8%;" mat-mini-fab color="primary" aria-label="modificar pais"
                 (click)="irAModificar(element);">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button style="margin-left: 10%;" mat-mini-fab color="secondary" aria-label="eliminar pais"
+              <button style="margin-left: 9%;" mat-mini-fab color="secondary" aria-label="eliminar pais"
                 (click)="openDialog(element);">
                 <mat-icon>delete</mat-icon>
               </button>
@@ -50,26 +55,13 @@
           </ng-container>
           <ng-container matColumnDef="expandedDetail">
             <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-              <div *ngFor="let ciudad of ciudades">
-                <div class="example-element-detail"
-                  [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                  <div class="invisible" *ngIf="ciudad && ciudad.pais_id === element.pais_id"> {{ciudad.ciudad_id}}
-                  </div>
-                  <div style="width: 5.5%;" *ngIf="ciudad && ciudad.pais_id === element.pais_id">
-                    {{ciudad.nombre_ciudad}} </div>
-                  <div style="margin-left: 16%;width: 4%;" *ngIf="ciudad && ciudad.pais_id === element.pais_id">
-                    {{ciudad.poblacion}} </div>
-                  <div style="margin-left: 20%;width: 9%;" *ngIf="ciudad && ciudad.pais_id === element.pais_id">
-                    {{ciudad.region}} </div>
-                </div>
-              </div>
             </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
             [class.example-expanded-row]="expandedElement === element"
-            (click)="expandedElement = expandedElement === element ? null : element;ConsultarCiudades(element);">
+            (click)="expandedElement = expandedElement === element ? null : element;">
           </tr>
           <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
           <tr class="mat-row" *matNoDataRow>
@@ -198,7 +190,7 @@
           </div>
         </mat-step>
         <mat-step [stepControl]="ingresarCiudadFormGroup" label="Ingresar Ciudad">
-          <form style="margin-top: 2% !important;" [formGroup]="ingresarCiudadFormGroup" (ngSubmit)="IngresarCiudad()">
+          <form style="margin-top: 2% !important;width: 50%;" [formGroup]="ingresarCiudadFormGroup" (ngSubmit)="IngresarCiudad()">
 
             <mat-form-field class="invisible" style="width: 80%;">
               <mat-label>Pais Id</mat-label>
@@ -221,7 +213,13 @@
               <mat-label>Población Ciudad</mat-label>
               <input matInput formControlName="poblacion" placeholder="150000000" required>
             </mat-form-field>
-            <div class="col-md-5 text-right" style="margin-top:5%;">
+
+            <div class="google-maps-desing-ingresa">
+              <agm-map [latitude]="lat" [longitude]="lng" (mapClick)="onChoseLocation($event)">
+                <agm-marker *ngIf="locationChose" [latitude]="lat" [longitude]="lng"></agm-marker>
+              </agm-map>
+            </div>
+            <div class="col-md-5 text-right" style="margin-top:2%;">
               <button mat-raised-button color="primary" [disabled]="!ingresarCiudadFormGroup.valid">Ingresar
                 Ciudad</button>
               <button mat-raised-button type="button" style="margin-left: 5%;" color="accent"
@@ -230,7 +228,7 @@
           </form>
         </mat-step>
         <mat-step [stepControl]="modificarCiudadFormGroup" label="Modificar Ciudad">
-          <form style="margin-top: 2% !important;" [formGroup]="modificarCiudadFormGroup"
+          <form style="margin-top: 2% !important;width: 50%;" [formGroup]="modificarCiudadFormGroup"
             (ngSubmit)="ModificarCiudad()">
 
             <mat-form-field class="invisible" style="width: 80%;">
@@ -254,14 +252,15 @@
               <mat-label>Población Ciudad</mat-label>
               <input matInput formControlName="poblacion" placeholder="150000000" required>
             </mat-form-field>
+            <div class="google-maps-desing">
             <agm-map [latitude]="lat" [longitude]="lng" (mapClick)="onChoseLocation($event)">
               <agm-marker *ngIf="locationChose" [latitude]="lat" [longitude]="lng"></agm-marker>
             </agm-map>
-
-            <div class="col-md-5 text-right" style="margin-top:5%;">
+          </div>
+            <div class="col-md-5 text-right" style="margin-top: 5%;">
               <button mat-raised-button color="primary" [disabled]="!modificarCiudadFormGroup.valid">Modificar
                 Ciudad</button>
-              <button mat-raised-button type="button" style="margin-left: 5%;" color="secondary"
+              <button mat-raised-button type="button" style="margin-left: 5%;" color="accent"
                 (click)="volverListaCiudad();">Volver Atrás</button>
             </div>
           </form>
@@ -269,5 +268,60 @@
       </mat-horizontal-stepper>
     </mat-step>
   </mat-horizontal-stepper>
+</div>
+  <div *ngIf="consultaCiudades">
 
+    <mat-form-field>
+      <mat-label>Buscador</mat-label>
+      <input matInput (keyup)="applyFilterCiudad($event)" placeholder="Buscar ciudad" #inputCiudadLista>
+    </mat-form-field>
+
+    <table style="width: 80%;margin-left: 10%;" mat-table [dataSource]="dataSourceCiudad" class="mat-elevation-z8"
+      matSort>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="nombre_ciudad">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Ciudad </th>
+        <td mat-cell *matCellDef="let element"> {{element.nombre_ciudad}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="region">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Region </th>
+        <td mat-cell *matCellDef="let element"> {{element.region}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="poblacion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Población</th>
+        <td mat-cell *matCellDef="let element"> {{element.poblacion}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
+        <td mat-cell *matCellDef="let element" style="padding: 4px!important;">
+          <button style="margin-left: -10%;" mat-mini-fab color="primary" aria-label="modificar Ciudad"
+            (click)="irAModificarCiudad(element);">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button style="margin-left: 5%;" mat-mini-fab color="secondary" aria-label="eliminar Ciudad"
+            (click)="openDialogCiudad(element);">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsCiudad"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsCiudad;"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No existen registros para este filtro.</td>
+      </tr>
+
+    </table>
+    <mat-paginator style="margin-right: 10%;" [pageSizeOptions]="[10]" #paginatorCiudad></mat-paginator>
+    <div class="col-md-5 text-right" style="margin-top:2%;">
+      <button mat-raised-button type="button" style="margin-left: 5%;" color="accent"
+                (click)="consultaCiudades = false">Volver Atrás</button>
+  </div>
+  </div>
 </mat-card>

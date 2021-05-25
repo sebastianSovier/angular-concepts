@@ -1,6 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionModel } from '@angular/cdk/collections';
-import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,11 +8,9 @@ import { MatSort } from '@angular/material/sort';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
 import { LoadingPageService } from '../loading-page/loading-page.service';
 import { DialogOverviewExampleDialogComponent } from '../modales/dialog-overview-example-dialog/dialog-overview-example-dialog.component';
 import { MantenedorService } from './mantenedor.service';
-import { catchError, map } from 'rxjs/operators';
 
 
 export class Ciudades {
@@ -22,6 +19,8 @@ export class Ciudades {
   nombre_ciudad!: string;
   region!: string;
   poblacion!: string;
+  latitud!: string;
+  longitud!: string;
 }
 export class Paises {
   pais_id!: number;
@@ -52,18 +51,18 @@ export class MantenedorComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<Paises>(this.paisesData);
   dataSourceCiudad = new MatTableDataSource<Ciudades>(this.CiudadesData);
   selection = new SelectionModel<Paises>(true, []);
-  @ViewChild(MatPaginator, { static: true })
+  @ViewChild(MatPaginator, { static: false })
   paginator!: MatPaginator;
-  @ViewChild('paginatorCiudad', { static: true })
+  @ViewChild('paginatorCiudad', { static: false })
   paginatorCiudades!: MatPaginator;
   isLinear = false;
   isLinearCiudad = false;
   tituloSecondStep = 'Ingrese Nuevo Pais';
   ingresarFormGroup = new FormGroup({});
   modificarFormGroup = new FormGroup({});
-  @ViewChild(MatSort, { static: true })
+  @ViewChild(MatSort, { static: false })
   sort!: MatSort;
-  @ViewChild('matSortCiudad', { static: true })
+  @ViewChild('matSortCiudad', { static: false })
   sortCiudades!: MatSort;
   @ViewChild('stepper')
   myStepper!: MatStepper;
@@ -75,15 +74,16 @@ export class MantenedorComponent implements OnInit, AfterViewInit {
   ingresarCiudadFormGroup = new FormGroup({});
 
   pais_id_cache = 0;
-  lat = 22.4064172;
-  lng = 69.0750171;
+  lat = -33.52413039023918;
+  lng = -70.82132887007117
   locationChose = false;
+  consultaCiudades = false;
 
 
   constructor(private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: FormBuilder) {
   }
 
-  onChoseLocation($event:any){
+  onChoseLocation($event: any) {
     this.lat = $event.coords.lat;
     this.lng = $event.coords.lng;
     this.locationChose = true;
@@ -210,27 +210,43 @@ export class MantenedorComponent implements OnInit, AfterViewInit {
     this.myStepper.next();
   }
   volverListaCiudad() {
+    this.resetearCoordenadas();
     this.myStepperCiudades.previous();
     this.myStepperCiudades.previous();
     this.myStepperCiudades.reset();
   }
   volverListaCiudadIngresa() {
+    this.resetearCoordenadas();
     this.myStepperCiudades.previous();
     this.myStepperCiudades.reset();
   }
-
+  resetearCoordenadas() {
+    this.consultaCiudades = false;
+    this.lat = -33.52413039023918;
+    this.lng = -70.82132887007117
+    this.locationChose = false;
+  }
   irAModificar(elemento: Paises) {
     this.ConsultarCiudades(elemento);
     this.modificarFormGroup.setValue({ pais_id: elemento.pais_id, nombre: elemento.nombre_pais, capital: elemento.capital, region: elemento.region, poblacion: elemento.poblacion });
     this.myStepper.next();
     this.myStepper.next();
   }
+  iraVerCiudades(elemento: Paises){
+    this.consultaCiudades = true;
+    this.ConsultarCiudades(elemento);
+
+  }
   IrIngresarCiudad() {
+    this.resetearCoordenadas();
     this.ingresarCiudadFormGroup.setValue({ pais_id: this.pais_id_cache, ciudad_id: '', nombre_ciudad: '', poblacion: '', region: '' });
     this.myStepperCiudades.next();
   }
   irAModificarCiudad(elemento: Ciudades) {
     this.modificarCiudadFormGroup.setValue({ ciudad_id: elemento.ciudad_id, pais_id: elemento.pais_id, nombre_ciudad: elemento.nombre_ciudad, region: elemento.region, poblacion: elemento.poblacion });
+    this.lat = Number(elemento.latitud);
+    this.lng = Number(elemento.longitud);
+    this.locationChose = true;
     this.myStepperCiudades.next();
     this.myStepperCiudades.next();
   }
@@ -251,7 +267,7 @@ export class MantenedorComponent implements OnInit, AfterViewInit {
   IngresarCiudad() {
     this.loading.cambiarestadoloading(true);
     if (this.ingresarCiudadFormGroup.valid) {
-      const objeto = { pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad };
+      const objeto = { pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad, latitud: this.lat.toString(), longitud: this.lng.toString() };
       this.mantenedorService.IngresarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;
@@ -278,8 +294,8 @@ export class MantenedorComponent implements OnInit, AfterViewInit {
   }
   ModificarCiudad() {
     this.loading.cambiarestadoloading(true);
-    if (this.modificarCiudadFormGroup.valid) {
-      const objeto = { pais_id: this.ModificaIdCiudadPais, ciudad_id: this.ModificaIdCiudad, nombre_ciudad: this.ModificanombreCiudad, region: this.ModificaregionCiudad, poblacion: this.ModificapoblacionCiudad };
+    if (this.modificarCiudadFormGroup.valid && this.locationChose === true) {
+      const objeto = { pais_id: this.ModificaIdCiudadPais, ciudad_id: this.ModificaIdCiudad, nombre_ciudad: this.ModificanombreCiudad, region: this.ModificaregionCiudad, poblacion: this.ModificapoblacionCiudad, latitud: this.lat.toString(), longitud: this.lng.toString() };
       this.mantenedorService.ModificarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;
