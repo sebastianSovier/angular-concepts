@@ -38,10 +38,12 @@
           <ng-container matColumnDef="acciones">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
             <td mat-cell *matCellDef="let element" style="padding: 4px!important;">
-              <button style="margin-left: -25%;" mat-mini-fab color="primary" aria-label="modificar pais" (click)="irAModificar(element);">
+              <button style="margin-left: -25%;" mat-mini-fab color="primary" aria-label="modificar pais"
+                (click)="irAModificar(element);">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button style="margin-left: 10%;" mat-mini-fab color="secondary" aria-label="eliminar pais" (click)="openDialog(element);">
+              <button style="margin-left: 10%;" mat-mini-fab color="secondary" aria-label="eliminar pais"
+                (click)="openDialog(element);">
                 <mat-icon>delete</mat-icon>
               </button>
             </td>
@@ -147,7 +149,8 @@
             <input matInput (keyup)="applyFilterCiudad($event)" placeholder="Buscar ciudad" #inputCiudad>
           </mat-form-field>
 
-          <table style="width: 80%;margin-left: 10%;" mat-table [dataSource]="dataSourceCiudad" class="mat-elevation-z8" matSort>
+          <table style="width: 80%;margin-left: 10%;" mat-table [dataSource]="dataSourceCiudad" class="mat-elevation-z8"
+            matSort>
 
             <!-- Name Column -->
             <ng-container matColumnDef="nombre_ciudad">
@@ -162,17 +165,20 @@
             </ng-container>
 
             <ng-container matColumnDef="poblacion">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header > Población</th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Población</th>
               <td mat-cell *matCellDef="let element"> {{element.poblacion}} </td>
             </ng-container>
+
 
             <ng-container matColumnDef="acciones">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
               <td mat-cell *matCellDef="let element" style="padding: 4px!important;">
-                <button style="margin-left: -10%;" mat-mini-fab color="primary" aria-label="modificar Ciudad" (click)="irAModificarCiudad(element);">
+                <button style="margin-left: -10%;" mat-mini-fab color="primary" aria-label="modificar Ciudad"
+                  (click)="irAModificarCiudad(element);">
                   <mat-icon>edit</mat-icon>
                 </button>
-                <button style="margin-left: 5%;" mat-mini-fab color="secondary" aria-label="eliminar Ciudad" (click)="openDialogCiudad(element);">
+                <button style="margin-left: 5%;" mat-mini-fab color="secondary" aria-label="eliminar Ciudad"
+                  (click)="openDialogCiudad(element);">
                   <mat-icon>delete</mat-icon>
                 </button>
               </td>
@@ -185,14 +191,15 @@
             </tr>
 
           </table>
-          <mat-paginator style="margin-right: 10%;"[pageSizeOptions]="[3]" #paginatorCiudad></mat-paginator>
+          <mat-paginator style="margin-right: 10%;" [pageSizeOptions]="[3]" #paginatorCiudad></mat-paginator>
           <div class="col-md-5 text-right" style="margin-top:2%;">
-            <button mat-raised-button color="primary"  type="button" (click)="IrIngresarCiudad();" >Ingresar Nueva Ciudad</button>
+            <button mat-raised-button color="primary" type="button" (click)="IrIngresarCiudad();">Ingresar Nueva
+              Ciudad</button>
           </div>
         </mat-step>
         <mat-step [stepControl]="ingresarCiudadFormGroup" label="Ingresar Ciudad">
           <form style="margin-top: 2% !important;" [formGroup]="ingresarCiudadFormGroup" (ngSubmit)="IngresarCiudad()">
-           
+
             <mat-form-field class="invisible" style="width: 80%;">
               <mat-label>Pais Id</mat-label>
               <input matInput formControlName="pais_id">
@@ -217,7 +224,8 @@
             <div class="col-md-5 text-right" style="margin-top:5%;">
               <button mat-raised-button color="primary" [disabled]="!ingresarCiudadFormGroup.valid">Ingresar
                 Ciudad</button>
-                <button mat-raised-button type="button" style="margin-left: 5%;" color="accent" (click)="volverListaCiudadIngresa();">Volver Atrás</button>
+              <button mat-raised-button type="button" style="margin-left: 5%;" color="accent"
+                (click)="volverListaCiudadIngresa();">Volver Atrás</button>
             </div>
           </form>
         </mat-step>
@@ -246,10 +254,15 @@
               <mat-label>Población Ciudad</mat-label>
               <input matInput formControlName="poblacion" placeholder="150000000" required>
             </mat-form-field>
+            <agm-map [latitude]="lat" [longitude]="lng" (mapClick)="onChoseLocation($event)">
+              <agm-marker *ngIf="locationChose" [latitude]="lat" [longitude]="lng"></agm-marker>
+            </agm-map>
+
             <div class="col-md-5 text-right" style="margin-top:5%;">
               <button mat-raised-button color="primary" [disabled]="!modificarCiudadFormGroup.valid">Modificar
                 Ciudad</button>
-                <button mat-raised-button type="button" style="margin-left: 5%;" color="secondary" (click)="volverListaCiudad();">Volver Atrás</button>
+              <button mat-raised-button type="button" style="margin-left: 5%;" color="secondary"
+                (click)="volverListaCiudad();">Volver Atrás</button>
             </div>
           </form>
         </mat-step>

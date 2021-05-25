@@ -8,7 +8,7 @@ import { MantenedorComponent } from './mantenedor/mantenedor.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import {MatCardModule} from '@angular/material/card';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { LoadingPageModule } from './loading-page/loading-page.module';
 import { LoadingPageService } from './loading-page/loading-page.service';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -29,6 +29,9 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { DialogOverviewExampleDialogComponent } from './modales/dialog-overview-example-dialog/dialog-overview-example-dialog.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { AgmCoreModule } from '@agm/core';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,6 +44,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    HttpClientJsonpModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
@@ -62,7 +66,12 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     MatSnackBarModule,
     MatDialogModule,
     MatExpansionModule,
-    MatSidenavModule
+    MatSidenavModule,
+    GoogleMapsModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCfgzQih8ZUXQ5HjkngxKd3VUcttaewMvo',
+      libraries: ['places']
+    })
 
   ],
   providers: [

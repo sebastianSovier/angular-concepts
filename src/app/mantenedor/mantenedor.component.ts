@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionModel } from '@angular/cdk/collections';
-import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -9,10 +9,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
 import { LoadingPageService } from '../loading-page/loading-page.service';
 import { DialogOverviewExampleDialogComponent } from '../modales/dialog-overview-example-dialog/dialog-overview-example-dialog.component';
 import { MantenedorService } from './mantenedor.service';
-
+import { catchError, map } from 'rxjs/operators';
 
 
 export class Ciudades {
@@ -42,7 +43,7 @@ export class Paises {
     ]),
   ],
 })
-export class MantenedorComponent implements OnInit {
+export class MantenedorComponent implements OnInit, AfterViewInit {
   expandedElement: Paises | null | undefined;
   displayedColumns: string[] = ['nombre_pais', 'capital', 'region', 'poblacion', 'acciones'];
   displayedColumnsCiudad: string[] = ['nombre_ciudad', 'region', 'poblacion', 'acciones'];
@@ -72,13 +73,25 @@ export class MantenedorComponent implements OnInit {
   ciudades: Ciudades[] = [];
   modificarCiudadFormGroup = new FormGroup({});
   ingresarCiudadFormGroup = new FormGroup({});
+
   pais_id_cache = 0;
+  lat = 22.4064172;
+  lng = 69.0750171;
+  locationChose = false;
 
-  constructor(private route:Router,public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: FormBuilder) { }
 
+  constructor(private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: FormBuilder) {
+  }
+
+  onChoseLocation($event:any){
+    this.lat = $event.coords.lat;
+    this.lng = $event.coords.lng;
+    this.locationChose = true;
+  }
   ngOnInit(): void {
-    if(sessionStorage.length === 0 ||sessionStorage.getItem('token') === undefined){
+    if (sessionStorage.length === 0 || sessionStorage.getItem('token') === undefined) {
       this.route.navigateByUrl('');
+      return;
     }
     this.loading.cambiarestadoloading(true);
     this.dataSource.sort = this.sort;
@@ -107,7 +120,7 @@ export class MantenedorComponent implements OnInit {
       poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]]
     });
     this.ingresarCiudadFormGroup = this._formBuilder.group({
-      pais_id:[''],
+      pais_id: [''],
       ciudad_id: [''],
       nombre_ciudad: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
       region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
@@ -141,8 +154,8 @@ export class MantenedorComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSourceCiudad.sort = this.sortCiudades
     this.dataSourceCiudad.paginator = this.paginatorCiudades;
-
   }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -169,7 +182,7 @@ export class MantenedorComponent implements OnInit {
     });
   }
   ConsultarCiudades(elemento: Paises) {
-    this.pais_id_cache=elemento.pais_id;
+    this.pais_id_cache = elemento.pais_id;
     this.mantenedorService.ObtenerCiudades(elemento.pais_id.toString()).subscribe((datos) => {
       this.ciudades = datos;
       this.CiudadesData = datos;
@@ -191,17 +204,17 @@ export class MantenedorComponent implements OnInit {
     this.loading.cambiarestadoloading(false);
     this.myStepper.previous();
     this.myStepper.reset();
-   
+
   }
   IrIngresarPais() {
     this.myStepper.next();
   }
-  volverListaCiudad(){
+  volverListaCiudad() {
     this.myStepperCiudades.previous();
     this.myStepperCiudades.previous();
     this.myStepperCiudades.reset();
   }
-  volverListaCiudadIngresa(){
+  volverListaCiudadIngresa() {
     this.myStepperCiudades.previous();
     this.myStepperCiudades.reset();
   }
@@ -213,11 +226,11 @@ export class MantenedorComponent implements OnInit {
     this.myStepper.next();
   }
   IrIngresarCiudad() {
-    this.ingresarCiudadFormGroup.setValue({pais_id:this.pais_id_cache,ciudad_id:'',nombre_ciudad:'',poblacion:'',region:''});
+    this.ingresarCiudadFormGroup.setValue({ pais_id: this.pais_id_cache, ciudad_id: '', nombre_ciudad: '', poblacion: '', region: '' });
     this.myStepperCiudades.next();
   }
   irAModificarCiudad(elemento: Ciudades) {
-    this.modificarCiudadFormGroup.setValue({ ciudad_id:elemento.ciudad_id,pais_id: elemento.pais_id, nombre_ciudad: elemento.nombre_ciudad,region: elemento.region, poblacion: elemento.poblacion });
+    this.modificarCiudadFormGroup.setValue({ ciudad_id: elemento.ciudad_id, pais_id: elemento.pais_id, nombre_ciudad: elemento.nombre_ciudad, region: elemento.region, poblacion: elemento.poblacion });
     this.myStepperCiudades.next();
     this.myStepperCiudades.next();
   }
@@ -238,7 +251,7 @@ export class MantenedorComponent implements OnInit {
   IngresarCiudad() {
     this.loading.cambiarestadoloading(true);
     if (this.ingresarCiudadFormGroup.valid) {
-      const objeto = { pais_id:this.IngresaPaisIdCiudad,nombre_ciudad: this.IngresanombreCiudad,region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad };
+      const objeto = { pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad };
       this.mantenedorService.IngresarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;
@@ -266,7 +279,7 @@ export class MantenedorComponent implements OnInit {
   ModificarCiudad() {
     this.loading.cambiarestadoloading(true);
     if (this.modificarCiudadFormGroup.valid) {
-      const objeto = { pais_id:this.ModificaIdCiudadPais,ciudad_id: this.ModificaIdCiudad, nombre_ciudad: this.ModificanombreCiudad, region: this.ModificaregionCiudad, poblacion: this.ModificapoblacionCiudad };
+      const objeto = { pais_id: this.ModificaIdCiudadPais, ciudad_id: this.ModificaIdCiudad, nombre_ciudad: this.ModificanombreCiudad, region: this.ModificaregionCiudad, poblacion: this.ModificapoblacionCiudad };
       this.mantenedorService.ModificarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;
@@ -292,7 +305,7 @@ export class MantenedorComponent implements OnInit {
     if (element === undefined) {
       this.loading.cambiarestadoloading(false);
     } else {
-      const objeto = {pais_id : element.element.pais_id.toString(),ciudad_id: element.element.ciudad_id.toString()} 
+      const objeto = { pais_id: element.element.pais_id.toString(), ciudad_id: element.element.ciudad_id.toString() }
       this.mantenedorService.EliminarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;
@@ -305,7 +318,7 @@ export class MantenedorComponent implements OnInit {
     this.loading.cambiarestadoloading(true);
     const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
       width: '250px',
-      data: { element,'label':'pais' }
+      data: { element, 'label': 'pais' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -318,7 +331,7 @@ export class MantenedorComponent implements OnInit {
     this.loading.cambiarestadoloading(true);
     const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
       width: '350px',
-      data: { element,'label':'ciudad'}
+      data: { element, 'label': 'ciudad' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
