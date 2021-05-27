@@ -42,7 +42,7 @@ export class Paises {
     ]),
   ],
 })
-export class MantenedorComponent implements OnInit, AfterViewInit {
+export class MantenedorComponent implements OnInit {
   expandedElement: Paises | null | undefined;
   displayedColumns: string[] = ['nombre_pais', 'capital', 'region', 'poblacion', 'acciones'];
   displayedColumnsCiudad: string[] = ['nombre_ciudad', 'region', 'poblacion', 'acciones'];
@@ -51,19 +51,11 @@ export class MantenedorComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<Paises>(this.paisesData);
   dataSourceCiudad = new MatTableDataSource<Ciudades>(this.CiudadesData);
   selection = new SelectionModel<Paises>(true, []);
-  @ViewChild(MatPaginator, { static: false })
-  paginator!: MatPaginator;
-  @ViewChild('paginatorCiudad', { static: false })
-  paginatorCiudades!: MatPaginator;
   isLinear = false;
   isLinearCiudad = false;
   tituloSecondStep = 'Ingrese Nuevo Pais';
   ingresarFormGroup = new FormGroup({});
   modificarFormGroup = new FormGroup({});
-  @ViewChild(MatSort, { static: false })
-  sort!: MatSort;
-  @ViewChild('matSortCiudad', { static: false })
-  sortCiudades!: MatSort;
   @ViewChild('stepper')
   myStepper!: MatStepper;
   @ViewChild('stepperCiudad')
@@ -72,7 +64,42 @@ export class MantenedorComponent implements OnInit, AfterViewInit {
   ciudades: Ciudades[] = [];
   modificarCiudadFormGroup = new FormGroup({});
   ingresarCiudadFormGroup = new FormGroup({});
+  private paginator!: MatPaginator;
+  private sort!: MatSort;
+  private paginatorCiudad!: MatPaginator;
+  private sortCiudad!: MatSort;
 
+  @ViewChild(MatSort) set matSort(ms: MatSort) {
+    this.sort = ms;
+    this.setDataSourceAttributes();
+  }
+
+  @ViewChild('paginatorCiudad') set matPaginatorCiudad(mpC: MatPaginator) {
+    this.paginatorCiudad = mpC;
+    this.setDataSourceAttributes();
+  }
+
+  @ViewChild('sortCiudad') set matSortCiudad(msC: MatSort) {
+    this.sortCiudad = msC;
+    this.setDataSourceAttributes();
+  }
+
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.setDataSourceAttributes();
+  }
+
+  setDataSourceAttributes() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+
+    this.dataSourceCiudad.paginator = this.paginatorCiudad;
+    this.dataSourceCiudad.sort = this.sortCiudad;
+
+    if (this.paginator && this.sort) {
+      //this.applyFilter();
+    }
+  }
   pais_id_cache = 0;
   lat = -33.52413039023918;
   lng = -70.82132887007117
@@ -95,10 +122,8 @@ export class MantenedorComponent implements OnInit, AfterViewInit {
     }
     this.loading.cambiarestadoloading(true);
     this.dataSource.sort = this.sort;
-    this.dataSourceCiudad.sort = this.sortCiudades
     this.ConsultarPaises();
     this.dataSource.paginator = this.paginator;
-    this.dataSourceCiudad.paginator = this.paginatorCiudades;
     this.ingresarFormGroup = this._formBuilder.group({
       nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
       capital: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]],
@@ -149,12 +174,6 @@ export class MantenedorComponent implements OnInit, AfterViewInit {
   get ModificaregionCiudad() { return this.modificarCiudadFormGroup.value.region }
   get ModificapoblacionCiudad() { return this.modificarCiudadFormGroup.value.poblacion; }
 
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.dataSourceCiudad.sort = this.sortCiudades
-    this.dataSourceCiudad.paginator = this.paginatorCiudades;
-  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

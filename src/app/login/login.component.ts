@@ -1,11 +1,9 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, NgForm, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { LoadingPageService } from '../loading-page/loading-page.service';
 import { LoginService } from './login.service';
-import { Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

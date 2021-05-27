@@ -32,6 +32,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { AgmCoreModule } from '@agm/core';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -75,7 +76,7 @@ import { AgmCoreModule } from '@agm/core';
 
   ],
   providers: [
-    LoadingPageService,
+    LoadingPageService
   ],
   bootstrap: [AppComponent]
 })
