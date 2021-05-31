@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -31,7 +31,12 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { AgmCoreModule } from '@agm/core';
+import { AppConfig } from './appconfig';
 
+
+export function initializeApp(appConfig: AppConfig) {
+	return () => appConfig.load();
+}
 
 @NgModule({
   declarations: [
@@ -76,7 +81,14 @@ import { AgmCoreModule } from '@agm/core';
 
   ],
   providers: [
-    LoadingPageService
+    LoadingPageService,
+    AppConfig,
+    {
+			provide: APP_INITIALIZER,
+			useFactory: initializeApp,
+			deps: [AppConfig],
+			multi: true,
+		},
   ],
   bootstrap: [AppComponent]
 })
