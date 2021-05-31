@@ -34,22 +34,22 @@ export class MantenedorService {
    }
    ObtenerCiudades(pais_id:string) {
     const headers = new HttpHeaders({'Authorization':'Bearer '+sessionStorage.getItem('token')});
-     const result: Observable<any> = this.http.get(AppConfig.settings.UrlWebApi +'/Countries/CiudadesPais?pais_id='+pais_id,{headers: headers});
+     const result: Observable<any> = this.http.get(AppConfig.settings.UrlWebApi +'/Ciudades/CiudadesPais?pais_id='+pais_id,{headers: headers});
      return result;
    }
    IngresarCiudad(ciudad:any) {
      const headers = new HttpHeaders({'Authorization':'Bearer '+sessionStorage.getItem('token')});
-      const result: Observable<any> = this.http.post(AppConfig.settings.UrlWebApi +'/Countries/IngresarCiudad',ciudad ,{headers: headers});
+      const result: Observable<any> = this.http.post(AppConfig.settings.UrlWebApi +'/Ciudades/IngresarCiudad',ciudad ,{headers: headers});
       return result;
     }
    ModificarCiudad(ciudad:any) {
      const headers = new HttpHeaders({'Authorization':'Bearer '+sessionStorage.getItem('token')});
-      const result: Observable<any> = this.http.put(AppConfig.settings.UrlWebApi +'/Countries/ModificarCiudad',ciudad ,{headers: headers});
+      const result: Observable<any> = this.http.put(AppConfig.settings.UrlWebApi +'/Ciudades/ModificarCiudad',ciudad ,{headers: headers});
       return result;
     }
     EliminarCiudad(element:any) {
      const headers = new HttpHeaders({'Authorization':'Bearer '+sessionStorage.getItem('token')});
-      const result: Observable<any> = this.http.delete(AppConfig.settings.UrlWebApi +'/Countries/EliminarCiudad?ciudad_id='+element.ciudad_id+'&pais_id='+element.pais_id,{headers: headers});
+      const result: Observable<any> = this.http.delete(AppConfig.settings.UrlWebApi +'/Ciudades/EliminarCiudad?ciudad_id='+element.ciudad_id+'&pais_id='+element.pais_id,{headers: headers});
       return result;
     }
 }

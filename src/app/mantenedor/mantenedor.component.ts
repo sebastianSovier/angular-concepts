@@ -194,7 +194,7 @@ export class MantenedorComponent implements OnInit {
 
   ConsultarPaises() {
     this.mantenedorService.ObtenerPaises().subscribe((datos) => {
-      this.paisesData = datos;
+      this.paisesData = datos.data;
       this.dataSource.data = this.paisesData;
       this.loading.cambiarestadoloading(false);
       console.log(datos);
@@ -203,8 +203,8 @@ export class MantenedorComponent implements OnInit {
   ConsultarCiudades(elemento: Paises) {
     this.pais_id_cache = elemento.pais_id;
     this.mantenedorService.ObtenerCiudades(elemento.pais_id.toString()).subscribe((datos) => {
-      this.ciudades = datos;
-      this.CiudadesData = datos;
+      this.ciudades = datos.data;
+      this.CiudadesData = datos.data;
       this.dataSourceCiudad.data = this.CiudadesData;
     });
   }
