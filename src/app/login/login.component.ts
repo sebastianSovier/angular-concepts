@@ -115,7 +115,7 @@ export class LoginComponent implements OnInit {
           this.loading.cambiarestadoloading(false);
           this.openSnackBar("Hubo problemas al crear su usuario Intente nuevamente.", "Reintente");
         } else {
-          if (datos === 'ok') {
+          if (datos.datos === 'ok') {
             this.login = true;
             this.openSnackBar("Usuario creado exitosamente.", "Ok");
             this.loading.cambiarestadoloading(false);
