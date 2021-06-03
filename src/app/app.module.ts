@@ -75,7 +75,7 @@ export function initializeApp(appConfig: AppConfig) {
     MatSidenavModule,
     GoogleMapsModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCfgzQih8ZUXQ5HjkngxKd3VUcttaewMvo',
+      apiKey: 'apikey',
       libraries: ['places']
     })
 
