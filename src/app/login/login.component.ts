@@ -93,6 +93,7 @@ export class LoginComponent implements OnInit {
             this.loginService.enviaCondicion(true);
             this._snackBar.dismiss();
             sessionStorage.setItem('token', datos.access_Token);
+            sessionStorage.setItem('user',this.usuario);
             this.router.navigateByUrl('/mantenedor');
           } else {
             this.loginService.enviaCondicion(false);

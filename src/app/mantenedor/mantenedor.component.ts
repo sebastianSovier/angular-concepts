@@ -193,7 +193,8 @@ export class MantenedorComponent implements OnInit {
   }
 
   ConsultarPaises() {
-    this.mantenedorService.ObtenerPaises().subscribe((datos) => {
+    const objeto = {usuario:sessionStorage.getItem('user')!};
+    this.mantenedorService.ObtenerPaises(objeto.usuario).subscribe((datos) => {
       this.paisesData = datos.data;
       this.dataSource.data = this.paisesData;
       this.loading.cambiarestadoloading(false);
@@ -272,7 +273,7 @@ export class MantenedorComponent implements OnInit {
   IngresarPais() {
     this.loading.cambiarestadoloading(true);
     if (this.ingresarFormGroup.valid) {
-      const objeto = { nombre_pais: this.Ingresanombre, capital: this.Ingresaregion, region: this.Ingresaregion, poblacion: this.Ingresapoblacion };
+      const objeto = { nombre_pais: this.Ingresanombre, capital: this.Ingresacapital, region: this.Ingresaregion, poblacion: this.Ingresapoblacion,usuario:sessionStorage.getItem('user') };
       this.mantenedorService.IngresarPais(objeto).subscribe((datos) => {
         this.paisesData = datos.data;
         this.dataSource.data = this.paisesData;

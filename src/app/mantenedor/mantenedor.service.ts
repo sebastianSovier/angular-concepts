@@ -12,9 +12,9 @@ export class MantenedorService {
 
 
 
-  ObtenerPaises() {
+  ObtenerPaises(usuario:string) {
    const headers = new HttpHeaders({'Authorization':'Bearer '+sessionStorage.getItem('token')});
-    const result: Observable<any> = this.http.get(AppConfig.settings.UrlWebApi +'/Countries/TodosLosPaises',{headers: headers});
+    const result: Observable<any> = this.http.get(AppConfig.settings.UrlWebApi +'/Countries/TodosLosPaises?usuario='+usuario,{headers: headers});
     return result;
   }
   IngresarPais(pais:any) {

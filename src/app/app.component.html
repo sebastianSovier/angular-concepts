@@ -20,7 +20,7 @@
       <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
         <mat-icon>login</mat-icon>
       </button>-->
-      <button mat-icon-button style="margin-left: 82%;"class="example-icon" (click)="LogOut();" aria-label="Example icon-button with share icon">
+      <button mat-icon-button style="margin-left: 62%;" class="example-icon" *ngIf="mostrar" (click)="LogOut();" aria-label="Example icon-button with share icon">
         <mat-icon>logout</mat-icon>
       </button>
     </mat-toolbar>

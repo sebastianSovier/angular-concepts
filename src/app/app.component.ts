@@ -22,5 +22,6 @@ ngOnInit(){
   LogOut() {
     sessionStorage.clear();
     this.route.navigateByUrl('');
+    this.mostrar = false;
   }
 }
