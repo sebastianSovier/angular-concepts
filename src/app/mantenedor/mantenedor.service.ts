@@ -27,9 +27,9 @@ export class MantenedorService {
      const result: Observable<any> = this.http.put(AppConfig.settings.UrlWebApi +'/Countries/ModificarPais',pais ,{headers: headers});
      return result;
    }
-   EliminarPais(pais_id:string) {
+   EliminarPais(pais_id:string,usuario:string) {
     const headers = new HttpHeaders({'Authorization':'Bearer '+sessionStorage.getItem('token')});
-     const result: Observable<any> = this.http.delete(AppConfig.settings.UrlWebApi +'/Countries/EliminarPais?pais_id='+pais_id,{headers: headers});
+     const result: Observable<any> = this.http.delete(AppConfig.settings.UrlWebApi +'/Countries/EliminarPais?pais_id='+pais_id+"&usuario="+usuario,{headers: headers});
      return result;
    }
    ObtenerCiudades(pais_id:string) {

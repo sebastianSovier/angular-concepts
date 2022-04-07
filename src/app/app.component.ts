@@ -7,7 +7,7 @@ import { LoginService } from './login/login.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'Proyecto Angular 12 / Angular Material/ Express.js / Mysql';
   mostrar = false;
   constructor(private route: Router, private loginService: LoginService) {
@@ -15,10 +15,15 @@ export class AppComponent implements OnInit{
       this.mostrar = d.mostrarMenu;
     });
   }
-ngOnInit(){
-  sessionStorage.clear();
-    this.route.navigateByUrl('');
-}
+  ngOnInit() {
+    if (!sessionStorage.getItem('user') || !sessionStorage.getItem('token')) {
+      sessionStorage.clear();
+      this.route.navigateByUrl('');
+      this.mostrar = false;
+    }else{
+      this.mostrar = true;
+    }
+  }
   LogOut() {
     sessionStorage.clear();
     this.route.navigateByUrl('');
