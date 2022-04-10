@@ -1,47 +1,51 @@
-
 <!doctype html>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
   <p style="margin:0 auto">
     <mat-toolbar color="primary">
-      <button mat-icon-button class="example-icon" *ngIf="mostrar" (click)="drawer.toggle()" aria-label="Example icon-button with menu icon">
+      <button mat-icon-button class="example-icon" *ngIf="mostrar" (click)="drawer.toggle()"
+        aria-label="Example icon-button with menu icon">
         <mat-icon>menu</mat-icon>
       </button>
       <span>{{title}}</span>
-     <!-- <span class="example-spacer"></span>
+      <!-- <span class="example-spacer"></span>
       <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
         <mat-icon>login</mat-icon>
       </button>-->
-      <button mat-icon-button style="margin-left: 62%;" class="example-icon" *ngIf="mostrar" (click)="LogOut();" aria-label="Example icon-button with share icon">
+      <button mat-icon-button style="margin-left: 62%;" class="example-icon" *ngIf="mostrar" (click)="LogOut();"
+        aria-label="Example icon-button with share icon">
         <mat-icon>logout</mat-icon>
       </button>
     </mat-toolbar>
   </p>
   <mat-drawer-container class="example-container" autosize>
     <mat-drawer #drawer class="example-sidenav" mode="side">
-
+      <button mat-button (click)="LogOut();drawer.toggle();">Logout</button>
+      <p>Auto-resizing sidenav</p>
     </mat-drawer>
     <mat-card class="carta-principal">
-       
+
       <app-loading-page></app-loading-page>
       <router-outlet></router-outlet>
-  
-  
+
+
     </mat-card>
- 
-  
+
+
   </mat-drawer-container>
-  
-  
+
+
 
 </body>
-</html>
 
+</html>

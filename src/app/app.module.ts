@@ -36,6 +36,7 @@ import localeCl from '@angular/common/locales/es-CL';
 import localeClExtra from '@angular/common/locales/extra/es-CL';
 import { registerLocaleData } from '@angular/common';
 import { AuthInterceptorServiceService } from './auth-interceptor-service.service';
+import { MatTableExporterModule } from 'mat-table-exporter';
 
 registerLocaleData(localeCl, localeClExtra);
 
@@ -78,6 +79,7 @@ export function initializeApp(appConfig: AppConfig) {
     MatDialogModule,
     MatExpansionModule,
     MatSidenavModule,
+    MatTableExporterModule,
     GoogleMapsModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDgcp1axlsAr2kQ3sfV33oiyp99UswWYNs',

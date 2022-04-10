@@ -9,7 +9,7 @@
 
                     <mat-form-field style="display: contents;" appearance="fill">
                         <mat-label>Usuario</mat-label>
-                        <input matInput type="text" class="example-right-align" name="usuario" id="usuario"
+                        <input matInput type="text" class="example-right-align" autocomplete="username" name="usuario" id="usuario"
                             class="form-control" required minlength="5" formControlName="usuario">
                     </mat-form-field>
                     <div *ngIf="isValidInput('usuario')" class="alert alert-danger">
@@ -23,7 +23,7 @@
                     </div>
                     <mat-form-field style="display: contents;" appearance="fill">
                         <mat-label>Contraseña</mat-label>
-                        <input matInput [type]="hide ? 'password' : 'text'" name="contrasena" id="contrasena"
+                        <input matInput [type]="hide ? 'password' : 'text'" autocomplete="current-password" name="contrasena" id="contrasena"
                             class="form-control" required minlength="6" formControlName="contrasena">
                         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
                             [attr.aria-pressed]="hide">

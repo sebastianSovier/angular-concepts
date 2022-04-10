@@ -127,31 +127,31 @@ export class MantenedorComponent implements OnInit {
     this.ConsultarPaises();
     this.dataSource.paginator = this.paginator;
     this.ingresarFormGroup = this._formBuilder.group({
-      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.nombrePaisPattern)]],
-      capital: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.nombrePaisPattern)]],
-      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.nombrePaisPattern)]],
-      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.poblacionPattern)]]
+      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
+      capital: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
+      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
+      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.poblacionPattern)]]
     });
     this.modificarFormGroup = this._formBuilder.group({
       pais_id: [''],
-      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.nombrePaisPattern)]],
-      capital: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.nombrePaisPattern)]],
-      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.nombrePaisPattern)]],
-      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.poblacionPattern)]]
+      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
+      capital: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
+      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
+      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.poblacionPattern)]]
     });
     this.modificarCiudadFormGroup = this._formBuilder.group({
       ciudad_id: [''],
       pais_id: [''],
-      nombre_ciudad: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.nombrePaisPattern)]],
-      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.nombrePaisPattern)]],
-      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.poblacionPattern)]]
+      nombre_ciudad: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
+      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
+      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.poblacionPattern)]]
     });
     this.ingresarCiudadFormGroup = this._formBuilder.group({
       pais_id: [''],
       ciudad_id: [''],
-      nombre_ciudad: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.nombrePaisPattern)]],
-      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.nombrePaisPattern)]],
-      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20),Validators.pattern(this.poblacionPattern)]]
+      nombre_ciudad: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
+      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
+      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.poblacionPattern)]]
     });
   }
   get Ingresanombre() { return this.ingresarFormGroup.value.nombre }
@@ -195,7 +195,7 @@ export class MantenedorComponent implements OnInit {
   }
 
   ConsultarPaises() {
-    const objeto = {usuario:sessionStorage.getItem('user')!};
+    const objeto = { usuario: sessionStorage.getItem('user')! };
     this.mantenedorService.ObtenerPaises(objeto.usuario).subscribe((datos) => {
       this.paisesData = datos.data;
       this.dataSource.data = this.paisesData;
@@ -254,7 +254,7 @@ export class MantenedorComponent implements OnInit {
     this.myStepper.next();
     this.myStepper.next();
   }
-  iraVerCiudades(elemento: Paises){
+  iraVerCiudades(elemento: Paises) {
     this.consultaCiudades = true;
     this.ConsultarCiudades(elemento);
 
@@ -275,7 +275,7 @@ export class MantenedorComponent implements OnInit {
   IngresarPais() {
     this.loading.cambiarestadoloading(true);
     if (this.ingresarFormGroup.valid) {
-      const objeto = { nombre_pais: this.Ingresanombre, capital: this.Ingresacapital, region: this.Ingresaregion, poblacion: this.Ingresapoblacion,usuario:sessionStorage.getItem('user') };
+      const objeto = { nombre_pais: this.Ingresanombre, capital: this.Ingresacapital, region: this.Ingresaregion, poblacion: this.Ingresapoblacion, usuario: sessionStorage.getItem('user') };
       this.mantenedorService.IngresarPais(objeto).subscribe((datos) => {
         this.paisesData = datos.data;
         this.dataSource.data = this.paisesData;
@@ -303,7 +303,7 @@ export class MantenedorComponent implements OnInit {
   ModificarPais() {
     this.loading.cambiarestadoloading(true);
     if (this.modificarFormGroup.valid) {
-      const objeto = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion,usuario:sessionStorage.getItem('user') };
+      const objeto = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion, usuario: sessionStorage.getItem('user') };
       this.mantenedorService.ModificarPais(objeto).subscribe((datos) => {
         this.paisesData = datos.data;
         this.dataSource.data = this.paisesData;
@@ -332,7 +332,7 @@ export class MantenedorComponent implements OnInit {
     if (element === undefined) {
       this.loading.cambiarestadoloading(false);
     } else {
-      this.mantenedorService.EliminarPais(element.element.pais_id.toString(),sessionStorage.getItem('user')!).subscribe((datos) => {
+      this.mantenedorService.EliminarPais(element.element.pais_id.toString(), sessionStorage.getItem('user')!).subscribe((datos) => {
         this.paisesData = datos.data;
         this.dataSource.data = this.paisesData;
         this.loading.cambiarestadoloading(false);
