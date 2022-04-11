@@ -1,6 +1,6 @@
 <mat-card class="carta-mantenedor">
   <div *ngIf="!consultaCiudades">
-    <mat-horizontal-stepper [linear]="isLinear" #stepper>
+    <mat-horizontal-stepper id="editarpais" [linear]="isLinear" #stepper>
       <mat-step completed="false">
         <form>
           <ng-template matStepLabel>Tabla Paises</ng-template>
@@ -188,7 +188,7 @@
               </tr>
 
             </table>
-            <mat-paginator style="margin-right: 10%;" [pageSizeOptions]="[3]" #paginatorCiudad></mat-paginator>
+            <mat-paginator style="margin-right: 10%;" [pageSizeOptions]="[2]" #paginatorCiudad></mat-paginator>
             <div class="col-md-5 text-right" style="margin-top:2%;">
               <button mat-raised-button color="primary" type="button" (click)="IrIngresarCiudad();">Ingresar Nueva
                 Ciudad</button>
@@ -228,7 +228,7 @@
                   <agm-marker *ngIf="locationChose" [latitude]="lat" [longitude]="lng"></agm-marker>
                 </agm-map>
               </div>
-              <div class="col-md-5 text-right" style="margin-top:2%;">
+              <div class="col-md-5 text-right" style="margin-top:0%;">
                 <button mat-raised-button color="primary" [disabled]="!ingresarCiudadFormGroup.valid">Ingresar
                   Ciudad</button>
                 <button mat-raised-button type="button" style="margin-left: 5%;" color="accent"

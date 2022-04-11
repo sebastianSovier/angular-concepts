@@ -57,11 +57,7 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
 
 
             sessionStorage.clear();
-            if (this.router.url === '/mantenedor') {
-
-            } else {
-              this.router.navigateByUrl('');
-            }
+            this.router.navigateByUrl('');
 
           } else if (err.status === 500) {
             if (this.router.url === '/mantenedor') {

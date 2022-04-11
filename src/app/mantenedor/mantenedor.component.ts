@@ -197,7 +197,7 @@ export class MantenedorComponent implements OnInit {
   ConsultarPaises() {
     const objeto = { usuario: sessionStorage.getItem('user')! };
     this.mantenedorService.ObtenerPaises(objeto.usuario).subscribe((datos) => {
-      this.paisesData = datos.data;
+      this.paisesData = datos.data.shift();
       this.dataSource.data = this.paisesData;
       this.loading.cambiarestadoloading(false);
       console.log(datos);
@@ -294,6 +294,7 @@ export class MantenedorComponent implements OnInit {
         this.CiudadesData = datos.data;
         this.dataSourceCiudad.data = this.CiudadesData;
         this.myStepperCiudades.previous();
+        this.myStepperCiudades.reset();
         this.loading.cambiarestadoloading(false);
       });
     } else {
