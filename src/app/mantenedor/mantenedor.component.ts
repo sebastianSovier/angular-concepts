@@ -217,6 +217,7 @@ export class MantenedorComponent implements OnInit {
       this.ciudades = datos.data;
       this.CiudadesData = datos.data;
       this.dataSourceCiudad.data = this.CiudadesData;
+      this.loading.cambiarestadoloading(false);
     }, (error) => {
       this.loading.cambiarestadoloading(false);
       console.log(error);
