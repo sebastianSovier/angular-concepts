@@ -195,20 +195,34 @@ export class MantenedorComponent implements OnInit {
   }
 
   ConsultarPaises() {
+    this.loading.cambiarestadoloading(true);
     const objeto = { usuario: sessionStorage.getItem('user')! };
     this.mantenedorService.ObtenerPaises(objeto.usuario).subscribe((datos) => {
       this.paisesData = datos.data.shift();
       this.dataSource.data = this.paisesData;
       this.loading.cambiarestadoloading(false);
       console.log(datos);
+    }, (error) => {
+      this.loading.cambiarestadoloading(false);
+      console.log(error);
+      if (error.status !== 200) {
+        this.route.navigateByUrl('');
+      }
     });
   }
   ConsultarCiudades(elemento: Paises) {
+    this.loading.cambiarestadoloading(true);
     this.pais_id_cache = elemento.pais_id;
     this.mantenedorService.ObtenerCiudades(elemento.pais_id.toString()).subscribe((datos) => {
       this.ciudades = datos.data;
       this.CiudadesData = datos.data;
       this.dataSourceCiudad.data = this.CiudadesData;
+    }, (error) => {
+      this.loading.cambiarestadoloading(false);
+      console.log(error);
+      if (error.status !== 200) {
+        this.route.navigateByUrl('');
+      }
     });
   }
   volverListaModifica() {
@@ -281,9 +295,13 @@ export class MantenedorComponent implements OnInit {
         this.dataSource.data = this.paisesData;
         this.myStepper.previous();
         this.loading.cambiarestadoloading(false);
+      }, (error) => {
+        this.loading.cambiarestadoloading(false);
+        console.log(error);
+        if(error.status !== 200){
+          this.route.navigateByUrl('');
+        }
       });
-    } else {
-
     }
   }
   IngresarCiudad() {
@@ -296,9 +314,13 @@ export class MantenedorComponent implements OnInit {
         this.myStepperCiudades.previous();
         this.myStepperCiudades.reset();
         this.loading.cambiarestadoloading(false);
+      }, (error) => {
+        this.loading.cambiarestadoloading(false);
+        console.log(error);
+        if(error.status !== 200){
+          this.route.navigateByUrl('');
+        }
       });
-    } else {
-
     }
   }
   ModificarPais() {
@@ -312,6 +334,12 @@ export class MantenedorComponent implements OnInit {
         this.myStepper.previous();
         this.myStepper.previous();
         this.loading.cambiarestadoloading(false);
+      }, (error) => {
+        this.loading.cambiarestadoloading(false);
+        console.log(error);
+        if(error.status !== 200){
+          this.route.navigateByUrl('');
+        }
       });
     }
   }
@@ -326,6 +354,12 @@ export class MantenedorComponent implements OnInit {
         this.myStepperCiudades.previous();
         this.myStepperCiudades.previous();
         this.loading.cambiarestadoloading(false);
+      }, (error) => {
+        this.loading.cambiarestadoloading(false);
+        console.log(error);
+        if(error.status !== 200){
+          this.route.navigateByUrl('');
+        }
       });
     }
   }
@@ -337,6 +371,9 @@ export class MantenedorComponent implements OnInit {
         this.paisesData = datos.data;
         this.dataSource.data = this.paisesData;
         this.loading.cambiarestadoloading(false);
+      }, (error) => {
+        this.loading.cambiarestadoloading(false);
+        console.log(error);
       });
     }
   }
@@ -349,6 +386,12 @@ export class MantenedorComponent implements OnInit {
         this.CiudadesData = datos.data;
         this.dataSourceCiudad.data = this.CiudadesData;
         this.loading.cambiarestadoloading(false);
+      }, (error) => {
+        this.loading.cambiarestadoloading(false);
+        console.log(error);
+        if(error.status !== 200){
+          this.route.navigateByUrl('');
+        }
       });
     }
   }

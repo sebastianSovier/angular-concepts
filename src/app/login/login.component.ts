@@ -103,6 +103,12 @@ export class LoginComponent implements OnInit {
           }
         }
         console.log(datos);
+      },(error) => {
+        this.loading.cambiarestadoloading(false);
+        console.log(error);
+        if(error.status !== 200){
+          this.router.navigateByUrl('');
+        }
       });
     }
   }
@@ -127,6 +133,12 @@ export class LoginComponent implements OnInit {
           }
         }
         console.log(datos);
+      },(error) => {
+        this.loading.cambiarestadoloading(false);
+        console.log(error);
+        if(error.status !== 200){
+          this.router.navigateByUrl('');
+        }
       });
     }
   }

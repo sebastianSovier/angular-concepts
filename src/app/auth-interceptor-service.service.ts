@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { EMPTY } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { EMPTY } from 'rxjs';
 export class AuthInterceptorServiceService implements HttpInterceptor {
   url401 = '';
   reload = 0;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private _snackBar: MatSnackBar) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token: string = sessionStorage.getItem("token")!;
 
@@ -58,14 +59,18 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
 
             sessionStorage.clear();
             this.router.navigateByUrl('');
-
+            this.openSnackBar("Superó el tiempo limite de sesión.", "Ingrese Nuevamente");
           } else if (err.status === 500) {
             if (this.router.url === '/mantenedor') {
               this.router.navigateByUrl('');
             } else {
               this.router.navigateByUrl('');
             }
-
+            this.openSnackBar("Hubo problemas, por favor comuniquese con Administrador.", "Reintente");
+          } else if(err.status === 0){
+            this.openSnackBar("Hubo problemas, por favor comuniquese con Administrador.", "Reintente");
+          }else{
+            return next.handle(request)
           }
 
 
@@ -77,5 +82,8 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
 
     // return next.handle(request)
 
+  }
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action);
   }
 }
