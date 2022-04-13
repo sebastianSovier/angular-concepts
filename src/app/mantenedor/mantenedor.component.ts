@@ -292,16 +292,17 @@ export class MantenedorComponent implements OnInit {
     if (this.ingresarFormGroup.valid) {
       const objeto = { nombre_pais: this.Ingresanombre, capital: this.Ingresacapital, region: this.Ingresaregion, poblacion: this.Ingresapoblacion, usuario: sessionStorage.getItem('user') };
       this.mantenedorService.IngresarPais(objeto).subscribe((datos) => {
-        this.paisesData = datos.data;
+        this.paisesData = datos.data.shift();
         this.dataSource.data = this.paisesData;
         this.myStepper.previous();
-        this.loading.cambiarestadoloading(false);
       }, (error) => {
-        this.loading.cambiarestadoloading(false);
-        console.log(error);
-        if(error.status !== 200){
+        // this.loading.cambiarestadoloading(false);
+        // console.log(error);
+        if (error.status !== 200) {
           this.route.navigateByUrl('');
         }
+      }, () => {
+        this.loading.cambiarestadoloading(false);
       });
     }
   }
@@ -314,13 +315,14 @@ export class MantenedorComponent implements OnInit {
         this.dataSourceCiudad.data = this.CiudadesData;
         this.myStepperCiudades.previous();
         this.myStepperCiudades.reset();
-        this.loading.cambiarestadoloading(false);
       }, (error) => {
         this.loading.cambiarestadoloading(false);
         console.log(error);
-        if(error.status !== 200){
+        if (error.status !== 200) {
           this.route.navigateByUrl('');
         }
+      }, () => {
+        this.loading.cambiarestadoloading(false);
       });
     }
   }
@@ -334,13 +336,14 @@ export class MantenedorComponent implements OnInit {
         this.myStepper.reset();
         this.myStepper.previous();
         this.myStepper.previous();
-        this.loading.cambiarestadoloading(false);
       }, (error) => {
         this.loading.cambiarestadoloading(false);
         console.log(error);
-        if(error.status !== 200){
+        if (error.status !== 200) {
           this.route.navigateByUrl('');
         }
+      }, () => {
+        this.loading.cambiarestadoloading(false);
       });
     }
   }
@@ -354,13 +357,14 @@ export class MantenedorComponent implements OnInit {
         this.myStepperCiudades.reset();
         this.myStepperCiudades.previous();
         this.myStepperCiudades.previous();
-        this.loading.cambiarestadoloading(false);
       }, (error) => {
         this.loading.cambiarestadoloading(false);
         console.log(error);
-        if(error.status !== 200){
+        if (error.status !== 200) {
           this.route.navigateByUrl('');
         }
+      }, () => {
+        this.loading.cambiarestadoloading(false);
       });
     }
   }
@@ -371,10 +375,11 @@ export class MantenedorComponent implements OnInit {
       this.mantenedorService.EliminarPais(element.element.pais_id.toString(), sessionStorage.getItem('user')!).subscribe((datos) => {
         this.paisesData = datos.data;
         this.dataSource.data = this.paisesData;
-        this.loading.cambiarestadoloading(false);
       }, (error) => {
         this.loading.cambiarestadoloading(false);
         console.log(error);
+      }, () => {
+        this.loading.cambiarestadoloading(false);
       });
     }
   }
@@ -386,13 +391,14 @@ export class MantenedorComponent implements OnInit {
       this.mantenedorService.EliminarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos.data;
         this.dataSourceCiudad.data = this.CiudadesData;
-        this.loading.cambiarestadoloading(false);
       }, (error) => {
         this.loading.cambiarestadoloading(false);
         console.log(error);
-        if(error.status !== 200){
+        if (error.status !== 200) {
           this.route.navigateByUrl('');
         }
+      },() => {
+        this.loading.cambiarestadoloading(false);
       });
     }
   }
