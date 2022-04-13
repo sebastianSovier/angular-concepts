@@ -18,6 +18,12 @@ export class MantenedorService {
     const result: Observable<any> = this.http.get(AppConfig.settings.UrlWebApi +'/Countries/TodosLosPaises?usuario='+usuario);
     return result;
   }
+  ObtenerExcelPaises(usuario:string) {
+    //const headers = new HttpHeaders({'Authorization':'Bearer '+sessionStorage.getItem('token')});
+    //,{headers:headers}
+     const result: Observable<any> = this.http.get(AppConfig.settings.UrlWebApi +'/Countries/GetExcelPaises?usuario='+usuario);
+     return result;
+   }
   IngresarPais(pais:any) {
      const result: Observable<any> = this.http.post(AppConfig.settings.UrlWebApi +'/Countries/IngresarPais',pais );
      return result;

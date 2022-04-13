@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { LoadingPageService } from '../loading-page/loading-page.service';
 import { DialogOverviewExampleDialogComponent } from '../modales/dialog-overview-example-dialog/dialog-overview-example-dialog.component';
 import { MantenedorService } from './mantenedor.service';
-
+import { saveAs } from 'file-saver';
 
 export class Ciudades {
   pais_id!: number;
@@ -117,6 +117,21 @@ export class MantenedorComponent implements OnInit {
     this.lng = $event.coords.lng;
     this.locationChose = true;
   }
+  public base64ToBlob(b64Data: string, sliceSize = 512) {
+    let byteCharacters = atob(b64Data); //data.file there
+    let byteArrays = [];
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      let slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      let byteNumbers = new Array(slice.length);
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      let byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+    return new Blob(byteArrays, { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  }
   ngOnInit(): void {
     if (sessionStorage.length === 0 || sessionStorage.getItem('token') === undefined) {
       this.route.navigateByUrl('');
@@ -210,6 +225,23 @@ export class MantenedorComponent implements OnInit {
       }
     });
   }
+  ExcelPaises() {
+    this.loading.cambiarestadoloading(true);
+    const objeto = { usuario: sessionStorage.getItem('user')! };
+    this.mantenedorService.ObtenerExcelPaises(objeto.usuario).subscribe((datos) => {
+      const myfile = this.base64ToBlob(datos);
+      const blob = new Blob([myfile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, 'MisPaises.xlsx');
+    }, (error) => {
+      this.loading.cambiarestadoloading(false);
+      console.log(error);
+      if (error.status !== 200) {
+        this.route.navigateByUrl('');
+      }
+    }, () => {
+      this.loading.cambiarestadoloading(false);
+    });
+  }
   ConsultarCiudades(elemento: Paises) {
     this.loading.cambiarestadoloading(true);
     this.pais_id_cache = elemento.pais_id;
@@ -224,6 +256,8 @@ export class MantenedorComponent implements OnInit {
       if (error.status !== 200) {
         this.route.navigateByUrl('');
       }
+    }, () => {
+      this.loading.cambiarestadoloading(false);
     });
   }
   volverListaModifica() {
@@ -397,7 +431,7 @@ export class MantenedorComponent implements OnInit {
         if (error.status !== 200) {
           this.route.navigateByUrl('');
         }
-      },() => {
+      }, () => {
         this.loading.cambiarestadoloading(false);
       });
     }
