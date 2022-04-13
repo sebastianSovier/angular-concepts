@@ -37,6 +37,9 @@ import localeClExtra from '@angular/common/locales/extra/es-CL';
 import { registerLocaleData } from '@angular/common';
 import { AuthInterceptorServiceService } from './auth-interceptor-service.service';
 import { MatTableExporterModule } from 'mat-table-exporter';
+import { AuthGuardService } from './auth-guard.service';
+import { AuthService } from './auth.service';
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 registerLocaleData(localeCl, localeClExtra);
 
@@ -88,6 +91,10 @@ export function initializeApp(appConfig: AppConfig) {
   ],
   providers: [
     LoadingPageService,
+    AuthGuardService,
+    AuthService,
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService,
     HttpClient, { provide: LOCALE_ID, useValue: 'es-CL' },
     AppConfig,
     {
