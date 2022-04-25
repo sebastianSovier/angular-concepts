@@ -242,6 +242,12 @@ export class MantenedorComponent implements OnInit {
       this.loading.cambiarestadoloading(false);
     });
   }
+  VolverAtrasPaises(){
+    this.consultaCiudades = false;
+    this.ciudades = [];
+    this.CiudadesData =  [];
+    this.dataSourceCiudad.data =  [];
+  }
   ConsultarCiudades(elemento: Paises) {
     this.loading.cambiarestadoloading(true);
     this.pais_id_cache = elemento.pais_id;
