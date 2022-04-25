@@ -365,7 +365,7 @@ export class MantenedorComponent implements OnInit {
     if (this.modificarFormGroup.valid) {
       const objeto = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion, usuario: sessionStorage.getItem('user') };
       this.mantenedorService.ModificarPais(objeto).subscribe((datos) => {
-        this.paisesData = datos.data;
+        this.paisesData = datos.data.shift();
         this.dataSource.data = this.paisesData;
         this.myStepper.reset();
         this.myStepper.previous();
@@ -407,7 +407,7 @@ export class MantenedorComponent implements OnInit {
       this.loading.cambiarestadoloading(false);
     } else {
       this.mantenedorService.EliminarPais(element.element.pais_id.toString(), sessionStorage.getItem('user')!).subscribe((datos) => {
-        this.paisesData = datos.data;
+        this.paisesData = datos.data.shift();
         this.dataSource.data = this.paisesData;
       }, (error) => {
         this.loading.cambiarestadoloading(false);
