@@ -29,4 +29,7 @@ export class AppComponent implements OnInit {
     this.route.navigateByUrl('');
     this.mostrar = false;
   }
+  VerPaises(){
+    this.route.navigateByUrl('paises');
+  }
 }

@@ -1,0 +1,21 @@
+<mat-card class="carta-mantenedor">
+<h1>Busqueda de Paises</h1>
+<form [formGroup]="busquedaFormGroup" (ngSubmit)="ConsultarPaisesFechas()" class="example-form">
+    <mat-form-field appearance="fill" style="width: 40%;">
+        <mat-label>Fecha Desde</mat-label>
+        <input formControlName="fecha_desde" matInput [matDatepicker]="pickerDesde">
+        <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+        <mat-datepicker #pickerDesde></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="fill" style="width: 40%; margin-left: 3%;">
+        <mat-label>Fecha Hasta</mat-label>
+        <input formControlName="fecha_hasta"  matInput [matDatepicker]="pickerHasta">
+        <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+        <mat-datepicker #pickerHasta></mat-datepicker>
+      </mat-form-field>
+      <button style="width: 10%;margin-left: 2%;" [disabled]="!busquedaFormGroup.valid" mat-raised-button color="primary">Buscar</button>
+
+</form>
+
+<app-hijo [PaisesInput]="paisesData" (editarPaisEvent)="editarPais($event)"></app-hijo>
+</mat-card>

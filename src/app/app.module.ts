@@ -18,14 +18,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule, } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { DialogOverviewExampleDialogComponent } from './modales/dialog-overview-example-dialog/dialog-overview-example-dialog.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -40,6 +41,10 @@ import { MatTableExporterModule } from 'mat-table-exporter';
 import { AuthGuardService } from './auth-guard.service';
 import { AuthService } from './auth.service';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { PadreComponent } from './parent-child-component/padre/padre.component';
+import { HijoComponent } from './parent-child-component/hijo/hijo.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { ModalEditarPaisComponent } from './modal-editar-pais/modal-editar-pais.component';
 
 registerLocaleData(localeCl, localeClExtra);
 
@@ -53,6 +58,9 @@ export function initializeApp(appConfig: AppConfig) {
     LoginComponent,
     MantenedorComponent,
     DialogOverviewExampleDialogComponent,
+    PadreComponent,
+    HijoComponent,
+    ModalEditarPaisComponent,
   ],
   imports: [
     BrowserModule,
@@ -84,12 +92,15 @@ export function initializeApp(appConfig: AppConfig) {
     MatSidenavModule,
     MatTableExporterModule,
     GoogleMapsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDgcp1axlsAr2kQ3sfV33oiyp99UswWYNs',
       libraries: ['places']
     })
   ],
   providers: [
+    DatePipe,
     LoadingPageService,
     AuthGuardService,
     AuthService,
@@ -108,6 +119,8 @@ export function initializeApp(appConfig: AppConfig) {
       deps: [AppConfig],
       multi: true,
     },
+  ],entryComponents: [
+    ModalEditarPaisComponent
   ],
   bootstrap: [AppComponent]
 })
