@@ -12,23 +12,9 @@ import { LoadingPageService } from '../loading-page/loading-page.service';
 import { DialogOverviewExampleDialogComponent } from '../modales/dialog-overview-example-dialog/dialog-overview-example-dialog.component';
 import { MantenedorService } from './mantenedor.service';
 import { saveAs } from 'file-saver';
+import { Paises } from '../models/paises';
+import { Ciudades } from '../models/ciudades';
 
-export class Ciudades {
-  pais_id!: number;
-  ciudad_id!: number;
-  nombre_ciudad!: string;
-  region!: string;
-  poblacion!: string;
-  latitud!: string;
-  longitud!: string;
-}
-export class Paises {
-  pais_id!: number;
-  nombre_pais!: string;
-  capital!: string;
-  region!: string;
-  poblacion!: string;
-}
 
 @Component({
   selector: 'app-mantenedor',

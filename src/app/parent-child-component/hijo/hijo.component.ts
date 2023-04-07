@@ -3,17 +3,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { LoadingPageService } from 'src/app/loading-page/loading-page.service';
 import { Output, EventEmitter } from '@angular/core';
+import { Paises } from '../padre/padre.component';
 
 
-export class Paises {
-  pais_id!: number;
-  nombre_pais!: string;
-  capital!: string;
-  region!: string;
-  poblacion!: string;
-  fecha_registro!: string;
-  usuario_id!: string;
-}
+
 @Component({
   selector: 'app-hijo',
   templateUrl: './hijo.component.html',

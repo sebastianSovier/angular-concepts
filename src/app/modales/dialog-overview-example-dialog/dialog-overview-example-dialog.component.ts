@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LoadingPageService } from 'src/app/loading-page/loading-page.service';
-import { Ciudades, Paises } from 'src/app/mantenedor/mantenedor.component';
 
 @Component({
   selector: 'app-dialog-overview-example-dialog',
