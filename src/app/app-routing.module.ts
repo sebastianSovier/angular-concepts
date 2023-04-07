@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'mantenedor', component: MantenedorComponent,canActivate:[AuthGuard] },
   {
     path: 'paises',
-    loadChildren: () => import('./parent-child-component/parent-child.module').then(m => m.ParentChildModule)
+    loadChildren: () => import('./parent-child-component/parent-child.module').then(m => m.ParentChildModule),canActivate:[AuthGuard]
   },
 	{ path: '', pathMatch: 'full', redirectTo: '' },
 	// cambiar
