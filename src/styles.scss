@@ -90,3 +90,12 @@ table {
   width: 12%;
   padding: 10px;
 }
+mat-form-field {
+  mat-error {
+      display: none !important;
+  }
+
+  mat-error:first-child {
+      display: block !important;
+  }
+}

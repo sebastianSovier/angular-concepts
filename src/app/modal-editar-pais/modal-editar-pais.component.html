@@ -1,25 +1,29 @@
- <h1>Editar Pais</h1>
-    <form [formGroup]="editarPaisFormGroup" (ngSubmit)="editarPais()" class="example-form">
-        <mat-form-field appearance="fill" class="example-full-width">
-            <mat-label>Nombre Pais</mat-label>
-            <input formControlName="nombre_pais" matInput >
-          
-          </mat-form-field>
-          <mat-form-field appearance="fill" class="example-full-width">
-            <mat-label>Capital</mat-label>
-            <input formControlName="capital"  matInput>
-           
-          </mat-form-field>
-          <mat-form-field appearance="fill" class="example-full-width">
-            <mat-label>Region</mat-label>
-            <input formControlName="region"  matInput>
-       
-          </mat-form-field>
-          <mat-form-field appearance="fill" class="example-full-width">
-            <mat-label>Poblacion</mat-label>
-            <input formControlName="poblacion"  matInput>
-       
-          </mat-form-field>
-          <button class="example-full-width" [disabled]="!editarPaisFormGroup.valid" mat-raised-button color="primary">Guardar</button>
-    
-    </form>
+<h1>Editar Pais</h1>
+<form [formGroup]="editarPaisFormGroup" (ngSubmit)="editarPais()" class="example-form">
+  <mat-form-field appearance="fill" class="example-full-width">
+    <mat-label>Nombre Pais</mat-label>
+    <input formControlName="nombre_pais" class="form-control" matInput>
+    <mat-error *ngIf="editarPaisFormGroup.controls.nombre_pais.dirty || editarPaisFormGroup.controls.nombre_pais.touched ">{{validationsForm(editarPaisFormGroup.controls.nombre_pais)}}</mat-error>
+
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="example-full-width">
+    <mat-label>Capital</mat-label>
+    <input formControlName="capital" matInput>
+    <mat-error *ngIf="editarPaisFormGroup.controls.capital.dirty || editarPaisFormGroup.controls.capital.touched ">{{validationsForm(editarPaisFormGroup.controls.capital)}}</mat-error>
+
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="example-full-width">
+    <mat-label>Region</mat-label>
+    <input formControlName="region" matInput>
+
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="example-full-width">
+    <mat-label>Poblacion</mat-label>
+    <input formControlName="poblacion" matInput>
+
+  </mat-form-field>
+  <button class="example-full-width" [disabled]="!editarPaisFormGroup.valid" mat-raised-button
+    color="primary">Guardar</button>
+
+</form>

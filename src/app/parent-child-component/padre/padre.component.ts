@@ -30,7 +30,7 @@ export class PadreComponent implements OnInit {
 
   ngOnInit(): void {
     this.busquedaFormGroup = this._formBuilder.group({
-      fecha_desde: [new Date(), [Validators.required,]],
+      fecha_desde: [new Date("2021-01-01"), [Validators.required,]],
       fecha_hasta: [new Date(), [Validators.required,]]  
     });
     this.loading.cambiarestadoloading(false);
