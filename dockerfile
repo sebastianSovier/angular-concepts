@@ -15,3 +15,5 @@ RUN npm run build --prod
 FROM nginx:1.17.1-alpine
 
 COPY --from=build-app /app/dist/angular-concepts /usr/share/nginx/html
+
+EXPOSE 80
