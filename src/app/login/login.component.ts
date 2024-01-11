@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { LoadingPageService } from '../loading-page/loading-page.service';
 import { LoginService } from './login.service';
+import { DecryptDataService } from '../decrypt-data.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -16,7 +17,7 @@ export class LoginComponent implements OnInit {
   loginRequest: any = {};
   login = true;
   contrasenaIguales = false;
-  constructor(fb: FormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
+  constructor(private decryptService:DecryptDataService, fb: FormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
     sessionStorage.clear();
     this.loginForm = fb.group(
       {
@@ -82,7 +83,8 @@ export class LoginComponent implements OnInit {
     if (f.valid) {
       this.loading.cambiarestadoloading(true);
       const loginRequest = { Username: this.usuario, Password: this.contrasena };
-      this.loginService.IniciarSesion(loginRequest).subscribe((datos) => {
+      this.loginService.IniciarSesion(this.decryptService.encrypt(loginRequest)).subscribe((datos) => {
+        datos = JSON.parse(this.decryptService.decrypt(datos.data));
         if (datos.Error !== undefined) {
           this.loginService.enviaCondicion(false);
           sessionStorage.clear();

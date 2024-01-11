@@ -28,6 +28,7 @@ import { AuthService } from './auth.service';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { ModalEditarPaisComponent } from './modal-editar-pais/modal-editar-pais.component';
 import { MaterialModule } from './material/material.module';
+import { DecryptDataService } from './decrypt-data.service';
 
 registerLocaleData(localeCl, localeClExtra);
 
@@ -65,6 +66,7 @@ export function initializeApp(appConfig: AppConfig) {
     LoadingPageService,
     AuthGuardService,
     AuthService,
+    DecryptDataService,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     JwtHelperService,
     HttpClient, { provide: LOCALE_ID, useValue: 'es-CL' },
