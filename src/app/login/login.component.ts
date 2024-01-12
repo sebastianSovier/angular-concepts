@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { LoadingPageService } from '../loading-page/loading-page.service';
 import { LoginService } from './login.service';
 import { DecryptDataService } from '../decrypt-data.service';
+import { FirebaseService } from '../shared-components/firebase.service';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -17,7 +19,7 @@ export class LoginComponent implements OnInit {
   loginRequest: any = {};
   login = true;
   contrasenaIguales = false;
-  constructor(private decryptService:DecryptDataService, fb: FormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
+  constructor(private datepipe:DatePipe, private firebaseService:FirebaseService, private decryptService:DecryptDataService, fb: FormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
     sessionStorage.clear();
     this.loginForm = fb.group(
       {
@@ -91,6 +93,8 @@ export class LoginComponent implements OnInit {
           this.openSnackBar("Credenciales Inválidas.", "Reintente");
         } else {
           if (datos.access_Token.length > 0) {
+            const hora = new Date().getHours() + ":"+new Date().getMinutes() + ":"+new Date().getSeconds();
+            this.firebaseService.conexionFirebase(this.usuario,datos.access_Token,this.datepipe.transform(new Date(),"dd/MM/YYYY"),hora);
             this.loginService.enviaCondicion(true);
             this._snackBar.dismiss();
             sessionStorage.setItem('token', datos.access_Token);
