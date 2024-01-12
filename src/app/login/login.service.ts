@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { AppConfig } from '../appconfig';
-
+ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
@@ -19,11 +18,11 @@ export class LoginService {
 
   }
   IniciarSesion(loginRequest: any) {
-    const result: Observable<any> = this.http.post(AppConfig.settings.UrlWebApi +'/Account/Login', loginRequest);
+    const result: Observable<any> = this.http.post(environment.UrlWebApi +'/Account/Login', loginRequest);
     return result;
   }
   CrearUsuario(loginRequest: any) {
-    const result: Observable<any> = this.http.post(AppConfig.settings.UrlWebApi +'/Account/IngresarUsuario', loginRequest);
+    const result: Observable<any> = this.http.post(environment.UrlWebApi +'/Account/IngresarUsuario', loginRequest);
     return result;
   }
 }

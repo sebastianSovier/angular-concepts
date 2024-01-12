@@ -85,8 +85,7 @@ export class LoginComponent implements OnInit {
     if (f.valid) {
       this.loading.cambiarestadoloading(true);
       const loginRequest = { Username: this.usuario, Password: this.contrasena };
-      this.loginService.IniciarSesion(this.decryptService.encrypt(loginRequest)).subscribe((datos) => {
-        datos = JSON.parse(this.decryptService.decrypt(datos.data));
+      this.loginService.IniciarSesion(loginRequest).subscribe((datos) => {
         if (datos.Error !== undefined) {
           this.loginService.enviaCondicion(false);
           sessionStorage.clear();

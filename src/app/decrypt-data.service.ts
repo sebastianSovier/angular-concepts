@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as CryptoJS from 'crypto-js';
-import { AppConfig } from './appconfig';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -12,12 +12,12 @@ export class DecryptDataService {
 
 
   public decrypt(data: any):any{
-    const bytes  = CryptoJS.AES.decrypt(data,AppConfig.settings.SecretKey.toString());
+    const bytes  = CryptoJS.AES.decrypt(data,environment.secretKey);
     const resp = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     return resp;
   }
   public encrypt(data: any):any{
-    const resp = CryptoJS.AES.encrypt(JSON.stringify(data), AppConfig.settings.SecretKey.toString()).toString();
+    const resp = CryptoJS.AES.encrypt(JSON.stringify(data), environment.secretKey).toString();
     return {data:resp};
   }
 }

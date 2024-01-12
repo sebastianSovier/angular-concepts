@@ -18,7 +18,6 @@ import { DialogOverviewExampleDialogComponent } from './modales/dialog-overview-
 
 import { GoogleMapsModule } from '@angular/google-maps';
 import { AgmCoreModule } from '@agm/core';
-import { AppConfig } from './appconfig';
 import localeCl from '@angular/common/locales/es-CL';
 import localeClExtra from '@angular/common/locales/extra/es-CL';
 import { registerLocaleData } from '@angular/common';
@@ -32,10 +31,6 @@ import { DecryptDataService } from './decrypt-data.service';
 import { FirebaseService } from './shared-components/firebase.service';
 
 registerLocaleData(localeCl, localeClExtra);
-
-export function initializeApp(appConfig: AppConfig) {
-  return () => appConfig.load();
-}
 
 @NgModule({
   declarations: [
@@ -72,17 +67,10 @@ export function initializeApp(appConfig: AppConfig) {
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     JwtHelperService,
     HttpClient, { provide: LOCALE_ID, useValue: 'es-CL' },
-    AppConfig,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorServiceService,
       multi: true
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeApp,
-      deps: [AppConfig],
-      multi: true,
     },
   ],entryComponents: [
     ModalEditarPaisComponent

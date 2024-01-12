@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, mergeMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { EMPTY } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DecryptDataService } from './decrypt-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class AuthInterceptorServiceService implements HttpInterceptor {
   url401 = '';
   reload = 0;
-  constructor(private router: Router, private _snackBar: MatSnackBar) { }
+  constructor(private decryptService:DecryptDataService, private router: Router, private _snackBar: MatSnackBar) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token: string = sessionStorage.getItem("token")!;
 
@@ -23,9 +24,18 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
       request = req.clone({
         setHeaders: {
           Authorization: 'Bearer ' + token
-        }
+        },body:this.decryptService.encrypt(req.body)
       });
+      let data = req.body as FormData;
+      console.log(data);
+    }else{
+      request = req.clone({
+        body:this.decryptService.encrypt(req.body)
+      });
+      let data = req.body as FormData;
+      console.log(data);
     }
+
 
     if (this.reload > 30) {
       setTimeout(() => {
@@ -35,11 +45,14 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
       return EMPTY
     } else {
       return next.handle(request).pipe(
-        tap((event: HttpEvent<any>) => {
+        mergeMap(async (event: HttpEvent<any>) => {
           if (event instanceof HttpResponse && event.status === 200) {
             this.url401 = '';
             this.reload = 0;
+            const _body = await this.decryptService.decrypt(event.body.data);
+            return event.clone({ body: JSON.parse(_body) });
           }
+          return event;
         }),
         catchError((err: HttpErrorResponse) => {
 
