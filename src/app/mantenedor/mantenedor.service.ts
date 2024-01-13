@@ -13,7 +13,7 @@ export class MantenedorService {
 
 
   ObtenerPaises(usuario:string) {
-    const result: Observable<any> = this.http.get(environment.UrlWebApi +'/Countries/TodosLosPaises?usuario='+usuario);
+    const result: Observable<any> = this.http.get(environment.UrlWebApi +'/Countries/TodosLosPaises?"usuario"='+'"'+usuario+'"');
     return result;
   }
   ObtenerPaisesByFechas(fechas:any) {
@@ -21,7 +21,7 @@ export class MantenedorService {
      return result;
    }
   ObtenerExcelPaises(usuario:string) {
-     const result: Observable<any> = this.http.get(environment.UrlWebApi +'/Countries/GetExcelPaises?usuario='+usuario);
+     const result: Observable<any> = this.http.get(environment.UrlWebApi +'/Countries/GetExcelPaises?"usuario"='+'"'+usuario+'"');
      return result;
    }
   IngresarPais(pais:any) {
@@ -33,11 +33,11 @@ export class MantenedorService {
      return result;
    }
    EliminarPais(pais_id:string,usuario:string) {
-     const result: Observable<any> = this.http.delete(environment.UrlWebApi +'/Countries/EliminarPais?pais_id='+pais_id+"&usuario="+usuario);
+     const result: Observable<any> = this.http.delete(environment.UrlWebApi +'/Countries/EliminarPais?"pais_id"='+'"'+pais_id+'"'+"&'usuario'="+'"'+usuario+'"');
      return result;
    }
    ObtenerCiudades(pais_id:string) {
-     const result: Observable<any> = this.http.get(environment.UrlWebApi +'/Ciudades/CiudadesPais?pais_id='+pais_id);
+     const result: Observable<any> = this.http.get(environment.UrlWebApi +'/Ciudades/CiudadesPais?"pais_id"='+'"'+pais_id+'"');
      return result;
    }
    IngresarCiudad(ciudad:any) {
@@ -49,7 +49,7 @@ export class MantenedorService {
       return result;
     }
     EliminarCiudad(element:any) {
-      const result: Observable<any> = this.http.delete(environment.UrlWebApi +'/Ciudades/EliminarCiudad?ciudad_id='+element.ciudad_id+'&pais_id='+element.pais_id);
+      const result: Observable<any> = this.http.delete(environment.UrlWebApi +'/Ciudades/EliminarCiudad?"ciudad_id"='+'"'+element.ciudad_id+'"'+"&'pais_id'="+'"'+element.pais_id+'"');
       return result;
     }
 }

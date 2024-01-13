@@ -42,7 +42,7 @@ export class PadreComponent implements OnInit {
     this.loading.cambiarestadoloading(true);
     const objeto = { fecha_desde:this.datePipe.transform(this.fechaDesde,"yyyy-MM-dd"),fecha_hasta:this.datePipe.transform(this.fechaHasta,"yyyy-MM-dd"),usuario: sessionStorage.getItem('user') };
     this.mantenedorService.ObtenerPaisesByFechas(objeto).subscribe((datos) => {
-      this.paisesData = datos.data.shift();
+      this.paisesData = datos;
       console.log(datos);
     }, (error) => {
       this.loading.cambiarestadoloading(false);
@@ -61,7 +61,7 @@ export class PadreComponent implements OnInit {
     }});
     dialogRef.afterClosed().subscribe(result => {
       this.mantenedorService.ModificarPais(result).subscribe((datos) => {
-        this.paisesData = datos.data.shift();
+        this.paisesData = datos;
        
       }, (error) => {
         this.loading.cambiarestadoloading(false);
