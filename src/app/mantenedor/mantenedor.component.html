@@ -1,5 +1,5 @@
 <mat-card class="carta-mantenedor">
-  <div *ngIf="!consultaCiudades">
+  <div [hidden]="consultaCiudades">
     <mat-horizontal-stepper id="editarpais" [linear]="isLinear" #stepper>
       <mat-step completed="false">
         <form>
@@ -281,7 +281,7 @@
       </mat-step>
     </mat-horizontal-stepper>
   </div>
-  <div *ngIf="consultaCiudades">
+  <div [hidden]="!consultaCiudades">
 
     <mat-form-field>
       <mat-label>Buscador</mat-label>

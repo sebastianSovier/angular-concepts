@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { EMPTY } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DecryptDataService } from './decrypt-data.service';
+import { LoadingPageService } from './loading-page/loading-page.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,9 @@ import { DecryptDataService } from './decrypt-data.service';
 export class AuthInterceptorServiceService implements HttpInterceptor {
   url401 = '';
   reload = 0;
-  constructor(private decryptService:DecryptDataService, private router: Router, private _snackBar: MatSnackBar) { }
+  constructor(private decryptService:DecryptDataService, private router: Router, private _snackBar: MatSnackBar,private _loadingService:LoadingPageService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    this._loadingService.cambiarestadoloading(true);
     const token: string = sessionStorage.getItem("token")!;
     let request = req;
     return this.decryptService.encrypt(request.body).pipe(
@@ -53,6 +55,7 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
         if (event instanceof HttpResponse && event.ok) {
           try {
             const contentType = event.headers.get('Content-Type');
+            this._loadingService.cambiarestadoloading(false);
             if (contentType && contentType.includes('application/json')) {
               const _body = await this.decryptService.decrypt(event.body.data).toPromise();
               const parsedBody = JSON.parse(_body);
@@ -60,13 +63,14 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
             }
           } catch (error) {
             console.error('Error during decryption or JSON parsing:', error);
-            return of(event);
+            this._loadingService.cambiarestadoloading(false);
+            return event;
           }
         }
         return event;
       }),
       catchError(error => {
-
+        this._loadingService.cambiarestadoloading(false);
         if (error.status === 401 || error.status === 403) {
           if (this.url401 == request.url) {
             if (this.reload > 12) {
@@ -93,11 +97,9 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
           this.openSnackBar("Hubo problemas, por favor comuniquese con Administrador.", "Reintente");
         }else{
           return next.handle(request);
-        }    
+        }
         return throwError(error);
-
       })
-
     );
   }
   openSnackBar(message: string, action: string) {

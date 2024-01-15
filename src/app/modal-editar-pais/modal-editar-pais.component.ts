@@ -35,7 +35,7 @@ export class ModalEditarPaisComponent implements OnInit {
       pais_id: this.objectPaisEditar.pais_id, nombre_pais: this.objectPaisEditar.nombre_pais, capital: this.objectPaisEditar.capital,
       region: this.objectPaisEditar.region, poblacion: this.objectPaisEditar.poblacion
     });
-    this.loading.cambiarestadoloading(false);
+   // this.loading.cambiarestadoloading(false);
   }
   get paisId() { return this.editarPaisFormGroup.value.pais_id }
   get nombrePais() { return this.editarPaisFormGroup.value.nombre_pais }
@@ -45,7 +45,7 @@ export class ModalEditarPaisComponent implements OnInit {
 
 
   editarPais() {
-    this.loading.cambiarestadoloading(true);
+   // this.loading.cambiarestadoloading(true);
     if (this.editarPaisFormGroup.valid) {
       const objeto = { pais_id: this.paisId, nombre_pais: this.nombrePais, capital: this.capital, region: this.region, poblacion: this.poblacion, usuario: sessionStorage.getItem('user') };
       this.dialogRef.close(objeto);

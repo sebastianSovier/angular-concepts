@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit {
   }
   onSubmit(f: FormGroup) {
     if (f.valid) {
-      this.loading.cambiarestadoloading(true);
+      //this.loading.cambiarestadoloading(true);
       const loginRequest = { Username: this.usuario, Password: this.contrasena };
       this.loginService.IniciarSesion(loginRequest).subscribe((datos) => {
         if (datos.Error !== undefined) {
@@ -111,13 +111,13 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('');
         }
       },() => {
-        this.loading.cambiarestadoloading(false);
+        //this.loading.cambiarestadoloading(false);
       });
     }
   }
   CrearUsuario(f: FormGroup) {
     if (f.valid) {
-      this.loading.cambiarestadoloading(true);
+      //this.loading.cambiarestadoloading(true);
       const loginRequest = { usuario: this.usuarioCrear, contrasena: this.contrasenaCrear, nombre_completo: this.nombre_completoCrear, correo: this.correoCrear };
       this.loginService.CrearUsuario(loginRequest).subscribe((datos) => {
         if (datos.Error !== undefined) {
@@ -139,7 +139,7 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('');
         }
       },() => {
-        this.loading.cambiarestadoloading(false);
+        //this.loading.cambiarestadoloading(false);
       });
     }
   }

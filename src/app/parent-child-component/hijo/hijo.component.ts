@@ -36,7 +36,7 @@ export class HijoComponent implements OnInit, OnChanges,AfterViewInit {
 
     }
     console.log(this.dataSource);
-    this.loading.cambiarestadoloading(false);
+    //this.loading.cambiarestadoloading(false);
     this.dataSource.paginator = this.paginator;
   }
   ngAfterViewInit() {

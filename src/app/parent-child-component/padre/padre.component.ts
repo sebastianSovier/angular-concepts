@@ -33,19 +33,19 @@ export class PadreComponent implements OnInit {
       fecha_desde: [new Date("2021-01-01"), [Validators.required,]],
       fecha_hasta: [new Date(), [Validators.required,]]  
     });
-    this.loading.cambiarestadoloading(false);
+    //this.loading.cambiarestadoloading(false);
   }
   get fechaDesde() { return this.busquedaFormGroup.value.fecha_desde }
   get fechaHasta() { return this.busquedaFormGroup.value.fecha_hasta; }
  
   ConsultarPaisesFechas() {
-    this.loading.cambiarestadoloading(true);
+    //this.loading.cambiarestadoloading(true);
     const objeto = { fecha_desde:this.datePipe.transform(this.fechaDesde,"yyyy-MM-dd"),fecha_hasta:this.datePipe.transform(this.fechaHasta,"yyyy-MM-dd"),usuario: sessionStorage.getItem('user') };
     this.mantenedorService.ObtenerPaisesByFechas(objeto).subscribe((datos) => {
       this.paisesData = datos;
       console.log(datos);
     }, (error) => {
-      this.loading.cambiarestadoloading(false);
+      //this.loading.cambiarestadoloading(false);
       console.log(error);
       if (error.status !== 200) {
         this.route.navigateByUrl('');
@@ -64,13 +64,13 @@ export class PadreComponent implements OnInit {
         this.paisesData = datos;
        
       }, (error) => {
-        this.loading.cambiarestadoloading(false);
+        //this.loading.cambiarestadoloading(false);
         console.log(error);
         if (error.status !== 200) {
           this.route.navigateByUrl('');
         }
       }, () => {
-        this.loading.cambiarestadoloading(false);
+        //this.loading.cambiarestadoloading(false);
       });
     });
   }

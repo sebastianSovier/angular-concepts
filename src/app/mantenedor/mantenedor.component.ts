@@ -123,7 +123,7 @@ export class MantenedorComponent implements OnInit {
       this.route.navigateByUrl('');
       return;
     }
-    this.loading.cambiarestadoloading(true);
+    //this.loading.cambiarestadoloading(true);
     this.dataSource.sort = this.sort;
     this.ConsultarPaises();
     this.dataSource.paginator = this.paginator;
@@ -196,15 +196,15 @@ export class MantenedorComponent implements OnInit {
   }
 
   ConsultarPaises() {
-    this.loading.cambiarestadoloading(true);
+    //this.loading.cambiarestadoloading(true);
     const objeto = { usuario: sessionStorage.getItem('user')! };
     this.mantenedorService.ObtenerPaises(objeto.usuario).subscribe((datos) => {
       this.paisesData = datos;
       this.dataSource.data = this.paisesData;
-      this.loading.cambiarestadoloading(false);
+      //this.loading.cambiarestadoloading(false);
       console.log(datos);
     }, (error) => {
-      this.loading.cambiarestadoloading(false);
+      //this.loading.cambiarestadoloading(false);
       console.log(error);
       if (error.status !== 200) {
         this.route.navigateByUrl('');
@@ -212,20 +212,20 @@ export class MantenedorComponent implements OnInit {
     });
   }
   ExcelPaises() {
-    this.loading.cambiarestadoloading(true);
+    //this.loading.cambiarestadoloading(true);
     const objeto = { usuario: sessionStorage.getItem('user')! };
     this.mantenedorService.ObtenerExcelPaises(objeto.usuario).subscribe((datos) => {
       const myfile = this.base64ToBlob(datos);
       const blob = new Blob([myfile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       saveAs(blob, 'MisPaises.xlsx');
     }, (error) => {
-      this.loading.cambiarestadoloading(false);
+      //this.loading.cambiarestadoloading(false);
       console.log(error);
       if (error.status !== 200) {
         this.route.navigateByUrl('');
       }
     }, () => {
-      this.loading.cambiarestadoloading(false);
+      //this.loading.cambiarestadoloading(false);
     });
   }
   VolverAtrasPaises(){
@@ -235,25 +235,25 @@ export class MantenedorComponent implements OnInit {
     this.dataSourceCiudad.data =  [];
   }
   ConsultarCiudades(elemento: Paises) {
-    this.loading.cambiarestadoloading(true);
+    //this.loading.cambiarestadoloading(true);
     this.pais_id_cache = elemento.pais_id;
     this.mantenedorService.ObtenerCiudades(elemento.pais_id.toString()).subscribe((datos) => {
       this.ciudades = datos;
       this.CiudadesData = datos;
       this.dataSourceCiudad.data = this.CiudadesData;
-      this.loading.cambiarestadoloading(false);
+      //this.loading.cambiarestadoloading(false);
     }, (error) => {
-      this.loading.cambiarestadoloading(false);
+      //this.loading.cambiarestadoloading(false);
       console.log(error);
       if (error.status !== 200) {
         this.route.navigateByUrl('');
       }
     }, () => {
-      this.loading.cambiarestadoloading(false);
+      //this.loading.cambiarestadoloading(false);
     });
   }
   volverListaModifica() {
-    this.loading.cambiarestadoloading(true);
+    //this.loading.cambiarestadoloading(true);
     this.myStepper.previous();
     this.myStepper.previous();
     this.myStepper.reset();
@@ -264,7 +264,7 @@ export class MantenedorComponent implements OnInit {
     this.ConsultarPaises();
   }
   volverListaIngresa() {
-    this.loading.cambiarestadoloading(false);
+    //this.loading.cambiarestadoloading(false);
     this.myStepper.previous();
     this.myStepper.reset();
 
@@ -314,7 +314,7 @@ export class MantenedorComponent implements OnInit {
     this.myStepperCiudades.next();
   }
   IngresarPais() {
-    this.loading.cambiarestadoloading(true);
+    //this.loading.cambiarestadoloading(true);
     if (this.ingresarFormGroup.valid) {
       const objeto = { nombre_pais: this.Ingresanombre, capital: this.Ingresacapital, region: this.Ingresaregion, poblacion: this.Ingresapoblacion, usuario: sessionStorage.getItem('user') };
       this.mantenedorService.IngresarPais(objeto).subscribe((datos) => {
@@ -326,12 +326,12 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        this.loading.cambiarestadoloading(false);
+        //this.loading.cambiarestadoloading(false);
       });
     }
   }
   IngresarCiudad() {
-    this.loading.cambiarestadoloading(true);
+    //this.loading.cambiarestadoloading(true);
     if (this.ingresarCiudadFormGroup.valid) {
       const objeto = { pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad, latitud: this.lat.toString(), longitud: this.lng.toString() };
       this.mantenedorService.IngresarCiudad(objeto).subscribe((datos) => {
@@ -345,12 +345,12 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        this.loading.cambiarestadoloading(false);
+        //this.loading.cambiarestadoloading(false);
       });
     }
   }
   ModificarPais() {
-    this.loading.cambiarestadoloading(true);
+    //this.loading.cambiarestadoloading(true);
     if (this.modificarFormGroup.valid) {
       const objeto = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion, usuario: sessionStorage.getItem('user') };
       this.mantenedorService.ModificarPais(objeto).subscribe((datos) => {
@@ -365,12 +365,12 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        this.loading.cambiarestadoloading(false);
+        //this.loading.cambiarestadoloading(false);
       });
     }
   }
   ModificarCiudad() {
-    this.loading.cambiarestadoloading(true);
+    //this.loading.cambiarestadoloading(true);
     if (this.modificarCiudadFormGroup.valid && this.locationChose === true) {
       const objeto = { pais_id: this.ModificaIdCiudadPais, ciudad_id: this.ModificaIdCiudad, nombre_ciudad: this.ModificanombreCiudad, region: this.ModificaregionCiudad, poblacion: this.ModificapoblacionCiudad, latitud: this.lat.toString(), longitud: this.lng.toString() };
       this.mantenedorService.ModificarCiudad(objeto).subscribe((datos) => {
@@ -385,13 +385,13 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        this.loading.cambiarestadoloading(false);
+        //this.loading.cambiarestadoloading(false);
       });
     }
   }
   EliminarPais(element: any) {
     if (element === undefined) {
-      this.loading.cambiarestadoloading(false);
+      //this.loading.cambiarestadoloading(false);
       return;
     } else {
       this.mantenedorService.EliminarPais(element.element.pais_id.toString(), sessionStorage.getItem('user')!).subscribe((datos) => {
@@ -400,13 +400,13 @@ export class MantenedorComponent implements OnInit {
       }, (error) => {
         console.log(error);
       }, () => {
-        this.loading.cambiarestadoloading(false);
+        //this.loading.cambiarestadoloading(false);
       });
     }
   }
   EliminarCiudad(element: any) {
     if (element === undefined) {
-      this.loading.cambiarestadoloading(false);
+      //this.loading.cambiarestadoloading(false);
       return;
     } else {
       const objeto = { pais_id: element.element.pais_id.toString(), ciudad_id: element.element.ciudad_id.toString() }
@@ -419,13 +419,13 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        this.loading.cambiarestadoloading(false);
+        //this.loading.cambiarestadoloading(false);
       });
     }
   }
 
   openDialog(element: Paises): void {
-    this.loading.cambiarestadoloading(true);
+    //this.loading.cambiarestadoloading(true);
     const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
       width: '250px',
       data: { element, 'label': 'pais' }
@@ -438,7 +438,7 @@ export class MantenedorComponent implements OnInit {
     });
   }
   openDialogCiudad(element: Ciudades): void {
-    this.loading.cambiarestadoloading(true);
+    //this.loading.cambiarestadoloading(true);
     const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
       width: '350px',
       data: { element, 'label': 'ciudad' }
