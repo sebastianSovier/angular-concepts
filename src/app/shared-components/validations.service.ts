@@ -9,7 +9,7 @@ export class ValidationsService {
     maxlength: 'max',
     minlength: 'min',
     email: 'email',
-    required: 'Required',
+    required: 'required',
     pattern: 'pattern'
   };
   form:FormGroup= new FormGroup({});

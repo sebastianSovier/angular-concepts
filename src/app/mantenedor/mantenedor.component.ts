@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -176,8 +176,20 @@ export class MantenedorComponent implements OnInit {
   get ModificanombreCiudad() { return this.modificarCiudadFormGroup.value.nombre_ciudad }
   get ModificaregionCiudad() { return this.modificarCiudadFormGroup.value.region }
   get ModificapoblacionCiudad() { return this.modificarCiudadFormGroup.value.poblacion; }
-
-
+  errorMessages: Record<string, string> = {
+    maxlength: 'max',
+    minlength: 'min',
+    email: 'email',
+    required: 'required',
+    pattern: 'pattern'
+  };
+  errors(control: AbstractControl | null): string[] {
+    if(control === null){
+      return [];
+    }else{
+      return control.errors ? Object.keys(control.errors) : [];
+    }
+  }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -185,6 +197,40 @@ export class MantenedorComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+  getErrorMessage(form: string,fg:FormGroup) {
+    let mensaje = '';
+    if (form == 'pais') {
+      for (const key of Object.keys(fg.controls)) {
+      if (fg.controls[key].hasError('required')) {
+         mensaje = 'Debe ingresar valor';
+      } else if (fg.controls[key].hasError('minlength')) {
+         mensaje ='Debe ingresar un minimo de caracteres';
+      } else if (fg.controls[key].hasError('maxlength')) {
+         mensaje ='Debe ingresar un maximo de caracteres';
+      } else if (fg.controls[key].hasError('pattern')) {
+         mensaje ='Debe ingresar caracteres validos';
+      }else{
+         mensaje = '';
+      }
+      break;
+    }
+    } else {
+      for (const key of Object.keys(fg.controls)) {
+        if (fg.controls[key].hasError('required')) {
+          return mensaje = 'Debe ingresar valor';
+        } else if (fg.controls[key].hasError('minlength')) {
+          return mensaje = 'Debe ingresar un minimo de caracteres';
+        } else if (fg.controls[key].hasError('maxlength')) {
+          return mensaje = 'Debe ingresar un maximo de caracteres';
+        } else if (fg.controls[key].hasError('pattern')) {
+          return mensaje = 'Debe ingresar caracteres validos';
+        }else{
+          return '';
+        }
+    }
+  }
+    return mensaje;
   }
   applyFilterCiudad(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -228,11 +274,11 @@ export class MantenedorComponent implements OnInit {
       //this.loading.cambiarestadoloading(false);
     });
   }
-  VolverAtrasPaises(){
+  VolverAtrasPaises() {
     this.consultaCiudades = false;
     this.ciudades = [];
-    this.CiudadesData =  [];
-    this.dataSourceCiudad.data =  [];
+    this.CiudadesData = [];
+    this.dataSourceCiudad.data = [];
   }
   ConsultarCiudades(elemento: Paises) {
     //this.loading.cambiarestadoloading(true);
@@ -449,6 +495,14 @@ export class MantenedorComponent implements OnInit {
         this.EliminarCiudad(result);
       }
     });
+  }
+  isValidInputCrear(fieldName: string | number): boolean {
+    return this.ingresarFormGroup.controls[fieldName].invalid &&
+      (this.ingresarFormGroup.controls[fieldName].dirty || this.ingresarFormGroup.controls[fieldName].touched);
+  }
+  isValidInputModificar(fieldName: string | number): boolean {
+    return this.modificarFormGroup.controls[fieldName].invalid &&
+      (this.modificarFormGroup.controls[fieldName].dirty || this.modificarFormGroup.controls[fieldName].touched);
   }
 
 }

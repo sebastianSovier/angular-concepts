@@ -84,20 +84,42 @@
         <form [formGroup]="ingresarFormGroup" (ngSubmit)="IngresarPais()">
           <mat-form-field style="width: 80%;">
             <mat-label>Nombre Pais</mat-label>
-            <input matInput formControlName="nombre" type="text" placeholder="Chile" required autocomplete="country">
+            <input matInput formControlName="nombre" type="text" placeholder="Chile" required autocomplete="country" >
+
+            <mat-error>
+              <ng-container *ngFor="let error of errors(ingresarFormGroup.get('nombre'))">
+                {{ errorMessages[error] }} <br>
+              </ng-container>
+            </mat-error>
           </mat-form-field>
+         
           <mat-form-field style="width: 80%;">
             <mat-label>Capital</mat-label>
             <input matInput formControlName="capital" placeholder="Santiago" autocomplete="address-level2" required>
+            <mat-error>
+              <ng-container *ngFor="let error of errors(ingresarFormGroup.get('capital'))">
+                {{ errorMessages[error] }} <br>
+              </ng-container>
+            </mat-error>
           </mat-form-field>
           <mat-form-field style="width: 80%;">
             <mat-label>Region</mat-label>
             <input matInput formControlName="region" placeholder="América del Sur" autocomplete="address-level3"
               required>
+              <mat-error>
+                <ng-container *ngFor="let error of errors(ingresarFormGroup.get('region')) ">
+                  {{ errorMessages[error] }} <br>
+                </ng-container>
+              </mat-error>
           </mat-form-field>
           <mat-form-field style="width: 80%;">
             <mat-label>Población</mat-label>
             <input matInput formControlName="poblacion" placeholder="150000000" autocomplete="address-level4" required>
+            <mat-error>
+              <ng-container *ngFor="let error of errors(ingresarFormGroup.get('poblacion'))">
+                {{ errorMessages[error] }} <br>
+              </ng-container>
+            </mat-error>
           </mat-form-field>
           <div class="col-md-5 text-right" style="margin-top:5%;">
             <button mat-raised-button color="primary" [disabled]="!ingresarFormGroup.valid">Ingresar</button>
