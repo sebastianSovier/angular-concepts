@@ -87,7 +87,6 @@ export class LoginComponent implements OnInit {
       const loginRequest = { Username: this.usuario, Password: this.contrasena };
       this.loginService.IniciarSesion(loginRequest).subscribe((datos) => {
         if (datos.Error !== undefined) {
-          this.loginService.enviaCondicion(false);
           sessionStorage.clear();
           this.openSnackBar("Credenciales Inválidas.", "Reintente");
         } else {
@@ -107,7 +106,6 @@ export class LoginComponent implements OnInit {
         }
         console.log(datos);
       },(error) => {
-        this.loading.cambiarestadoloading(false);
         console.log(error);
         if(error.status !== 200){
           this.router.navigateByUrl('');
@@ -136,7 +134,6 @@ export class LoginComponent implements OnInit {
         }
         console.log(datos);
       },(error) => {
-        this.loading.cambiarestadoloading(false);
         console.log(error);
         if(error.status !== 200){
           this.router.navigateByUrl('');

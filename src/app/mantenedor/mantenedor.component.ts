@@ -322,8 +322,6 @@ export class MantenedorComponent implements OnInit {
         this.dataSource.data = this.paisesData;
         this.myStepper.previous();
       }, (error) => {
-        // this.loading.cambiarestadoloading(false);
-        // console.log(error);
         if (error.status !== 200) {
           this.route.navigateByUrl('');
         }
@@ -342,7 +340,6 @@ export class MantenedorComponent implements OnInit {
         this.myStepperCiudades.previous();
         this.myStepperCiudades.reset();
       }, (error) => {
-        this.loading.cambiarestadoloading(false);
         console.log(error);
         if (error.status !== 200) {
           this.route.navigateByUrl('');
@@ -363,7 +360,6 @@ export class MantenedorComponent implements OnInit {
         this.myStepper.previous();
         this.myStepper.previous();
       }, (error) => {
-        this.loading.cambiarestadoloading(false);
         console.log(error);
         if (error.status !== 200) {
           this.route.navigateByUrl('');
@@ -384,7 +380,6 @@ export class MantenedorComponent implements OnInit {
         this.myStepperCiudades.previous();
         this.myStepperCiudades.previous();
       }, (error) => {
-        this.loading.cambiarestadoloading(false);
         console.log(error);
         if (error.status !== 200) {
           this.route.navigateByUrl('');
@@ -397,12 +392,12 @@ export class MantenedorComponent implements OnInit {
   EliminarPais(element: any) {
     if (element === undefined) {
       this.loading.cambiarestadoloading(false);
+      return;
     } else {
       this.mantenedorService.EliminarPais(element.element.pais_id.toString(), sessionStorage.getItem('user')!).subscribe((datos) => {
         this.paisesData = datos;
         this.dataSource.data = this.paisesData;
       }, (error) => {
-        this.loading.cambiarestadoloading(false);
         console.log(error);
       }, () => {
         this.loading.cambiarestadoloading(false);
@@ -412,13 +407,13 @@ export class MantenedorComponent implements OnInit {
   EliminarCiudad(element: any) {
     if (element === undefined) {
       this.loading.cambiarestadoloading(false);
+      return;
     } else {
       const objeto = { pais_id: element.element.pais_id.toString(), ciudad_id: element.element.ciudad_id.toString() }
       this.mantenedorService.EliminarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;
       }, (error) => {
-        this.loading.cambiarestadoloading(false);
         console.log(error);
         if (error.status !== 200) {
           this.route.navigateByUrl('');

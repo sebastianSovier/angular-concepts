@@ -22,16 +22,7 @@ export class DecryptDataService {
     return of({data:resp});
   }
   public encryptQuery(data: any):any{
-    let resp = " ";
-    for (let index = 0; index < 100000; index++) {
-      resp = CryptoJS.AES.encrypt(data, environment.secretKey).toString();
-      if(resp.includes(" ")){
-        resp = CryptoJS.AES.encrypt(data, environment.secretKey).toString();
-      }else{
-        break;
-      }
-    }
-    
+    const  resp = CryptoJS.AES.encrypt(data, environment.secretKey).toString(); 
     return resp;
   }
 }
