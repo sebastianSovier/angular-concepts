@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { LoadingPageService } from '../loading-page/loading-page.service';
 import { LoginService } from './login.service';
-import { DecryptDataService } from '../decrypt-data.service';
 import { FirebaseService } from '../shared-components/firebase.service';
 import { DatePipe } from '@angular/common';
+import { pairwise, takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,12 +14,20 @@ import { DatePipe } from '@angular/common';
 })
 export class LoginComponent implements OnInit {
   hide = true;
+  errorMessages: Record<string, string> = {
+    maxlength: 'Ingrese un maximo de caracteres',
+    minlength: 'Ingrese un minimo de caracteres',
+    email: 'Ingrese email válido',
+    required: 'El campo es requerido',
+    pattern: 'Ingrese caracteres válidos',
+    notEquivalent: 'Contraseña deben ser iguales',
+    passwordStrength: 'Contraseña debe contener Mayusculas,Minusculas,Numeros'
+  };
   loginForm = new FormGroup({});
   crearCuentaForm = new FormGroup({});
   loginRequest: any = {};
   login = true;
-  contrasenaIguales = false;
-  constructor(private datepipe:DatePipe, private firebaseService:FirebaseService, private decryptService:DecryptDataService, fb: FormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
+  constructor(private datepipe:DatePipe, private firebaseService:FirebaseService, fb: FormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
     sessionStorage.clear();
     this.loginForm = fb.group(
       {
@@ -31,13 +39,14 @@ export class LoginComponent implements OnInit {
     this.crearCuentaForm = fb.group(
       {
         usuario: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
-        contrasena: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
+        contrasena: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20),this.createPasswordStrengthValidator()]],
         nombre_completo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
         correo: ['', [Validators.email, Validators.required, Validators.minLength(6), Validators.maxLength(60)]],
-        contrasenaRepetir: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]]
-      }
+        contrasenaRepetir: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20),this.ConfirmedValidator(),this.createPasswordStrengthValidator()]]
+      },
     );
   }
+  
   get usuarioCrear() { return this.crearCuentaForm.value.usuario }
 
   get contrasenaCrear() { return this.crearCuentaForm.value.contrasena; }
@@ -46,12 +55,37 @@ export class LoginComponent implements OnInit {
 
   get correoCrear() { return this.crearCuentaForm.value.correo; }
   get contrasenaRepetirCrear() { return this.crearCuentaForm.value.contrasenaRepetir; }
-  comparaContrasenas() {
-    if (this.contrasenaCrear === this.contrasenaRepetirCrear) {
-      this.contrasenaIguales = true;
-    } else {
-      this.crearCuentaForm.controls['contrasenaRepetir'].setErrors({ 'incorrect': 'Contraseña deben ser iguales' });
-      this.contrasenaIguales = false;
+  ConfirmedValidator():ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null  => {
+      const value = group.value
+      if (!value) {
+        return null;
+    }
+          if (this.contrasenaCrear !== this.contrasenaRepetirCrear) {
+            return {notEquivalent:true};
+          } else {
+            return null;
+          }
+    };
+  }
+  createPasswordStrengthValidator(): ValidatorFn {
+    return (control:AbstractControl) : ValidationErrors | null => {
+
+        const value = control.value;
+
+        if (!value) {
+            return null;
+        }
+
+        const hasUpperCase = /[A-Z]+/.test(value);
+
+        const hasLowerCase = /[a-z]+/.test(value);
+
+        const hasNumeric = /[0-9]+/.test(value);
+
+        const passwordValid = hasUpperCase && hasLowerCase && hasNumeric;
+
+        return !passwordValid ? {passwordStrength:true}: null;
     }
   }
   volver() {
@@ -67,19 +101,22 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     sessionStorage.clear();
     this.loading.cambiarestadoloading(false);
+    
   }
-
+  errors(control: AbstractControl | null): string[] {
+    if(control === null){
+      return [];
+    }else{
+      return control.errors ? Object.keys(control.errors) : [];
+    }
+  }
   get usuario() { return this.loginForm.value.usuario }
 
   get contrasena() { return this.loginForm.value.contrasena; }
 
-  isValidInput(fieldName: string | number): boolean {
-    return this.loginForm.controls[fieldName].invalid &&
-      (this.loginForm.controls[fieldName].dirty || this.loginForm.controls[fieldName].touched);
-  }
-  isValidInputCrear(fieldName: string | number): boolean {
-    return this.crearCuentaForm.controls[fieldName].invalid &&
-      (this.crearCuentaForm.controls[fieldName].dirty || this.crearCuentaForm.controls[fieldName].touched);
+  isValidInput(fieldName: string | number,form: FormGroup): boolean {
+    return form.controls[fieldName]?.invalid &&
+      (form.controls[fieldName].dirty || form.controls[fieldName].touched);
   }
   onSubmit(f: FormGroup) {
     if (f.valid) {

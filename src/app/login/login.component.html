@@ -12,15 +12,11 @@
                         <input matInput type="text" class="example-right-align" autocomplete="username" name="usuario" id="usuario"
                             class="form-control" required minlength="5" formControlName="usuario">
                     </mat-form-field>
-                    <div *ngIf="isValidInput('usuario')" class="alert alert-danger">
-
-                        <div *ngIf="loginForm.controls['usuario'].errors?.required">
-                            Ingrese su Usuario.
-                        </div>
-                        <div *ngIf="loginForm.controls['usuario'].errors?.minlength">
-                            Usuario debe ser mayor de 5 caracteres.
-                        </div>
-                    </div>
+                    <mat-error *ngIf="isValidInput('usuario',loginForm)">
+                        <ng-container *ngFor="let error of errors(loginForm.get('usuario'))">
+                          {{ errorMessages[error] }} <br>
+                        </ng-container>
+                      </mat-error>         
                     <mat-form-field style="display: contents;" appearance="fill">
                         <mat-label>Contraseña</mat-label>
                         <input matInput [type]="hide ? 'password' : 'text'" autocomplete="current-password" name="contrasena" id="contrasena"
@@ -30,15 +26,12 @@
                             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
                     </mat-form-field>
-                    <div *ngIf="isValidInput('contrasena')" class="alert alert-danger">
-
-                        <div *ngIf="loginForm.controls['contrasena'].errors?.required">
-                            Ingrese Password.
-                        </div>
-                        <div *ngIf="loginForm.controls['contrasena'].errors?.minlength">
-                            Password debe ser mayor de 5 caracteres.
-                        </div>
-                    </div>
+                   
+                    <mat-error *ngIf="isValidInput('contrasena',loginForm)" >
+                        <ng-container *ngFor="let error of errors(loginForm.get('contrasena'))">
+                          {{ errorMessages[error] }} <br>
+                        </ng-container>
+                      </mat-error>   
                 </div>
             </div>
             <div>
@@ -66,40 +59,61 @@
                             <mat-label>Usuario</mat-label>
                             <input matInput type="text" class="example-right-align" name="usuario" id="usuario"
                                 class="form-control" required minlength="5" formControlName="usuario">
+                                <mat-error *ngIf="isValidInput('usuario',crearCuentaForm)">
+                                    <ng-container *ngFor="let error of errors(crearCuentaForm.get('usuario'))">
+                                      {{ errorMessages[error] }} <br>
+                                    </ng-container>
+                                  </mat-error>
                         </mat-form-field>
                         <mat-form-field style="display: contents;" appearance="fill">
                             <mat-label>Nombre Completo</mat-label>
                             <input matInput type="text" class="example-right-align" name="nombre_completo"
                                 id="nombre_completo" class="form-control" required minlength="5"
                                 formControlName="nombre_completo">
+                                <mat-error *ngIf="isValidInput('nombre_completo',crearCuentaForm)">
+                                    <ng-container *ngFor="let error of errors(crearCuentaForm.get('nombre_completo'))">
+                                      {{ errorMessages[error] }} <br>
+                                    </ng-container>
+                                  </mat-error>
                         </mat-form-field>
 
                         <mat-form-field style="display: contents;" appearance="fill">
                             <mat-label>Correo</mat-label>
                             <input matInput type="email" class="example-right-align" name="correo" id="correo"
                                 class="form-control" required minlength="5" formControlName="correo">
+                                <mat-error *ngIf="isValidInput('correo',crearCuentaForm)">
+                                    <ng-container *ngFor="let error of errors(crearCuentaForm.get('correo'))">
+                                      {{ errorMessages[error] }} <br>
+                                    </ng-container>
+                                  </mat-error>
                         </mat-form-field>
 
                         <mat-form-field style="display: contents;" appearance="fill">
                             <mat-label>Contraseña</mat-label>
                             <input matInput type="password" name="contrasena" id="contrasena" class="form-control"
                                 required minlength="6" formControlName="contrasena">
-
+                                <mat-error *ngIf="isValidInput('contrasena',crearCuentaForm)">
+                                    <ng-container *ngFor="let error of errors(crearCuentaForm.get('contrasena'))">
+                                      {{ errorMessages[error] }} <br>
+                                    </ng-container>
+                                  </mat-error>
                         </mat-form-field>
                        
                         <mat-form-field style="display: contents;" appearance="fill">
                             <mat-label>Repita Contraseña</mat-label>
-                            <input matInput type="password" (keyup)="comparaContrasenas();" name="contrasenaRepetir" id="contrasenaRepetir"
+                            <input matInput type="password" name="contrasenaRepetir" id="contrasenaRepetir"
                                 class="form-control" required minlength="6" formControlName="contrasenaRepetir">
-
+                                <mat-error *ngIf="isValidInput('contrasenaRepetir',crearCuentaForm)">
+                                    <ng-container *ngFor="let error of errors(crearCuentaForm.get('contrasenaRepetir'))">
+                                      {{ errorMessages[error] }} <br>
+                                    </ng-container>
+                                  </mat-error>
                         </mat-form-field>
-                        <div *ngIf="isValidInputCrear('contrasenaRepetir')" class="alert alert-danger">
-                        <div *ngIf="crearCuentaForm.controls['contrasenaRepetir'].errors">Contraseñas deben ser iguales.</div>
-                    </div>
                 </div>
                 </div>
+                {{crearCuentaForm.valid}}
                 <div class="col-md-5 text-right" style="margin-top:5%;">
-                    <button mat-raised-button color="primary" [disabled]="!crearCuentaForm.valid && !contrasenaIguales">Crear Usuario</button>
+                    <button mat-raised-button color="primary" [disabled]="!crearCuentaForm.valid">Crear Usuario</button>
                     <button mat-raised-button color="accent" type="button" (click)="volver();"
                         style="margin-left: 10%;">Volver</button>
                 </div>

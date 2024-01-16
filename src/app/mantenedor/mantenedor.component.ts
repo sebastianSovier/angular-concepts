@@ -177,11 +177,11 @@ export class MantenedorComponent implements OnInit {
   get ModificaregionCiudad() { return this.modificarCiudadFormGroup.value.region }
   get ModificapoblacionCiudad() { return this.modificarCiudadFormGroup.value.poblacion; }
   errorMessages: Record<string, string> = {
-    maxlength: 'max',
-    minlength: 'min',
-    email: 'email',
-    required: 'required',
-    pattern: 'pattern'
+    maxlength: 'Ingrese un maximo de caracteres',
+    minlength: 'Ingrese un minimo de caracteres',
+    email: 'Ingrese email válido',
+    required: 'El campo es requerido',
+    pattern: 'Ingrese caracteres válidos'
   };
   errors(control: AbstractControl | null): string[] {
     if(control === null){
@@ -496,13 +496,11 @@ export class MantenedorComponent implements OnInit {
       }
     });
   }
-  isValidInputCrear(fieldName: string | number): boolean {
-    return this.ingresarFormGroup.controls[fieldName].invalid &&
-      (this.ingresarFormGroup.controls[fieldName].dirty || this.ingresarFormGroup.controls[fieldName].touched);
-  }
-  isValidInputModificar(fieldName: string | number): boolean {
-    return this.modificarFormGroup.controls[fieldName].invalid &&
-      (this.modificarFormGroup.controls[fieldName].dirty || this.modificarFormGroup.controls[fieldName].touched);
+  isValidInput(fieldName: string | number,form:FormGroup): boolean {
+
+    return form.controls[fieldName]?.invalid &&
+      (form.controls[fieldName].dirty || form.controls[fieldName].touched);
+   
   }
 
 }

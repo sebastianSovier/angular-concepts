@@ -86,7 +86,7 @@
             <mat-label>Nombre Pais</mat-label>
             <input matInput formControlName="nombre" type="text" placeholder="Chile" required autocomplete="country" >
 
-            <mat-error>
+            <mat-error *ngIf="isValidInput('nombre',ingresarFormGroup)">
               <ng-container *ngFor="let error of errors(ingresarFormGroup.get('nombre'))">
                 {{ errorMessages[error] }} <br>
               </ng-container>
@@ -96,7 +96,7 @@
           <mat-form-field style="width: 80%;">
             <mat-label>Capital</mat-label>
             <input matInput formControlName="capital" placeholder="Santiago" autocomplete="address-level2" required>
-            <mat-error>
+            <mat-error *ngIf="isValidInput('capital',ingresarFormGroup)">
               <ng-container *ngFor="let error of errors(ingresarFormGroup.get('capital'))">
                 {{ errorMessages[error] }} <br>
               </ng-container>
@@ -106,7 +106,7 @@
             <mat-label>Region</mat-label>
             <input matInput formControlName="region" placeholder="América del Sur" autocomplete="address-level3"
               required>
-              <mat-error>
+              <mat-error *ngIf="isValidInput('region',ingresarFormGroup)">
                 <ng-container *ngFor="let error of errors(ingresarFormGroup.get('region')) ">
                   {{ errorMessages[error] }} <br>
                 </ng-container>
@@ -115,7 +115,7 @@
           <mat-form-field style="width: 80%;">
             <mat-label>Población</mat-label>
             <input matInput formControlName="poblacion" placeholder="150000000" autocomplete="address-level4" required>
-            <mat-error>
+            <mat-error *ngIf="isValidInput('poblacion',ingresarFormGroup)">
               <ng-container *ngFor="let error of errors(ingresarFormGroup.get('poblacion'))">
                 {{ errorMessages[error] }} <br>
               </ng-container>
@@ -138,19 +138,39 @@
           <mat-form-field style="width: 80%;">
             <mat-label>Nombre Pais</mat-label>
             <input matInput formControlName="nombre" placeholder="Chile" autocomplete="country" required>
+            <mat-error *ngIf="isValidInput('nombre',ingresarCiudadFormGroup)">
+            <ng-container *ngFor="let error of errors(modificarFormGroup.get('nombre'))">
+              {{ errorMessages[error] }} <br>
+            </ng-container>
+            </mat-error>
           </mat-form-field>
           <mat-form-field style="width: 80%;">
             <mat-label>Capital</mat-label>
             <input matInput formControlName="capital" placeholder="Santiago" autocomplete="address-level2" required>
+            <mat-error *ngIf="isValidInput('capital',ingresarCiudadFormGroup)">
+              <ng-container *ngFor="let error of errors(modificarFormGroup.get('capital'))">
+                {{ errorMessages[error] }} <br>
+              </ng-container>
+              </mat-error>
           </mat-form-field>
           <mat-form-field style="width: 80%;">
             <mat-label>Region</mat-label>
             <input matInput formControlName="region" placeholder="América del Sur" autocomplete="address-level3"
               required>
+              <mat-error *ngIf="isValidInput('region',ingresarCiudadFormGroup)">
+                <ng-container *ngFor="let error of errors(modificarFormGroup.get('region'))">
+                  {{ errorMessages[error] }} <br>
+                </ng-container>
+                </mat-error>
           </mat-form-field>
           <mat-form-field style="width: 80%;">
             <mat-label>Población</mat-label>
             <input matInput formControlName="poblacion" placeholder="150000000" autocomplete="address-level4" required>
+            <mat-error *ngIf="isValidInput('poblacion',ingresarCiudadFormGroup)">
+              <ng-container *ngFor="let error of errors(modificarFormGroup.get('poblacion'))">
+                {{ errorMessages[error] }} <br>
+              </ng-container>
+              </mat-error>
           </mat-form-field>
           <div class="col-md-5 text-right" style="margin-top:1%;">
             <button mat-raised-button color="primary" [disabled]="!modificarFormGroup.valid">Guardar Modificación
@@ -232,17 +252,33 @@
                 <mat-label>Nombre Ciudad</mat-label>
                 <input matInput formControlName="nombre_ciudad" placeholder="Santiago" autocomplete="address-level2"
                   required>
+                  <mat-error *ngIf="isValidInput('nombre_ciudad',ingresarCiudadFormGroup)">
+
+                    <ng-container *ngFor="let error of errors(ingresarCiudadFormGroup.get('nombre_ciudad'))">
+                      {{ errorMessages[error] }} <br>
+                    </ng-container>
+                    </mat-error>
               </mat-form-field>
 
               <mat-form-field style="width: 80%;">
                 <mat-label>Region Perteneciente</mat-label>
                 <input matInput formControlName="region" placeholder="Region metropolitana"
                   autocomplete="address-level3" required>
+                  <mat-error *ngIf="isValidInput('region',ingresarCiudadFormGroup)">
+                    <ng-container *ngFor="let error of errors(ingresarCiudadFormGroup.get('region'))">
+                      {{ errorMessages[error] }} <br>
+                    </ng-container>
+                    </mat-error>
               </mat-form-field>
               <mat-form-field style="width: 80%;">
                 <mat-label>Población Ciudad</mat-label>
                 <input matInput formControlName="poblacion" placeholder="150000000" autocomplete="address-level4"
                   required>
+                  <mat-error *ngIf="isValidInput('poblacion',ingresarCiudadFormGroup)">
+                    <ng-container *ngFor="let error of errors(ingresarCiudadFormGroup.get('poblacion'))">
+                      {{ errorMessages[error] }} <br>
+                    </ng-container>
+                    </mat-error>
               </mat-form-field>
 
               <div class="google-maps-desing-ingresa">
@@ -274,17 +310,32 @@
                 <mat-label>Nombre Ciudad</mat-label>
                 <input matInput formControlName="nombre_ciudad" placeholder="Santiago" autocomplete="address-level2"
                   required>
+                  <mat-error *ngIf="isValidInput('nombre_ciudad',modificarCiudadFormGroup)">
+                    <ng-container *ngFor="let error of errors(modificarCiudadFormGroup.get('nombre_ciudad'))">
+                      {{ errorMessages[error] }} <br>
+                    </ng-container>
+                    </mat-error>
               </mat-form-field>
 
               <mat-form-field style="width: 80%;">
                 <mat-label>Region Perteneciente</mat-label>
                 <input matInput formControlName="region" placeholder="Region metropolitana"
                   autocomplete="address-level3" required>
+                  <mat-error *ngIf="isValidInput('region',modificarCiudadFormGroup)">
+                    <ng-container *ngFor="let error of errors(modificarCiudadFormGroup.get('region'))">
+                      {{ errorMessages[error] }} <br>
+                    </ng-container>
+                    </mat-error>
               </mat-form-field>
               <mat-form-field style="width: 80%;">
                 <mat-label>Población Ciudad</mat-label>
                 <input matInput formControlName="poblacion" placeholder="150000000" autocomplete="address-level4"
                   required>
+                  <mat-error *ngIf="isValidInput('poblacion',modificarCiudadFormGroup)">
+                    <ng-container *ngFor="let error of errors(modificarCiudadFormGroup.get('poblacion'))">
+                      {{ errorMessages[error] }} <br>
+                    </ng-container>
+                    </mat-error>
               </mat-form-field>
               <div class="google-maps-desing">
                 <agm-map [latitude]="lat" [longitude]="lng" (mapClick)="onChoseLocation($event)">
