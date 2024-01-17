@@ -35,7 +35,7 @@ export class ModalEditarPaisComponent implements OnInit {
       pais_id: this.objectPaisEditar.pais_id, nombre_pais: this.objectPaisEditar.nombre_pais, capital: this.objectPaisEditar.capital,
       region: this.objectPaisEditar.region, poblacion: this.objectPaisEditar.poblacion
     });
-   // this.loading.cambiarestadoloading(false);
+   this.loading.cambiarestadoloading(false);
   }
   get paisId() { return this.editarPaisFormGroup.value.pais_id }
   get nombrePais() { return this.editarPaisFormGroup.value.nombre_pais }

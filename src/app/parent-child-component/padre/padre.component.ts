@@ -68,7 +68,7 @@ export class PadreComponent implements OnInit {
         this.paisesData = datos;
        
       }, (error) => {
-        //this.loading.cambiarestadoloading(false);
+        this.loading.cambiarestadoloading(false);
         console.log(error);
         if (error.status !== 200) {
           this.route.navigateByUrl('');
