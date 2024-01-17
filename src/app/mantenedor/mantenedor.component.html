@@ -11,7 +11,7 @@
             <input matInput (keyup)="applyFilter($event)" placeholder="Buscar registro" #input>
           </mat-form-field>
 
-          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows matSort matTableExporter  #exporter="matTableExporter">
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows matSort>
 
             <!-- Name Column -->
             <ng-container matColumnDef="nombre_pais">
@@ -87,7 +87,7 @@
             <input matInput formControlName="nombre" type="text" placeholder="Chile" required autocomplete="country" >
 
             <mat-error *ngIf="isValidInput('nombre',ingresarFormGroup)">
-              <ng-container *ngFor="let error of errors(ingresarFormGroup.get('nombre'))">
+              <ng-container *ngFor="let error of errors(ingresarFormGroup.get('nombre')) ">
                 {{ errorMessages[error] }} <br>
               </ng-container>
             </mat-error>
@@ -116,7 +116,7 @@
             <mat-label>Población</mat-label>
             <input matInput formControlName="poblacion" placeholder="150000000" autocomplete="address-level4" required>
             <mat-error *ngIf="isValidInput('poblacion',ingresarFormGroup)">
-              <ng-container *ngFor="let error of errors(ingresarFormGroup.get('poblacion'))">
+              <ng-container *ngFor="let error of errors(ingresarFormGroup.get('poblacion')) ">
                 {{ errorMessages[error] }} <br>
               </ng-container>
             </mat-error>

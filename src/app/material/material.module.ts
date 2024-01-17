@@ -19,7 +19,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatTableExporterModule } from 'mat-table-exporter';
 import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
@@ -43,8 +42,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatDialogModule,
     MatExpansionModule,
     MatSidenavModule,
-    MatTableExporterModule,
-    MatNativeDateModule,
+        MatNativeDateModule,
     MatDatepickerModule,
     MatInputModule,
     FormsModule,
@@ -71,8 +69,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatDialogModule,
     MatExpansionModule,
     MatSidenavModule,
-    MatTableExporterModule,
-    MatNativeDateModule,
+        MatNativeDateModule,
     MatDatepickerModule,
     MatInputModule,
     FormsModule,

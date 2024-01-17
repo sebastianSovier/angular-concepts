@@ -3,14 +3,12 @@
   <mat-form-field appearance="fill" class="example-full-width">
     <mat-label>Nombre Pais</mat-label>
     <input formControlName="nombre_pais" class="form-control" matInput>
-    <mat-error *ngIf="editarPaisFormGroup.controls.nombre_pais.dirty || editarPaisFormGroup.controls.nombre_pais.touched ">{{validationsForm(editarPaisFormGroup.controls.nombre_pais)}}</mat-error>
 
   </mat-form-field>
 
   <mat-form-field appearance="fill" class="example-full-width">
     <mat-label>Capital</mat-label>
     <input formControlName="capital" matInput>
-    <mat-error *ngIf="editarPaisFormGroup.controls.capital.dirty || editarPaisFormGroup.controls.capital.touched ">{{validationsForm(editarPaisFormGroup.controls.capital)}}</mat-error>
 
   </mat-form-field>
   <mat-form-field appearance="fill" class="example-full-width">

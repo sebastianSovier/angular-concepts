@@ -7,6 +7,7 @@ import { LoginService } from './login.service';
 import { FirebaseService } from '../shared-components/firebase.service';
 import { DatePipe } from '@angular/common';
 import { pairwise, takeUntil } from 'rxjs/operators';
+import { ValidationsService } from '../shared-components/validations.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,20 +15,12 @@ import { pairwise, takeUntil } from 'rxjs/operators';
 })
 export class LoginComponent implements OnInit {
   hide = true;
-  errorMessages: Record<string, string> = {
-    maxlength: 'Ingrese un maximo de caracteres',
-    minlength: 'Ingrese un minimo de caracteres',
-    email: 'Ingrese email válido',
-    required: 'El campo es requerido',
-    pattern: 'Ingrese caracteres válidos',
-    notEquivalent: 'Contraseña deben ser iguales',
-    passwordStrength: 'Contraseña debe contener Mayusculas,Minusculas,Numeros'
-  };
+ 
   loginForm = new FormGroup({});
   crearCuentaForm = new FormGroup({});
   loginRequest: any = {};
   login = true;
-  constructor(private datepipe:DatePipe, private firebaseService:FirebaseService, fb: FormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
+  constructor(private validationService:ValidationsService, private datepipe:DatePipe, private firebaseService:FirebaseService, fb: FormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
     sessionStorage.clear();
     this.loginForm = fb.group(
       {
@@ -39,13 +32,16 @@ export class LoginComponent implements OnInit {
     this.crearCuentaForm = fb.group(
       {
         usuario: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
-        contrasena: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20),this.createPasswordStrengthValidator()]],
+        contrasena: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20),this.validationService.createPasswordStrengthValidator()]],
         nombre_completo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
         correo: ['', [Validators.email, Validators.required, Validators.minLength(6), Validators.maxLength(60)]],
-        contrasenaRepetir: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20),this.ConfirmedValidator(),this.createPasswordStrengthValidator()]]
+        contrasenaRepetir: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20),this.validationService.ConfirmedValidator(this.crearCuentaForm.value.contrasena,this.crearCuentaForm.value.contrasenaRepetir),this.validationService.createPasswordStrengthValidator()]]
       },
     );
   }
+  isValidInput = (fieldName: string | number, form: FormGroup) => this.validationService.isValidInput(fieldName,form);
+  errors = (control: AbstractControl | null) => this.validationService.errors(control);
+  errorMessages: Record<string, string> = this.validationService.errorMessages;
   
   get usuarioCrear() { return this.crearCuentaForm.value.usuario }
 
@@ -55,39 +51,7 @@ export class LoginComponent implements OnInit {
 
   get correoCrear() { return this.crearCuentaForm.value.correo; }
   get contrasenaRepetirCrear() { return this.crearCuentaForm.value.contrasenaRepetir; }
-  ConfirmedValidator():ValidatorFn {
-    return (group: AbstractControl): ValidationErrors | null  => {
-      const value = group.value
-      if (!value) {
-        return null;
-    }
-          if (this.contrasenaCrear !== this.contrasenaRepetirCrear) {
-            return {notEquivalent:true};
-          } else {
-            return null;
-          }
-    };
-  }
-  createPasswordStrengthValidator(): ValidatorFn {
-    return (control:AbstractControl) : ValidationErrors | null => {
-
-        const value = control.value;
-
-        if (!value) {
-            return null;
-        }
-
-        const hasUpperCase = /[A-Z]+/.test(value);
-
-        const hasLowerCase = /[a-z]+/.test(value);
-
-        const hasNumeric = /[0-9]+/.test(value);
-
-        const passwordValid = hasUpperCase && hasLowerCase && hasNumeric;
-
-        return !passwordValid ? {passwordStrength:true}: null;
-    }
-  }
+  
   volver() {
     this.login = true;
   }
@@ -103,21 +67,12 @@ export class LoginComponent implements OnInit {
     this.loading.cambiarestadoloading(false);
     
   }
-  errors(control: AbstractControl | null): string[] {
-    if(control === null){
-      return [];
-    }else{
-      return control.errors ? Object.keys(control.errors) : [];
-    }
-  }
+ 
   get usuario() { return this.loginForm.value.usuario }
 
   get contrasena() { return this.loginForm.value.contrasena; }
 
-  isValidInput(fieldName: string | number,form: FormGroup): boolean {
-    return form.controls[fieldName]?.invalid &&
-      (form.controls[fieldName].dirty || form.controls[fieldName].touched);
-  }
+  
   onSubmit(f: FormGroup) {
     if (f.valid) {
       //this.loading.cambiarestadoloading(true);

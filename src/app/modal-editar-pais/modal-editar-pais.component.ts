@@ -52,9 +52,6 @@ export class ModalEditarPaisComponent implements OnInit {
 
     }
   }
-  validationsForm(value:any){
-   return this.validations.errorsForm(value);
-  }
 
  
 }

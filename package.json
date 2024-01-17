@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4200 --prod",
+    "start": "ng serve --port 4200 --configuration production",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -30,7 +30,6 @@
     "dns-packet": "^5.2.4",
     "file-saver": "^2.0.5",
     "firebase": "^10.7.1",
-    "mat-table-exporter": "^10.2.4",
     "normalize-url": "^6.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",

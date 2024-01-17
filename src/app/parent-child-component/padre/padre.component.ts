@@ -1,11 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { LoadingPageService } from 'src/app/loading-page/loading-page.service';
 import { MantenedorService } from 'src/app/mantenedor/mantenedor.service';
 import { ModalEditarPaisComponent } from 'src/app/modal-editar-pais/modal-editar-pais.component';
+import { ValidationsService } from 'src/app/shared-components/validations.service';
 
 
 export class Paises {
@@ -24,16 +25,19 @@ export class Paises {
 })
 export class PadreComponent implements OnInit {
 
-  constructor(private datePipe:DatePipe,private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService,private _formBuilder: FormBuilder) { }
+  constructor(private validationService:ValidationsService, private datePipe:DatePipe,private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService,private _formBuilder: FormBuilder) { }
   paisesData: Paises[] = [];
   busquedaFormGroup = new FormGroup({});
 
+  isValidInput = (fieldName: string | number, form: FormGroup) => this.validationService.isValidInput(fieldName,form);
+  errors = (control: AbstractControl | null) => this.validationService.errors(control);
+  errorMessages: Record<string, string> = this.validationService.errorMessages;
   ngOnInit(): void {
     this.busquedaFormGroup = this._formBuilder.group({
-      fecha_desde: [new Date("2021-01-01"), [Validators.required,]],
+      fecha_desde: [new Date("2021-01-01"), [Validators.required]],
       fecha_hasta: [new Date(), [Validators.required,]]  
     });
-    //this.loading.cambiarestadoloading(false);
+    this.loading.cambiarestadoloading(false);
   }
   get fechaDesde() { return this.busquedaFormGroup.value.fecha_desde }
   get fechaHasta() { return this.busquedaFormGroup.value.fecha_hasta; }
@@ -70,7 +74,7 @@ export class PadreComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        //this.loading.cambiarestadoloading(false);
+        this.loading.cambiarestadoloading(false);
       });
     });
   }

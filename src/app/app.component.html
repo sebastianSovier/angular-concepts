@@ -31,7 +31,8 @@
   <mat-drawer-container class="example-container" autosize>
     <mat-drawer #drawer class="example-sidenav" mode="side">
       <button mat-button (click)="LogOut();drawer.toggle();">Logout</button>
-      <button mat-button routerLink="/paises" (click)="drawer.toggle();">Paises</button>
+      <button mat-button routerLink="/paises" (click)="drawer.toggle();">Paises P/H</button>
+      <button mat-button routerLink="/mantenedor" (click)="drawer.toggle();">Mantenedor</button>
     </mat-drawer>
     
     <mat-card class="carta-principal">

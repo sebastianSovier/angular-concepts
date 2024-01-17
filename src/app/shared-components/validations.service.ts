@@ -1,37 +1,63 @@
 import { Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ValidationsService {
-  errorMessages: Object = {
-    maxlength: 'max',
-    minlength: 'min',
-    email: 'email',
-    required: 'required',
-    pattern: 'pattern'
+  errorMessages: Record<string, string> = {
+    maxlength: 'Ingrese un maximo de caracteres',
+    minlength: 'Ingrese un minimo de caracteres',
+    email: 'Ingrese email válido',
+    required: 'El campo es requerido',
+    pattern: 'Ingrese caracteres válidos',
+    notEquivalent: 'Contraseña deben ser iguales',
+    passwordStrength: 'Contraseña debe contener Mayusculas,Minusculas,Numeros'
   };
-  form:FormGroup= new FormGroup({});
-  constructor() { }
 
-  errorsForm(inputForm: any) {
-    console.log(inputForm.errors);
-    let message = "";
-    if (inputForm.errors) {
-      Object.entries(this.errorMessages).forEach(value => {
-        if (message.length > 0) {
-        } else {
-          const [key1, value1] = value;
-          if (Object.prototype.hasOwnProperty.call(inputForm.errors, key1)) {
-            console.log(value1);
-            message = value1;
-            return message;
-          }
-        }
-        return;
-      })
+  
+  ConfirmedValidator(contrasenaCrear: string,contrasenaRepetirCrear: string):ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null  => {
+      const value = group.value
+      if (!value) {
+        return null;
     }
-    return message;
-}
+          if (contrasenaCrear !== contrasenaRepetirCrear) {
+            return {notEquivalent:true};
+          } else {
+            return null;
+          }
+    };
+  }
+  createPasswordStrengthValidator(): ValidatorFn {
+    return (control:AbstractControl) : ValidationErrors | null => {
+
+        const value = control.value;
+
+        if (!value) {
+            return null;
+        }
+
+        const hasUpperCase = /[A-Z]+/.test(value);
+
+        const hasLowerCase = /[a-z]+/.test(value);
+
+        const hasNumeric = /[0-9]+/.test(value);
+
+        const passwordValid = hasUpperCase && hasLowerCase && hasNumeric;
+
+        return !passwordValid ? {passwordStrength:true}: null;
+    }
+  }
+  isValidInput(fieldName: string | number,form: FormGroup): boolean {
+    return form.controls[fieldName]?.invalid &&
+      (form.controls[fieldName].dirty || form.controls[fieldName].touched);
+  }
+  errors(control: AbstractControl | null): string[] {
+    if(control === null){
+      return [];
+    }else{
+      return control.errors ? Object.keys(control.errors) : [];
+    }
+  }
 }

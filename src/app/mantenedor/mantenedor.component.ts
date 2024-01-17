@@ -14,6 +14,7 @@ import { MantenedorService } from './mantenedor.service';
 import { saveAs } from 'file-saver';
 import { Paises } from '../models/paises';
 import { Ciudades } from '../models/ciudades';
+import { ValidationsService } from '../shared-components/validations.service';
 
 
 @Component({
@@ -95,7 +96,7 @@ export class MantenedorComponent implements OnInit {
   consultaCiudades = false;
 
 
-  constructor(private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: FormBuilder) {
+  constructor(private validationService:ValidationsService, private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: FormBuilder) {
   }
 
   onChoseLocation($event: any) {
@@ -123,7 +124,6 @@ export class MantenedorComponent implements OnInit {
       this.route.navigateByUrl('');
       return;
     }
-    //this.loading.cambiarestadoloading(true);
     this.dataSource.sort = this.sort;
     this.ConsultarPaises();
     this.dataSource.paginator = this.paginator;
@@ -176,20 +176,7 @@ export class MantenedorComponent implements OnInit {
   get ModificanombreCiudad() { return this.modificarCiudadFormGroup.value.nombre_ciudad }
   get ModificaregionCiudad() { return this.modificarCiudadFormGroup.value.region }
   get ModificapoblacionCiudad() { return this.modificarCiudadFormGroup.value.poblacion; }
-  errorMessages: Record<string, string> = {
-    maxlength: 'Ingrese un maximo de caracteres',
-    minlength: 'Ingrese un minimo de caracteres',
-    email: 'Ingrese email válido',
-    required: 'El campo es requerido',
-    pattern: 'Ingrese caracteres válidos'
-  };
-  errors(control: AbstractControl | null): string[] {
-    if(control === null){
-      return [];
-    }else{
-      return control.errors ? Object.keys(control.errors) : [];
-    }
-  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -198,40 +185,9 @@ export class MantenedorComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  getErrorMessage(form: string,fg:FormGroup) {
-    let mensaje = '';
-    if (form == 'pais') {
-      for (const key of Object.keys(fg.controls)) {
-      if (fg.controls[key].hasError('required')) {
-         mensaje = 'Debe ingresar valor';
-      } else if (fg.controls[key].hasError('minlength')) {
-         mensaje ='Debe ingresar un minimo de caracteres';
-      } else if (fg.controls[key].hasError('maxlength')) {
-         mensaje ='Debe ingresar un maximo de caracteres';
-      } else if (fg.controls[key].hasError('pattern')) {
-         mensaje ='Debe ingresar caracteres validos';
-      }else{
-         mensaje = '';
-      }
-      break;
-    }
-    } else {
-      for (const key of Object.keys(fg.controls)) {
-        if (fg.controls[key].hasError('required')) {
-          return mensaje = 'Debe ingresar valor';
-        } else if (fg.controls[key].hasError('minlength')) {
-          return mensaje = 'Debe ingresar un minimo de caracteres';
-        } else if (fg.controls[key].hasError('maxlength')) {
-          return mensaje = 'Debe ingresar un maximo de caracteres';
-        } else if (fg.controls[key].hasError('pattern')) {
-          return mensaje = 'Debe ingresar caracteres validos';
-        }else{
-          return '';
-        }
-    }
-  }
-    return mensaje;
-  }
+  isValidInput = (fieldName: string | number, form: FormGroup) => this.validationService.isValidInput(fieldName,form);
+  errors = (control: AbstractControl | null) => this.validationService.errors(control);
+  errorMessages: Record<string, string> = this.validationService.errorMessages;
   applyFilterCiudad(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSourceCiudad.filter = filterValue.trim().toLowerCase();
@@ -258,7 +214,7 @@ export class MantenedorComponent implements OnInit {
     });
   }
   ExcelPaises() {
-    //this.loading.cambiarestadoloading(true);
+    this.loading.cambiarestadoloading(true);
     const objeto = { usuario: sessionStorage.getItem('user')! };
     this.mantenedorService.ObtenerExcelPaises(objeto.usuario).subscribe((datos) => {
       const myfile = this.base64ToBlob(datos);
@@ -271,7 +227,7 @@ export class MantenedorComponent implements OnInit {
         this.route.navigateByUrl('');
       }
     }, () => {
-      //this.loading.cambiarestadoloading(false);
+      this.loading.cambiarestadoloading(false);
     });
   }
   VolverAtrasPaises() {
@@ -495,12 +451,6 @@ export class MantenedorComponent implements OnInit {
         this.EliminarCiudad(result);
       }
     });
-  }
-  isValidInput(fieldName: string | number,form:FormGroup): boolean {
-
-    return form.controls[fieldName]?.invalid &&
-      (form.controls[fieldName].dirty || form.controls[fieldName].touched);
-   
   }
 
 }
