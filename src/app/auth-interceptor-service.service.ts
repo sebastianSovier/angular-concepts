@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { EMPTY } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DecryptDataService } from './decrypt-data.service';
 import { LoadingPageService } from './loading-page/loading-page.service';

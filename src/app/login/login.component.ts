@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { LoadingPageService } from '../loading-page/loading-page.service';
 import { LoginService } from './login.service';
 import { FirebaseService } from '../shared-components/firebase.service';
 import { DatePipe } from '@angular/common';
-import { pairwise, takeUntil } from 'rxjs/operators';
 import { ValidationsService } from '../shared-components/validations.service';
 @Component({
   selector: 'app-login',
