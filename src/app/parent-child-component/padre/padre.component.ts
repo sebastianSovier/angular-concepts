@@ -62,7 +62,7 @@ export class PadreComponent implements OnInit {
     
     let dialogRef = this.dialog.open(ModalEditarPaisComponent,{data: {
       dataKey: element
-    }});
+    },disableClose: true});
     dialogRef.afterClosed().subscribe(result => {
       this.mantenedorService.ModificarPais(result).subscribe((datos) => {
         this.paisesData = datos;
