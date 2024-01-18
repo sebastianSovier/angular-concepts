@@ -72,8 +72,7 @@ registerLocaleData(localeCl, localeClExtra);
             useClass: AuthInterceptorServiceService,
             multi: true
         },
-    ],entryComponents: [
-      ModalEditarPaisComponent],
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

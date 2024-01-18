@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LoadingPageService } from '../loading-page/loading-page.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -16,7 +16,7 @@ export class ModalEditarPaisComponent implements OnInit {
 
   objectPaisEditar: any;
 
-  constructor(public validations:ValidationsService,public dialogRef: MatDialogRef<ModalEditarPaisComponent>, public dialog: MatDialog, private loading: LoadingPageService, private _formBuilder: FormBuilder, @Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(public validations:ValidationsService,public dialogRef: MatDialogRef<ModalEditarPaisComponent>, public dialog: MatDialog, private loading: LoadingPageService, private _formBuilder: UntypedFormBuilder, @Inject(MAT_DIALOG_DATA) public data: any) {
     this.objectPaisEditar = data.dataKey;
   }
 

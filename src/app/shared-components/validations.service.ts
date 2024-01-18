@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +49,7 @@ export class ValidationsService {
         return !passwordValid ? {passwordStrength:true}: null;
     }
   }
-  isValidInput(fieldName: string | number,form: FormGroup): boolean {
+  isValidInput(fieldName: string | number,form: UntypedFormGroup): boolean {
     return form.controls[fieldName]?.invalid &&
       (form.controls[fieldName].dirty || form.controls[fieldName].touched);
   }

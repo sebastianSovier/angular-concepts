@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -43,16 +43,16 @@ export class MantenedorComponent implements OnInit {
   poblacionPattern = "^[0-9]*$";
   isLinearCiudad = false;
   tituloSecondStep = 'Ingrese Nuevo Pais';
-  ingresarFormGroup = new FormGroup({});
-  modificarFormGroup = new FormGroup({});
+  ingresarFormGroup = new UntypedFormGroup({});
+  modificarFormGroup = new UntypedFormGroup({});
   @ViewChild('stepper')
   myStepper!: MatStepper;
   @ViewChild('stepperCiudad')
   myStepperCiudades!: MatStepper;
   panelOpenState = false;
   ciudades: Ciudades[] = [];
-  modificarCiudadFormGroup = new FormGroup({});
-  ingresarCiudadFormGroup = new FormGroup({});
+  modificarCiudadFormGroup = new UntypedFormGroup({});
+  ingresarCiudadFormGroup = new UntypedFormGroup({});
   private paginator!: MatPaginator;
   private sort!: MatSort;
   private paginatorCiudad!: MatPaginator;
@@ -96,7 +96,7 @@ export class MantenedorComponent implements OnInit {
   consultaCiudades = false;
 
 
-  constructor(private validationService:ValidationsService, private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: FormBuilder) {
+  constructor(private validationService:ValidationsService, private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: UntypedFormBuilder) {
   }
 
   onChoseLocation($event: any) {
@@ -185,7 +185,7 @@ export class MantenedorComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  isValidInput = (fieldName: string | number, form: FormGroup) => this.validationService.isValidInput(fieldName,form);
+  isValidInput = (fieldName: string | number, form: UntypedFormGroup) => this.validationService.isValidInput(fieldName,form);
   errors = (control: AbstractControl | null) => this.validationService.errors(control);
   errorMessages: Record<string, string> = this.validationService.errorMessages;
   applyFilterCiudad(event: Event) {

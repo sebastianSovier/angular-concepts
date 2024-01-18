@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { LoadingPageService } from 'src/app/loading-page/loading-page.service';
@@ -25,11 +25,11 @@ export class Paises {
 })
 export class PadreComponent implements OnInit {
 
-  constructor(private validationService:ValidationsService, private datePipe:DatePipe,private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService,private _formBuilder: FormBuilder) { }
+  constructor(private validationService:ValidationsService, private datePipe:DatePipe,private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService,private _formBuilder: UntypedFormBuilder) { }
   paisesData: Paises[] = [];
-  busquedaFormGroup = new FormGroup({});
+  busquedaFormGroup = new UntypedFormGroup({});
 
-  isValidInput = (fieldName: string | number, form: FormGroup) => this.validationService.isValidInput(fieldName,form);
+  isValidInput = (fieldName: string | number, form: UntypedFormGroup) => this.validationService.isValidInput(fieldName,form);
   errors = (control: AbstractControl | null) => this.validationService.errors(control);
   errorMessages: Record<string, string> = this.validationService.errorMessages;
   ngOnInit(): void {

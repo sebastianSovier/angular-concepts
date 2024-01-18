@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { LoadingPageService } from '../loading-page/loading-page.service';
@@ -15,11 +15,11 @@ import { ValidationsService } from '../shared-components/validations.service';
 export class LoginComponent implements OnInit {
   hide = true;
  
-  loginForm = new FormGroup({});
-  crearCuentaForm = new FormGroup({});
+  loginForm = new UntypedFormGroup({});
+  crearCuentaForm = new UntypedFormGroup({});
   loginRequest: any = {};
   login = true;
-  constructor(private validationService:ValidationsService, private datepipe:DatePipe, private firebaseService:FirebaseService, fb: FormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
+  constructor(private validationService:ValidationsService, private datepipe:DatePipe, private firebaseService:FirebaseService, fb: UntypedFormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
     sessionStorage.clear();
     this.loginForm = fb.group(
       {
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
       },
     );
   }
-  isValidInput = (fieldName: string | number, form: FormGroup) => this.validationService.isValidInput(fieldName,form);
+  isValidInput = (fieldName: string | number, form: UntypedFormGroup) => this.validationService.isValidInput(fieldName,form);
   errors = (control: AbstractControl | null) => this.validationService.errors(control);
   errorMessages: Record<string, string> = this.validationService.errorMessages;
   
@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
   get contrasena() { return this.loginForm.value.contrasena; }
 
   
-  onSubmit(f: FormGroup) {
+  onSubmit(f: UntypedFormGroup) {
     if (f.valid) {
       //this.loading.cambiarestadoloading(true);
       const loginRequest = { Username: this.usuario, Password: this.contrasena };
@@ -106,7 +106,7 @@ export class LoginComponent implements OnInit {
       });
     }
   }
-  CrearUsuario(f: FormGroup) {
+  CrearUsuario(f: UntypedFormGroup) {
     if (f.valid) {
       //this.loading.cambiarestadoloading(true);
       const loginRequest = { usuario: this.usuarioCrear, contrasena: this.contrasenaCrear, nombre_completo: this.nombre_completoCrear, correo: this.correoCrear };
