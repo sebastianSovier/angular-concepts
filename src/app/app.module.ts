@@ -33,48 +33,47 @@ import { FirebaseService } from './shared-components/firebase.service';
 registerLocaleData(localeCl, localeClExtra);
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    MantenedorComponent,
-    DialogOverviewExampleDialogComponent,
-    ModalEditarPaisComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    HttpClientJsonpModule,
-    FormsModule,
-    ReactiveFormsModule,
-    CommonModule,
-    LoadingPageModule,
-    MaterialModule,
-    GoogleMapsModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDgcp1axlsAr2kQ3sfV33oiyp99UswWYNs',
-      libraries: ['places']
-    })
-  ],
-  providers: [
-    DatePipe,
-    LoadingPageService,
-    AuthGuardService,
-    FirebaseService,
-    AuthService,
-    DecryptDataService,
-    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-    JwtHelperService,
-    HttpClient, { provide: LOCALE_ID, useValue: 'es-CL' },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptorServiceService,
-      multi: true
-    },
-  ],entryComponents: [
-    ModalEditarPaisComponent
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        LoginComponent,
+        MantenedorComponent,
+        DialogOverviewExampleDialogComponent,
+        ModalEditarPaisComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        HttpClientJsonpModule,
+        FormsModule,
+        ReactiveFormsModule,
+        CommonModule,
+        LoadingPageModule,
+        MaterialModule,
+        GoogleMapsModule,
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyDgcp1axlsAr2kQ3sfV33oiyp99UswWYNs',
+            libraries: ['places']
+        })
+    ],
+    providers: [
+        DatePipe,
+        LoadingPageService,
+        AuthGuardService,
+        FirebaseService,
+        AuthService,
+        DecryptDataService,
+        { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+        JwtHelperService,
+        HttpClient, { provide: LOCALE_ID, useValue: 'es-CL' },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptorServiceService,
+            multi: true
+        },
+    ],entryComponents: [
+      ModalEditarPaisComponent],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
