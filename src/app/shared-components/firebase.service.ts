@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 import { initializeApp } from "firebase/app";
 import { getDatabase,ref,set } from "firebase/database";
 @Injectable({
