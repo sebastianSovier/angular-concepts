@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
+import {  CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -16,8 +16,6 @@ import { CommonModule, DatePipe } from '@angular/common';
 
 import { DialogOverviewExampleDialogComponent } from './modales/dialog-overview-example-dialog/dialog-overview-example-dialog.component';
 
-import { GoogleMapsModule } from '@angular/google-maps';
-import { AgmCoreModule } from '@agm/core';
 import localeCl from '@angular/common/locales/es-CL';
 import localeClExtra from '@angular/common/locales/extra/es-CL';
 import { registerLocaleData } from '@angular/common';
@@ -50,12 +48,7 @@ registerLocaleData(localeCl, localeClExtra);
         ReactiveFormsModule,
         CommonModule,
         LoadingPageModule,
-        MaterialModule,
-        GoogleMapsModule,
-        AgmCoreModule.forRoot({
-            apiKey: 'AIzaSyDgcp1axlsAr2kQ3sfV33oiyp99UswWYNs',
-            libraries: ['places']
-        })
+        MaterialModule
     ],
     providers: [
         DatePipe,
@@ -72,7 +65,9 @@ registerLocaleData(localeCl, localeClExtra);
             useClass: AuthInterceptorServiceService,
             multi: true
         },
-    ],entryComponents:[ModalEditarPaisComponent],
-    bootstrap: [AppComponent]
+    ],
+    bootstrap: [AppComponent],schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
+      ]
 })
 export class AppModule { }

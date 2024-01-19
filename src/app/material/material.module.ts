@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
@@ -16,7 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSortModule } from '@angular/material/sort';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -42,14 +42,14 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatDialogModule,
     MatExpansionModule,
     MatSidenavModule,
+    MatInputModule ,
         MatNativeDateModule,
     MatDatepickerModule,
-    MatInputModule,
     FormsModule,
     ReactiveFormsModule,
     MatCardModule,
     MatPaginatorModule,
-    MatTableModule
+    MatTableModule,
   ],exports:[
     CommonModule,
     MatSliderModule,
@@ -69,9 +69,9 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatDialogModule,
     MatExpansionModule,
     MatSidenavModule,
+    MatInputModule ,
         MatNativeDateModule,
     MatDatepickerModule,
-    MatInputModule,
     FormsModule,
     ReactiveFormsModule,
     MatCardModule,
@@ -79,4 +79,5 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatTableModule
   ]
 })
+
 export class MaterialModule { }

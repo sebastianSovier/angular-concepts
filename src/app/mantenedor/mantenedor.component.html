@@ -1,3 +1,4 @@
+
 <mat-card class="carta-mantenedor">
   <div [hidden]="consultaCiudades">
     <mat-horizontal-stepper id="editarpais" [linear]="isLinear" #stepper>
@@ -282,9 +283,9 @@
               </mat-form-field>
 
               <div class="google-maps-desing-ingresa">
-                <agm-map [latitude]="lat" [longitude]="lng" (mapClick)="onChoseLocation($event)">
-                  <agm-marker *ngIf="locationChose" [latitude]="lat" [longitude]="lng"></agm-marker>
-                </agm-map>
+              <!--  <agm-map [latitude]="lat" [longitude]="lng" [zoom]="2" (mapClick)="onChoseLocation($event)">
+                  <agm-marker *ngIf="locationChose" [markerDraggable]="true" [opacity]="1" [latitude]="lat" [longitude]="lng"></agm-marker>
+                </agm-map>-->
               </div>
               <div class="col-md-5 text-right" style="margin-top:0%;">
                 <button mat-raised-button color="primary" [disabled]="!ingresarCiudadFormGroup.valid">Ingresar
