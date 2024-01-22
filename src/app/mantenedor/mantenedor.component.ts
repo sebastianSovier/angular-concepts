@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -90,22 +90,135 @@ export class MantenedorComponent implements OnInit {
     }
   }
   pais_id_cache = 0;
-  lat = -33.52413039023918;
-  lng = -70.82132887007117
+  lat: number | undefined = -33.52413039023918;
+  lng: number | undefined = -70.82132887007117
   locationChose = false;
   consultaCiudades = false;
 
+  @ViewChild('googleMap', { static: true })
+  googleMapRef: ElementRef | undefined;
+  map: google.maps.Map | undefined;
+  marker: google.maps.Marker | undefined;
 
-  constructor(private validationService:ValidationsService, private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: UntypedFormBuilder) {
+  @ViewChild('googleMapMod', { static: true })
+  googleMapRefMod: ElementRef | undefined;
+  mapMod: google.maps.Map | undefined;
+  markerMod: google.maps.Marker | undefined;
+
+  constructor(private validationService: ValidationsService, private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: UntypedFormBuilder) {
   }
+  initMap(tipoMapa: boolean, lat?: string, lng?: string): void {
+    if (lat && lng) {
+      this.lat = Number(lat);
+      this.lng = Number(lng);
+    }
+    const mapOptions: google.maps.MapOptions = {
+      center: new google.maps.LatLng(this.lat!, this.lng!),
+      zoom: 9,
+      mapTypeId: "roadmap",
+    };
+    //const input = document.getElementById("pac-input") as HTMLInputElement;
+    //const searchBox = new google.maps.places.SearchBox(input);
+    if (tipoMapa) {
+      this.mapMod = new google.maps.Map(this.googleMapRefMod?.nativeElement, mapOptions);
+      this.mapMod.addListener("click", (e) => {
+        this.setMarkMap(e.latLng, this.mapMod!);
+      });
+      /*this.mapMod.addListener("bounds_changed", () => {
+        searchBox.setBounds(this.mapMod!.getBounds() as google.maps.LatLngBounds);
+      });*/
+      this.setMarkMap(undefined, this.mapMod, lat, lng);
+      //this.BuscarDireccion(this.mapMod,searchBox);
+    } else {
+      this.map = new google.maps.Map(this.googleMapRef?.nativeElement, mapOptions);
+      this.map.addListener("click", (e) => {
+        this.setMarkMap(e.latLng, this.map!, lat, lng);
+      });
+      /*this.map.addListener("bounds_changed", () => {
+        searchBox.setBounds(this.map!.getBounds() as google.maps.LatLngBounds);
+      });*/
+      //this.BuscarDireccion(this.map,searchBox);
+    }
 
-  onChoseLocation($event: any) {
-    this.lat = $event.coords.lat;
-    this.lng = $event.coords.lng;
+  }
+  BuscarDireccion(map: google.maps.Map, searchBox: any) {
+    searchBox.addListener("places_changed", () => {
+      const places = searchBox.getPlaces();
+
+      if (places.length == 0) {
+        return;
+      }
+      // For each place, get the icon, name and location.
+      const bounds = new google.maps.LatLngBounds();
+
+      places.forEach((place: { geometry: { location: google.maps.LatLng | google.maps.LatLngLiteral; viewport: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral; }; icon: string; name: any; }) => {
+        if (!place.geometry || !place.geometry.location) {
+          console.log("Returned place contains no geometry");
+          return;
+        }
+
+        const icon = {
+          url: place.icon as string,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(25, 25),
+        };
+
+        // Create a marker for each place.
+
+        this.marker = new google.maps.Marker({
+          position: place.geometry.location,
+          map: map,
+          title: place.name,
+          icon,
+        });
+
+
+        if (place.geometry.viewport) {
+          // Only geocodes have viewport.
+          bounds.union(place.geometry.viewport);
+        } else {
+          bounds.extend(place.geometry.location);
+        }
+      });
+      map.fitBounds(bounds);
+    });
+  }
+  setMarkMap(latLng?: google.maps.LatLng, map?: google.maps.Map, lat?: string, lng?: string) {
+    let coords = new google.maps.LatLng({ lat: this.lat!, lng: this.lng! });
+    if (lat && lng) {
+      this.lat = Number(lat);
+      this.lng = Number(lng);
+      coords = new google.maps.LatLng({ lat: this.lat, lng: this.lng });
+    }
+
+    if (this.marker) {
+      this.marker!.setMap(null);
+      this.lat = -33.52413039023918;
+      this.lng = -70.82132887007117;
+      this.locationChose = false;
+    }
+    this.marker = new google.maps.Marker({
+      position: lat && lng ? coords : latLng,
+      map: map,
+    });
+    if (lat && lng) {
+      this.lat = Number(lat);
+      this.lng = Number(lng);
+      map!.panTo(coords!);
+    } else {
+      this.lat = latLng!.lat();
+      this.lng = latLng!.lng();
+      map!.panTo(latLng!);
+    }
+
     this.locationChose = true;
   }
-  public base64ToBlob(b64Data: string, sliceSize = 512) {
-    let byteCharacters = atob(b64Data); //data.file there
+
+
+  base64ToBlob(b64Data: string, sliceSize = 512) {
+    let byteCharacters = atob(b64Data);
     let byteArrays = [];
     for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
       let slice = byteCharacters.slice(offset, offset + sliceSize);
@@ -119,7 +232,9 @@ export class MantenedorComponent implements OnInit {
     }
     return new Blob(byteArrays, { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
   }
+
   ngOnInit(): void {
+    this.initMap(false);
     if (sessionStorage.length === 0 || sessionStorage.getItem('token') === undefined) {
       this.route.navigateByUrl('');
       return;
@@ -185,7 +300,7 @@ export class MantenedorComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  isValidInput = (fieldName: string | number, form: UntypedFormGroup) => this.validationService.isValidInput(fieldName,form);
+  isValidInput = (fieldName: string | number, form: UntypedFormGroup) => this.validationService.isValidInput(fieldName, form);
   errors = (control: AbstractControl | null) => this.validationService.errors(control);
   errorMessages: Record<string, string> = this.validationService.errorMessages;
   applyFilterCiudad(event: Event) {
@@ -196,7 +311,6 @@ export class MantenedorComponent implements OnInit {
       this.dataSourceCiudad.paginator.firstPage();
     }
   }
-
   ConsultarPaises() {
     //this.loading.cambiarestadoloading(true);
     const objeto = { usuario: sessionStorage.getItem('user')! };
@@ -304,6 +418,7 @@ export class MantenedorComponent implements OnInit {
   }
   IrIngresarCiudad() {
     this.resetearCoordenadas();
+    this.initMap(false);
     this.ingresarCiudadFormGroup.setValue({ pais_id: this.pais_id_cache, ciudad_id: '', nombre_ciudad: '', poblacion: '', region: '' });
     this.myStepperCiudades.next();
   }
@@ -311,6 +426,7 @@ export class MantenedorComponent implements OnInit {
     this.modificarCiudadFormGroup.setValue({ ciudad_id: elemento.ciudad_id, pais_id: elemento.pais_id, nombre_ciudad: elemento.nombre_ciudad, region: elemento.region, poblacion: elemento.poblacion });
     this.lat = Number(elemento.latitud);
     this.lng = Number(elemento.longitud);
+    this.initMap(true, elemento.latitud, elemento.longitud);
     this.locationChose = true;
     this.myStepperCiudades.next();
     this.myStepperCiudades.next();
@@ -334,8 +450,8 @@ export class MantenedorComponent implements OnInit {
   }
   IngresarCiudad() {
     //this.loading.cambiarestadoloading(true);
-    if (this.ingresarCiudadFormGroup.valid) {
-      const objeto = { pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad, latitud: this.lat.toString(), longitud: this.lng.toString() };
+    if (this.ingresarCiudadFormGroup.valid && this.locationChose === true) {
+      const objeto = { pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString() };
       this.mantenedorService.IngresarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;
@@ -374,7 +490,7 @@ export class MantenedorComponent implements OnInit {
   ModificarCiudad() {
     //this.loading.cambiarestadoloading(true);
     if (this.modificarCiudadFormGroup.valid && this.locationChose === true) {
-      const objeto = { pais_id: this.ModificaIdCiudadPais, ciudad_id: this.ModificaIdCiudad, nombre_ciudad: this.ModificanombreCiudad, region: this.ModificaregionCiudad, poblacion: this.ModificapoblacionCiudad, latitud: this.lat.toString(), longitud: this.lng.toString() };
+      const objeto = { pais_id: this.ModificaIdCiudadPais, ciudad_id: this.ModificaIdCiudad, nombre_ciudad: this.ModificanombreCiudad, region: this.ModificaregionCiudad, poblacion: this.ModificapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString() };
       this.mantenedorService.ModificarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;

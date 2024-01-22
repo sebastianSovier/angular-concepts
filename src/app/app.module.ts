@@ -36,7 +36,7 @@ registerLocaleData(localeCl, localeClExtra);
         LoginComponent,
         MantenedorComponent,
         DialogOverviewExampleDialogComponent,
-        ModalEditarPaisComponent,
+        ModalEditarPaisComponent
     ],
     imports: [
         BrowserModule,
@@ -48,7 +48,8 @@ registerLocaleData(localeCl, localeClExtra);
         ReactiveFormsModule,
         CommonModule,
         LoadingPageModule,
-        MaterialModule
+        MaterialModule,
+        
     ],
     providers: [
         DatePipe,

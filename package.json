@@ -10,7 +10,6 @@
   },
   "private": true,
   "dependencies": {
-    "@agm/core": "^1.1.0",
     "@angular-material-extensions/google-maps-autocomplete": "^9.0.3",
     "@angular/animations": "^17.1.0",
     "@angular/cdk": "^14.2.7",
