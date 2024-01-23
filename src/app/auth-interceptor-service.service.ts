@@ -18,7 +18,7 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
     this._loadingService.cambiarestadoloading(true);
     const token: string = sessionStorage.getItem("token")!;
     let request = req;
-    return this.decryptService.encrypt(request.body).pipe(
+    return this.decryptService.encrypt(request).pipe(
       switchMap((encryptedBody) => {
         // Clonamos la solicitud original y le asignamos el cuerpo cifrado
         if(req.method === "GET" || req.method === "DELETE"){
@@ -56,7 +56,7 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
             const contentType = event.headers.get('Content-Type');
             this._loadingService.cambiarestadoloading(false);
             if (contentType && contentType.includes('application/json')) {
-              const _body = await this.decryptService.decrypt(event.body.data).toPromise();
+              const _body = await this.decryptService.decrypt(event).toPromise();
               const parsedBody = JSON.parse(_body);
               return event.clone({ body: parsedBody });
             }

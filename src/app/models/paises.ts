@@ -4,5 +4,5 @@ export class Paises {
     capital!: string;
     region!: string;
     poblacion!: string;
-
+    usuario!:string;
 }

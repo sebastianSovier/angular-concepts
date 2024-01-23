@@ -419,6 +419,7 @@ export class MantenedorComponent implements OnInit {
   IrIngresarCiudad() {
     this.resetearCoordenadas();
     this.initMap(false);
+    this.locationChose = false;
     this.ingresarCiudadFormGroup.setValue({ pais_id: this.pais_id_cache, ciudad_id: '', nombre_ciudad: '', poblacion: '', region: '' });
     this.myStepperCiudades.next();
   }
@@ -434,7 +435,7 @@ export class MantenedorComponent implements OnInit {
   IngresarPais() {
     //this.loading.cambiarestadoloading(true);
     if (this.ingresarFormGroup.valid) {
-      const objeto = { nombre_pais: this.Ingresanombre, capital: this.Ingresacapital, region: this.Ingresaregion, poblacion: this.Ingresapoblacion, usuario: sessionStorage.getItem('user') };
+      const objeto:Paises = { pais_id:0,nombre_pais: this.Ingresanombre, capital: this.Ingresacapital, region: this.Ingresaregion, poblacion: this.Ingresapoblacion, usuario: sessionStorage.getItem('user')! };
       this.mantenedorService.IngresarPais(objeto).subscribe((datos) => {
         this.paisesData = datos;
         this.dataSource.data = this.paisesData;
@@ -451,7 +452,7 @@ export class MantenedorComponent implements OnInit {
   IngresarCiudad() {
     //this.loading.cambiarestadoloading(true);
     if (this.ingresarCiudadFormGroup.valid && this.locationChose === true) {
-      const objeto = { pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString() };
+      const objeto:Ciudades = { ciudad_id:0,pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString() };
       this.mantenedorService.IngresarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;
@@ -470,7 +471,7 @@ export class MantenedorComponent implements OnInit {
   ModificarPais() {
     //this.loading.cambiarestadoloading(true);
     if (this.modificarFormGroup.valid) {
-      const objeto = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion, usuario: sessionStorage.getItem('user') };
+      const objeto:Paises = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion, usuario: sessionStorage.getItem('user')! };
       this.mantenedorService.ModificarPais(objeto).subscribe((datos) => {
         this.paisesData = datos;
         this.dataSource.data = this.paisesData;
@@ -522,12 +523,12 @@ export class MantenedorComponent implements OnInit {
       });
     }
   }
-  EliminarCiudad(element: any) {
+  EliminarCiudad(element: Ciudades) {
     if (element === undefined) {
       //this.loading.cambiarestadoloading(false);
       return;
     } else {
-      const objeto = { pais_id: element.element.pais_id.toString(), ciudad_id: element.element.ciudad_id.toString() }
+      const objeto :Ciudades = { pais_id: element.pais_id, ciudad_id: element.ciudad_id,nombre_ciudad:"", region:"", poblacion:"", latitud:"", longitud:"" }
       this.mantenedorService.EliminarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;
@@ -564,7 +565,7 @@ export class MantenedorComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.EliminarCiudad(result);
+        this.EliminarCiudad(result.element);
       }
     });
   }
