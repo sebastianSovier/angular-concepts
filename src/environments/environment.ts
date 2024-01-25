@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  secretKey:"papucho",
+  secretKey:"a-very-long-radonmly-generated-secret-key-that-cannot-be-guessed",
   UrlWebApi: "http://localhost:8080"
 };
 
