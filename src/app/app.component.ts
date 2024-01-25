@@ -9,7 +9,7 @@ import { LoginService } from './login/login.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'Proyecto Angular 17 / Angular Material 15/ Express.js / Mysql /Firebase';
+  title = 'Proyecto Angular 17 / Angular Material 15/ Express.js Middleware / Mysql/ Firebase /Api Net Core 6';
   mostrar = false;
   constructor(private route: Router, private loginService: LoginService) {
     this.loginService.emisor.subscribe((d: { mostrarMenu: boolean }) => {
