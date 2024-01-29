@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -16,19 +16,7 @@ export class ValidationsService {
   };
 
   
-  ConfirmedValidator(contrasenaCrear: string,contrasenaRepetirCrear: string):ValidatorFn {
-    return (group: AbstractControl): ValidationErrors | null  => {
-      const value = group.value
-      if (!value) {
-        return null;
-    }
-          if (contrasenaCrear !== contrasenaRepetirCrear) {
-            return {notEquivalent:true};
-          } else {
-            return null;
-          }
-    };
-  }
+  
   createPasswordStrengthValidator(): ValidatorFn {
     return (control:AbstractControl) : ValidationErrors | null => {
 
