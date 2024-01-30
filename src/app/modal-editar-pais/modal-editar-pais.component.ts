@@ -11,8 +11,6 @@ import { ValidationsService } from '../shared-components/validations.service';
   styleUrls: ['./modal-editar-pais.component.scss']
 })
 export class ModalEditarPaisComponent implements OnInit {
-  nombrePaisPattern = "^[a-zA-Z ]*$";
-  poblacionPattern = "^[0-9]*$";
 
   objectPaisEditar: any;
 
@@ -22,10 +20,10 @@ export class ModalEditarPaisComponent implements OnInit {
 
   editarPaisFormGroup = this._formBuilder.group({
     pais_id: [0],
-    nombre_pais: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
-    capital: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
-    region: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
-    poblacion: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.poblacionPattern)]]
+    nombre_pais: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validations.nombrePaisPattern)]],
+    capital: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validations.nombrePaisPattern)]],
+    region: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validations.nombrePaisPattern)]],
+    poblacion: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validations.poblacionPattern)]]
 
 
   });

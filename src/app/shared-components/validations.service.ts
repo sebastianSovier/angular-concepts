@@ -15,7 +15,8 @@ export class ValidationsService {
     passwordStrength: 'Contraseña debe contener Mayusculas,Minusculas,Numeros'
   };
 
-  
+  nombrePaisPattern = "^[a-zA-Z ]*$";
+  poblacionPattern = "^[0-9]*$";
   
   createPasswordStrengthValidator(): ValidatorFn {
     return (control:AbstractControl) : ValidationErrors | null => {

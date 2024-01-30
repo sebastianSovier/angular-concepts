@@ -39,8 +39,7 @@ export class MantenedorComponent implements OnInit {
   dataSourceCiudad = new MatTableDataSource<Ciudades>(this.CiudadesData);
   selection = new SelectionModel<Paises>(true, []);
   isLinear = false;
-  nombrePaisPattern = "^[a-zA-Z ]*$";
-  poblacionPattern = "^[0-9]*$";
+
   isLinearCiudad = false;
   tituloSecondStep = 'Ingrese Nuevo Pais';
   ingresarFormGroup = new UntypedFormGroup({});
@@ -243,31 +242,31 @@ export class MantenedorComponent implements OnInit {
     this.ConsultarPaises();
     this.dataSource.paginator = this.paginator;
     this.ingresarFormGroup = this._formBuilder.group({
-      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
-      capital: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
-      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
-      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.poblacionPattern)]]
+      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.nombrePaisPattern)]],
+      capital: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.nombrePaisPattern)]],
+      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.nombrePaisPattern)]],
+      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.poblacionPattern)]]
     });
     this.modificarFormGroup = this._formBuilder.group({
       pais_id: [''],
-      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
-      capital: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
-      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
-      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.poblacionPattern)]]
+      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.nombrePaisPattern)]],
+      capital: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.nombrePaisPattern)]],
+      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.nombrePaisPattern)]],
+      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.poblacionPattern)]]
     });
     this.modificarCiudadFormGroup = this._formBuilder.group({
       ciudad_id: [''],
       pais_id: [''],
-      nombre_ciudad: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
-      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
-      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.poblacionPattern)]]
+      nombre_ciudad: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.nombrePaisPattern)]],
+      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.nombrePaisPattern)]],
+      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.poblacionPattern)]]
     });
     this.ingresarCiudadFormGroup = this._formBuilder.group({
       pais_id: [''],
       ciudad_id: [''],
-      nombre_ciudad: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
-      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.nombrePaisPattern)]],
-      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.poblacionPattern)]]
+      nombre_ciudad: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.nombrePaisPattern)]],
+      region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.nombrePaisPattern)]],
+      poblacion: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(this.validationService.poblacionPattern)]]
     });
   }
   get Ingresanombre() { return this.ingresarFormGroup.value.nombre }
