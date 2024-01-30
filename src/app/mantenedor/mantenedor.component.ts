@@ -382,10 +382,12 @@ export class MantenedorComponent implements OnInit {
     //this.loading.cambiarestadoloading(false);
     this.myStepper.previous();
     this.myStepper.reset();
+    this.ingresarFormGroup.reset();
 
   }
   IrIngresarPais() {
     this.myStepper.next();
+    this.ingresarFormGroup.reset();
   }
   volverListaCiudad() {
     this.resetearCoordenadas();
@@ -397,6 +399,7 @@ export class MantenedorComponent implements OnInit {
     this.resetearCoordenadas();
     this.myStepperCiudades.previous();
     this.myStepperCiudades.reset();
+    this.ingresarCiudadFormGroup.reset();
   }
   resetearCoordenadas() {
     this.consultaCiudades = false;
@@ -409,6 +412,7 @@ export class MantenedorComponent implements OnInit {
     this.modificarFormGroup.setValue({ pais_id: elemento.pais_id, nombre: elemento.nombre_pais, capital: elemento.capital, region: elemento.region, poblacion: elemento.poblacion });
     this.myStepper.next();
     this.myStepper.next();
+    this.modificarFormGroup.reset();
   }
   iraVerCiudades(elemento: Paises) {
     this.consultaCiudades = true;
@@ -421,6 +425,7 @@ export class MantenedorComponent implements OnInit {
     this.locationChose = false;
     this.ingresarCiudadFormGroup.setValue({ pais_id: this.pais_id_cache, ciudad_id: '', nombre_ciudad: '', poblacion: '', region: '' });
     this.myStepperCiudades.next();
+    this.ingresarCiudadFormGroup.reset();
   }
   irAModificarCiudad(elemento: Ciudades) {
     this.modificarCiudadFormGroup.setValue({ ciudad_id: elemento.ciudad_id, pais_id: elemento.pais_id, nombre_ciudad: elemento.nombre_ciudad, region: elemento.region, poblacion: elemento.poblacion });
@@ -430,6 +435,7 @@ export class MantenedorComponent implements OnInit {
     this.locationChose = true;
     this.myStepperCiudades.next();
     this.myStepperCiudades.next();
+    this.modificarCiudadFormGroup.reset();
   }
   IngresarPais() {
     //this.loading.cambiarestadoloading(true);
@@ -438,7 +444,9 @@ export class MantenedorComponent implements OnInit {
       this.mantenedorService.IngresarPais(objeto).subscribe((datos) => {
         this.paisesData = datos;
         this.dataSource.data = this.paisesData;
-        this.myStepper.previous();
+        this.myStepper.reset()
+        this.ingresarFormGroup.reset();
+       
       }, (error) => {
         if (error.status !== 200) {
           this.route.navigateByUrl('');
@@ -457,6 +465,7 @@ export class MantenedorComponent implements OnInit {
         this.dataSourceCiudad.data = this.CiudadesData;
         this.myStepperCiudades.previous();
         this.myStepperCiudades.reset();
+        this.ingresarCiudadFormGroup.reset();
       }, (error) => {
         console.log(error);
         if (error.status !== 200) {
@@ -477,6 +486,7 @@ export class MantenedorComponent implements OnInit {
         this.myStepper.reset();
         this.myStepper.previous();
         this.myStepper.previous();
+        this.modificarFormGroup.reset();
       }, (error) => {
         console.log(error);
         if (error.status !== 200) {
@@ -497,6 +507,7 @@ export class MantenedorComponent implements OnInit {
         this.myStepperCiudades.reset();
         this.myStepperCiudades.previous();
         this.myStepperCiudades.previous();
+        this.modificarCiudadFormGroup.reset();
       }, (error) => {
         console.log(error);
         if (error.status !== 200) {
