@@ -5,15 +5,17 @@ WORKDIR /app
 
 COPY package*.json /app
 
-RUN npm install
+RUN npm install --force
 
 COPY . /app
 
-RUN npm run build --prod
+RUN npm run watch
 
 
-FROM nginx:1.17.1-alpine
+FROM nginx:1.19.2-alpine
 
 COPY --from=build-app /app/dist/angular-concepts /usr/share/nginx/html
 
-EXPOSE 80
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf   
+
+EXPOSE 4200

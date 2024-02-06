@@ -412,7 +412,7 @@ export class MantenedorComponent implements OnInit {
     this.modificarFormGroup.setValue({ pais_id: elemento.pais_id, nombre: elemento.nombre_pais, capital: elemento.capital, region: elemento.region, poblacion: elemento.poblacion });
     this.myStepper.next();
     this.myStepper.next();
-    this.modificarFormGroup.reset();
+    
   }
   iraVerCiudades(elemento: Paises) {
     this.consultaCiudades = true;
@@ -425,7 +425,6 @@ export class MantenedorComponent implements OnInit {
     this.locationChose = false;
     this.ingresarCiudadFormGroup.setValue({ pais_id: this.pais_id_cache, ciudad_id: '', nombre_ciudad: '', poblacion: '', region: '' });
     this.myStepperCiudades.next();
-    this.ingresarCiudadFormGroup.reset();
   }
   irAModificarCiudad(elemento: Ciudades) {
     this.modificarCiudadFormGroup.setValue({ ciudad_id: elemento.ciudad_id, pais_id: elemento.pais_id, nombre_ciudad: elemento.nombre_ciudad, region: elemento.region, poblacion: elemento.poblacion });
@@ -435,7 +434,6 @@ export class MantenedorComponent implements OnInit {
     this.locationChose = true;
     this.myStepperCiudades.next();
     this.myStepperCiudades.next();
-    this.modificarCiudadFormGroup.reset();
   }
   IngresarPais() {
     //this.loading.cambiarestadoloading(true);
