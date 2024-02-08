@@ -9,7 +9,7 @@ RUN npm install --force
 
 COPY . /app
 
-RUN npm run build --prod
+RUN npm run watch
 
 
 FROM nginx:1.19.2-alpine

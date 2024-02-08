@@ -412,7 +412,7 @@ export class MantenedorComponent implements OnInit {
     this.modificarFormGroup.setValue({ pais_id: elemento.pais_id, nombre: elemento.nombre_pais, capital: elemento.capital, region: elemento.region, poblacion: elemento.poblacion });
     this.myStepper.next();
     this.myStepper.next();
-    
+
   }
   iraVerCiudades(elemento: Paises) {
     this.consultaCiudades = true;
@@ -438,13 +438,13 @@ export class MantenedorComponent implements OnInit {
   IngresarPais() {
     //this.loading.cambiarestadoloading(true);
     if (this.ingresarFormGroup.valid) {
-      const objeto:Paises = { pais_id:0,nombre_pais: this.Ingresanombre, capital: this.Ingresacapital, region: this.Ingresaregion, poblacion: this.Ingresapoblacion, usuario: sessionStorage.getItem('user')! };
+      const objeto: Paises = { pais_id: 0, nombre_pais: this.Ingresanombre, capital: this.Ingresacapital, region: this.Ingresaregion, poblacion: this.Ingresapoblacion, usuario: sessionStorage.getItem('user')! };
       this.mantenedorService.IngresarPais(objeto).subscribe((datos) => {
         this.paisesData = datos;
         this.dataSource.data = this.paisesData;
         this.myStepper.reset()
         this.ingresarFormGroup.reset();
-       
+
       }, (error) => {
         if (error.status !== 200) {
           this.route.navigateByUrl('');
@@ -457,7 +457,7 @@ export class MantenedorComponent implements OnInit {
   IngresarCiudad() {
     //this.loading.cambiarestadoloading(true);
     if (this.ingresarCiudadFormGroup.valid && this.locationChose === true) {
-      const objeto:Ciudades = { ciudad_id:0,pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString() };
+      const objeto: Ciudades = { ciudad_id: 0, pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString() };
       this.mantenedorService.IngresarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;
@@ -477,7 +477,7 @@ export class MantenedorComponent implements OnInit {
   ModificarPais() {
     //this.loading.cambiarestadoloading(true);
     if (this.modificarFormGroup.valid) {
-      const objeto:Paises = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion, usuario: sessionStorage.getItem('user')! };
+      const objeto: Paises = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion, usuario: sessionStorage.getItem('user')! };
       this.mantenedorService.ModificarPais(objeto).subscribe((datos) => {
         this.paisesData = datos;
         this.dataSource.data = this.paisesData;
@@ -531,12 +531,49 @@ export class MantenedorComponent implements OnInit {
       });
     }
   }
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    if (this.isExcelFile(file)) {
+      const fileReader = new FileReader();
+      let arrayBuffer;
+      let base64String;
+      fileReader.onload = (e: any) => {
+        arrayBuffer = e.target.result;
+        const uint8Array = new Uint8Array(arrayBuffer);
+        const numberArray = Array.from(uint8Array);
+
+        base64String = btoa(String.fromCharCode.apply(null, numberArray));
+        const objeto = { base64string: base64String, usuario: sessionStorage.getItem('user')! }
+        this.mantenedorService.ImportarPaisesCiudades(objeto).subscribe((datos) => {
+          this.paisesData = datos;
+          this.dataSource.data = this.paisesData;
+          this.myStepper.reset()
+          this.ingresarFormGroup.reset();
+        }, (error) => {
+          console.log(error);
+          if (error.status !== 200) {
+            this.route.navigateByUrl('');
+          }
+        }, () => {
+          //this.loading.cambiarestadoloading(false);
+        });
+      };
+      fileReader.readAsArrayBuffer(file);
+    } else {
+      console.error('Invalid file format. Please select an Excel file.');
+    }
+  }
+  private isExcelFile(file: File): boolean {
+    const allowedExtensions = ['.xls', '.xlsx'];
+    const fileName = file.name.toLowerCase();
+    return allowedExtensions.some(ext => fileName.endsWith(ext));
+  }
   EliminarCiudad(element: Ciudades) {
     if (element === undefined) {
       //this.loading.cambiarestadoloading(false);
       return;
     } else {
-      const objeto :Ciudades = { pais_id: element.pais_id, ciudad_id: element.ciudad_id,nombre_ciudad:"", region:"", poblacion:"", latitud:"", longitud:"" }
+      const objeto: Ciudades = { pais_id: element.pais_id, ciudad_id: element.ciudad_id, nombre_ciudad: "", region: "", poblacion: "", latitud: "", longitud: "" }
       this.mantenedorService.EliminarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;

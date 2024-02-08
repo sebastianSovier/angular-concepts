@@ -74,7 +74,9 @@
             <button mat-raised-button style="margin-right: 2%;" color="primary" (click)="IrIngresarPais();">Ingresar
               Nuevo
               Pais</button>
-            <button mat-raised-button color="primary" (click)="ExcelPaises()">Exportar a Excel</button>
+            <button style="margin-right: 2%;" mat-raised-button color="primary" (click)="ExcelPaises()">Exportar a Excel</button>
+            <input  type="file" hidden accept=".xlsx, .xls" #fileInput (change)="onFileChange($event)">
+            <button  mat-raised-button color="primary" (click)="fileInput.click()">Importar excel</button>
           </div>
 
         </form>
