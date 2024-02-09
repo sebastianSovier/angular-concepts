@@ -61,6 +61,8 @@ export class MantenedorComponent implements OnInit {
     this.sort = ms;
     this.setDataSourceAttributes();
   }
+  @ViewChild('fileInputPais') fileInputPais: ElementRef | undefined;
+  @ViewChild('fileInputCiudad') fileInputCiudad: ElementRef | undefined;
 
   @ViewChild('paginatorCiudad') set matPaginatorCiudad(mpC: MatPaginator) {
     this.paginatorCiudad = mpC;
@@ -531,7 +533,7 @@ export class MantenedorComponent implements OnInit {
       });
     }
   }
-  onFileChange(event: any): void {
+  ImportarPais(event: any): void {
     const file = event.target.files[0];
     if (this.isExcelFile(file)) {
       const fileReader = new FileReader();
@@ -543,12 +545,46 @@ export class MantenedorComponent implements OnInit {
         const numberArray = Array.from(uint8Array);
 
         base64String = btoa(String.fromCharCode.apply(null, numberArray));
+        if (this.fileInputPais) {
+          this.fileInputPais.nativeElement.value = null;
+        }
         const objeto = { base64string: base64String, usuario: sessionStorage.getItem('user')! }
-        this.mantenedorService.ImportarPaisesCiudades(objeto).subscribe((datos) => {
+        this.mantenedorService.ImportarPaises(objeto).subscribe((datos) => {
           this.paisesData = datos;
           this.dataSource.data = this.paisesData;
-          this.myStepper.reset()
-          this.ingresarFormGroup.reset();
+        }, (error) => {
+          console.log(error);
+          if (error.status !== 200) {
+            this.route.navigateByUrl('');
+          }
+        }, () => {
+          //this.loading.cambiarestadoloading(false);
+        });
+      };
+      fileReader.readAsArrayBuffer(file);
+    } else {
+      console.error('Invalid file format. Please select an Excel file.');
+    }
+  }
+  ImportarCiudad(event: any): void {
+    const file = event.target.files[0];
+    if (this.isExcelFile(file)) {
+      const fileReader = new FileReader();
+      let arrayBuffer;
+      let base64String;
+      fileReader.onload = (e: any) => {
+        arrayBuffer = e.target.result;
+        const uint8Array = new Uint8Array(arrayBuffer);
+        const numberArray = Array.from(uint8Array);
+
+        base64String = btoa(String.fromCharCode.apply(null, numberArray));
+        if (this.fileInputCiudad) {
+          this.fileInputCiudad.nativeElement.value = null;
+        }
+        const objeto = { base64string: base64String, usuario: sessionStorage.getItem('user')!, pais_id: this.ModificaIdPais }
+        this.mantenedorService.ImportarCiudades(objeto).subscribe((datos) => {
+          this.CiudadesData = datos;
+          this.dataSourceCiudad.data = this.CiudadesData;
         }, (error) => {
           console.log(error);
           if (error.status !== 200) {

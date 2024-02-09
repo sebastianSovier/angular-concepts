@@ -26,8 +26,12 @@ export class MantenedorService {
      const result: Observable<any> = this.http.get(environment.UrlWebApi +'/Countries/GetExcelPaises?"usuario"='+'"'+usuario+'"');
      return result;
    }
-   ImportarPaisesCiudades(objeto:any) {
-    const result: Observable<any> = this.http.post(environment.UrlWebApi +'/Countries/ImportarPaisCiudades',objeto);
+   ImportarPaises(objeto:any) {
+    const result: Observable<any> = this.http.post(environment.UrlWebApi +'/Countries/ImportarPais',objeto);
+    return result;
+  }
+  ImportarCiudades(objeto:any) {
+    const result: Observable<any> = this.http.post(environment.UrlWebApi +'/Ciudades/ImportarCiudad',objeto);
     return result;
   }
   IngresarPais(pais:Paises) {
