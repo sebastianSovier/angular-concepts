@@ -13,17 +13,30 @@ export class DecryptDataService {
   constructor() { }
 
 
-  public decrypt(data: HttpResponse<any>):Observable<any>{
-    const bytes  = CryptoJS.AES.decrypt(data.body.data,environment.secretKey);
-    const resp = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    return of(resp);
+  public decrypt(data: HttpResponse<any>): Observable<any> {
+    if (environment.encrypt) {
+      const bytes = CryptoJS.AES.decrypt(data.body.data, environment.secretKey);
+      const resp = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+      return of(resp);
+    } else {
+      return of(data.body.data);
+    }
+
   }
-  public encrypt(data: HttpRequest<any>):Observable<any>{
-    const resp = CryptoJS.AES.encrypt(JSON.stringify(data.body), environment.secretKey).toString();
-    return of({data:resp});
+  public encrypt(data: HttpRequest<any>): Observable<any> {
+    if (environment.encrypt) {
+      const resp = CryptoJS.AES.encrypt(JSON.stringify(data.body), environment.secretKey).toString();
+      return of({ data: resp });
+    } else {
+      return of({ data: data.body });
+    }
   }
-  public encryptQuery(data: string):string{
-    const  resp = CryptoJS.AES.encrypt(data, environment.secretKey).toString(); 
-    return resp;
+  public encryptQuery(data: string): string {
+    if (environment.encrypt) {
+      const resp = CryptoJS.AES.encrypt(data, environment.secretKey).toString();
+      return resp;
+    } else {
+      return data;
+    }
   }
 }
