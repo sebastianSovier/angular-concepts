@@ -113,7 +113,7 @@ export class LoginComponent implements OnInit {
         } else {
           if (datos.access_Token.length > 0) {
             const hora = new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds();
-            this.firebaseService.conexionFirebase(this.usuario, datos.access_Token, this.datepipe.transform(new Date(), "dd/MM/YYYY"), hora);
+            this.firebaseService.conexionFirebase(this.usuario, datos.access_Token, this.datepipe.transform(new Date(), "dd/MM/YYYY"), hora,datos.tokenFirebase);
             this.loginService.enviaCondicion(true);
             this._snackBar.dismiss();
             sessionStorage.setItem('token', datos.access_Token);

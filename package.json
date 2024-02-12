@@ -28,7 +28,7 @@
     "css-what": "^5.0.1",
     "dns-packet": "^5.2.4",
     "file-saver": "^2.0.5",
-    "firebase": "^10.7.1",
+    "firebase": "^10.8.0",
     "normalize-url": "^6.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
