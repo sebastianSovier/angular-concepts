@@ -6,20 +6,23 @@ import { LoginService } from './login.service';
 import { FirebaseService } from '../shared-components/firebase.service';
 import { DatePipe } from '@angular/common';
 import { ValidationsService } from '../shared-components/validations.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ReCaptchaV3Service } from 'ng-recaptcha';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit,OnDestroy {
   hide = true;
 
   loginForm = new UntypedFormGroup({});
   crearCuentaForm = new UntypedFormGroup({});
   loginRequest: any = {};
   login = true;
-  constructor(private validationService: ValidationsService, private datepipe: DatePipe, private firebaseService: FirebaseService, fb: UntypedFormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
+  private recaptchaSubscription: Subscription = new Subscription;
+  constructor(private recaptchaV3Service: ReCaptchaV3Service,private validationService: ValidationsService, private datepipe: DatePipe, private firebaseService: FirebaseService, fb: UntypedFormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
     sessionStorage.clear();
     this.loginForm = fb.group(
       {
@@ -61,6 +64,12 @@ export class LoginComponent implements OnInit {
     this._snackBar.open(message, action);
   }
 
+  public executeImportantAction(f:UntypedFormGroup): void {
+    this.recaptchaSubscription = this.recaptchaV3Service.execute('login_action')
+      .subscribe((token) => this.onSubmit(token,f));
+  }
+
+
   ConfirmedValidator(): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
       const passwordConfirm = group.value as string;
@@ -101,11 +110,16 @@ export class LoginComponent implements OnInit {
 
   get contrasena() { return this.loginForm.value.contrasena; }
 
-
-  onSubmit(f: UntypedFormGroup) {
+  ngOnDestroy(): void {
+    // Unsubscribe when the component is destroyed
+    if (this.recaptchaSubscription) {
+      this.recaptchaSubscription.unsubscribe();
+    }
+  }
+  onSubmit(token:string,f: UntypedFormGroup) {
     if (f.valid) {
       //this.loading.cambiarestadoloading(true);
-      const loginRequest = { Username: this.usuario, Password: this.contrasena };
+      const loginRequest = { Username: this.usuario, Password: this.contrasena,token:token };
       this.loginService.IniciarSesion(loginRequest).subscribe((datos) => {
         if (datos.Error !== undefined) {
           sessionStorage.clear();

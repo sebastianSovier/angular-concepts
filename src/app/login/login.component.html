@@ -1,5 +1,5 @@
 <mat-card class="carta-login" *ngIf="login; else crearUsuario ">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)">
+    <form [formGroup]="loginForm" (ngSubmit)="executeImportantAction(loginForm)">
         <div class="example-container" style="color: black;text-align: center;margin-top: 4%;margin-bottom: 20%;">
             <div style="margin-right: 2%;">
                 <div>

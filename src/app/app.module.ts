@@ -27,6 +27,8 @@ import { ModalEditarPaisComponent } from './modal-editar-pais/modal-editar-pais.
 import { MaterialModule } from './material/material.module';
 import { DecryptDataService } from './decrypt-data.service';
 import { FirebaseService } from './shared-components/firebase.service';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaFormsModule, RecaptchaModule, RecaptchaV3Module } from 'ng-recaptcha';
+import { environment } from 'src/environments/environment';
 
 registerLocaleData(localeCl, localeClExtra);
 
@@ -49,6 +51,9 @@ registerLocaleData(localeCl, localeClExtra);
         CommonModule,
         LoadingPageModule,
         MaterialModule,
+        RecaptchaModule,
+        RecaptchaFormsModule,
+        RecaptchaV3Module
         
     ],
     providers: [
@@ -66,6 +71,7 @@ registerLocaleData(localeCl, localeClExtra);
             useClass: AuthInterceptorServiceService,
             multi: true
         },
+        { provide: RECAPTCHA_V3_SITE_KEY, useValue: environment.recaptchakey }
     ],
     bootstrap: [AppComponent],schemas: [
         CUSTOM_ELEMENTS_SCHEMA
