@@ -108,7 +108,7 @@ export class MantenedorComponent implements OnInit {
 
   constructor(private validationService: ValidationsService, private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService, private _formBuilder: UntypedFormBuilder) {
   }
-  initMap(tipoMapa: boolean, lat?: string, lng?: string): void {
+  async initMap(tipoMapa: boolean, lat?: string, lng?: string): Promise<void> {
     if (lat && lng) {
       this.lat = Number(lat);
       this.lng = Number(lng);
