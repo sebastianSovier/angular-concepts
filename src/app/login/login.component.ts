@@ -107,7 +107,6 @@ export class LoginComponent implements OnInit,OnDestroy {
   }
 
   get usuario() { return this.loginForm.value.usuario }
-
   get contrasena() { return this.loginForm.value.contrasena; }
 
   ngOnDestroy(): void {
