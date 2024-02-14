@@ -7,14 +7,15 @@ import { FirebaseService } from '../shared-components/firebase.service';
 import { DatePipe } from '@angular/common';
 import { ValidationsService } from '../shared-components/validations.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ReCaptchaV3Service } from 'ng-recaptcha';
+import { ReCaptchaV3Service, } from 'ng-recaptcha';
 import { Subscription } from 'rxjs';
+import { Recaptcha } from '../models/recaptcha';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit,OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
   hide = true;
 
   loginForm = new UntypedFormGroup({});
@@ -22,7 +23,9 @@ export class LoginComponent implements OnInit,OnDestroy {
   loginRequest: any = {};
   login = true;
   private recaptchaSubscription: Subscription = new Subscription;
-  constructor(private recaptchaV3Service: ReCaptchaV3Service,private validationService: ValidationsService, private datepipe: DatePipe, private firebaseService: FirebaseService, fb: UntypedFormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
+  recaptchaToken: Recaptcha = new Recaptcha;
+  tokenv2: string = '';
+  constructor(private recaptchaV3Service: ReCaptchaV3Service, private validationService: ValidationsService, private datepipe: DatePipe, private firebaseService: FirebaseService, fb: UntypedFormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
     sessionStorage.clear();
     this.loginForm = fb.group(
       {
@@ -34,7 +37,7 @@ export class LoginComponent implements OnInit,OnDestroy {
     this.crearCuentaForm = fb.group(
       {
         usuario: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
-        contrasena: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20), this.validationService.createPasswordStrengthValidator(),this.ConfirmedValidatorPass()]],
+        contrasena: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20), this.validationService.createPasswordStrengthValidator(), this.ConfirmedValidatorPass()]],
         nombre_completo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
         correo: ['', [Validators.email, Validators.required, Validators.minLength(6), Validators.maxLength(60)]],
         contrasenaRepetir: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20), this.validationService.createPasswordStrengthValidator(), this.ConfirmedValidator()]],
@@ -63,12 +66,26 @@ export class LoginComponent implements OnInit,OnDestroy {
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action);
   }
-
-  public executeImportantAction(f:UntypedFormGroup): void {
+  recaptchaVerificado: boolean = true;
+  executeImportantAction(f: UntypedFormGroup): void {
     this.recaptchaSubscription = this.recaptchaV3Service.execute('login_action')
-      .subscribe((token) => this.onSubmit(token,f));
+      .subscribe((token) => {
+        this.recaptchaVerificado = false;
+        this.onSubmit(token, f);
+      });
   }
-
+  resolveRecaptcha(event:any): void {
+    if (event) {
+      this.recaptchaVerificado = true;
+      this.tokenv2 = event;
+    } else {
+      this.recaptchaVerificado = false;
+      this.tokenv2 = "";
+    }
+  }
+  errored(event:any):void{
+    console.log(event);
+  }
 
   ConfirmedValidator(): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
@@ -115,18 +132,21 @@ export class LoginComponent implements OnInit,OnDestroy {
       this.recaptchaSubscription.unsubscribe();
     }
   }
-  onSubmit(token:string,f: UntypedFormGroup) {
+  onSubmit(token: string, f: UntypedFormGroup) {
     if (f.valid) {
       //this.loading.cambiarestadoloading(true);
-      const loginRequest = { Username: this.usuario, Password: this.contrasena,token:token };
+      const loginRequest = { Username: this.usuario, Password: this.contrasena, token: token,tokenv2:this.tokenv2 };
       this.loginService.IniciarSesion(loginRequest).subscribe((datos) => {
         if (datos.Error !== undefined) {
+          if (datos.Error === "3") {
+            this.recaptchaToken = { score: datos.score, token: datos.token };
+          }
           sessionStorage.clear();
           this.openSnackBar("Credenciales Inválidas.", "Reintente");
         } else {
           if (datos.access_Token.length > 0) {
             const hora = new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds();
-            this.firebaseService.conexionFirebase(this.usuario, datos.access_Token, this.datepipe.transform(new Date(), "dd/MM/YYYY"), hora,datos.tokenFirebase);
+            this.firebaseService.conexionFirebase(this.usuario, datos.access_Token, this.datepipe.transform(new Date(), "dd/MM/YYYY"), hora, datos.tokenFirebase);
             this.loginService.enviaCondicion(true);
             this._snackBar.dismiss();
             sessionStorage.setItem('token', datos.access_Token);
