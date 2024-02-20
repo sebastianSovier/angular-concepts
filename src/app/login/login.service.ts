@@ -12,10 +12,7 @@ export class LoginService {
   constructor(private http: HttpClient) { }
 
   enviaCondicion(mostrarMenu:boolean) {
-    // al que lo este escuchando...
-
     this.subject.next({ mostrarMenu });
-
   }
   IniciarSesion(loginRequest: any) {
     const result: Observable<any> = this.http.post(environment.UrlWebApi +'/Account/Login', loginRequest);

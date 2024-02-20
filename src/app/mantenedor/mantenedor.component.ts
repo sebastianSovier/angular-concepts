@@ -87,7 +87,6 @@ export class MantenedorComponent implements OnInit {
     this.dataSourceCiudad.sort = this.sortCiudad;
 
     if (this.paginator && this.sort) {
-      //this.applyFilter();
     }
   }
   pais_id_cache = 0;
@@ -118,27 +117,17 @@ export class MantenedorComponent implements OnInit {
       zoom: 9,
       mapTypeId: "roadmap",
     };
-    //const input = document.getElementById("pac-input") as HTMLInputElement;
-    //const searchBox = new google.maps.places.SearchBox(input);
     if (tipoMapa) {
       this.mapMod = new google.maps.Map(this.googleMapRefMod?.nativeElement, mapOptions);
       this.mapMod.addListener("click", (e) => {
         this.setMarkMap(e.latLng, this.mapMod!);
       });
-      /*this.mapMod.addListener("bounds_changed", () => {
-        searchBox.setBounds(this.mapMod!.getBounds() as google.maps.LatLngBounds);
-      });*/
       this.setMarkMap(undefined, this.mapMod, lat, lng);
-      //this.BuscarDireccion(this.mapMod,searchBox);
     } else {
       this.map = new google.maps.Map(this.googleMapRef?.nativeElement, mapOptions);
       this.map.addListener("click", (e) => {
         this.setMarkMap(e.latLng, this.map!, lat, lng);
       });
-      /*this.map.addListener("bounds_changed", () => {
-        searchBox.setBounds(this.map!.getBounds() as google.maps.LatLngBounds);
-      });*/
-      //this.BuscarDireccion(this.map,searchBox);
     }
 
   }
@@ -165,19 +154,13 @@ export class MantenedorComponent implements OnInit {
           anchor: new google.maps.Point(17, 34),
           scaledSize: new google.maps.Size(25, 25),
         };
-
-        // Create a marker for each place.
-
         this.marker = new google.maps.Marker({
           position: place.geometry.location,
           map: map,
           title: place.name,
           icon,
         });
-
-
         if (place.geometry.viewport) {
-          // Only geocodes have viewport.
           bounds.union(place.geometry.viewport);
         } else {
           bounds.extend(place.geometry.location);
@@ -313,15 +296,15 @@ export class MantenedorComponent implements OnInit {
     }
   }
   ConsultarPaises() {
-    //this.loading.cambiarestadoloading(true);
+    
     const objeto = { usuario: sessionStorage.getItem('user')! };
     this.mantenedorService.ObtenerPaises(objeto.usuario).subscribe((datos) => {
       this.paisesData = datos;
       this.dataSource.data = this.paisesData;
-      //this.loading.cambiarestadoloading(false);
+      
       console.log(datos);
     }, (error) => {
-      //this.loading.cambiarestadoloading(false);
+      
       console.log(error);
       if (error.status !== 200) {
         this.route.navigateByUrl('');
@@ -336,7 +319,7 @@ export class MantenedorComponent implements OnInit {
       const blob = new Blob([myfile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       saveAs(blob, 'MisPaises.xlsx');
     }, (error) => {
-      //this.loading.cambiarestadoloading(false);
+      
       console.log(error);
       if (error.status !== 200) {
         this.route.navigateByUrl('');
@@ -352,25 +335,25 @@ export class MantenedorComponent implements OnInit {
     this.dataSourceCiudad.data = [];
   }
   ConsultarCiudades(elemento: Paises) {
-    //this.loading.cambiarestadoloading(true);
+    
     this.pais_id_cache = elemento.pais_id;
     this.mantenedorService.ObtenerCiudades(elemento.pais_id.toString()).subscribe((datos) => {
       this.ciudades = datos;
       this.CiudadesData = datos;
       this.dataSourceCiudad.data = this.CiudadesData;
-      //this.loading.cambiarestadoloading(false);
+      
     }, (error) => {
-      //this.loading.cambiarestadoloading(false);
+      
       console.log(error);
       if (error.status !== 200) {
         this.route.navigateByUrl('');
       }
     }, () => {
-      //this.loading.cambiarestadoloading(false);
+      
     });
   }
   volverListaModifica() {
-    //this.loading.cambiarestadoloading(true);
+    
     this.myStepper.previous();
     this.myStepper.previous();
     this.myStepper.reset();
@@ -381,7 +364,7 @@ export class MantenedorComponent implements OnInit {
     this.ConsultarPaises();
   }
   volverListaIngresa() {
-    //this.loading.cambiarestadoloading(false);
+    
     this.myStepper.previous();
     this.myStepper.reset();
     this.ingresarFormGroup.reset();
@@ -438,7 +421,7 @@ export class MantenedorComponent implements OnInit {
     this.myStepperCiudades.next();
   }
   IngresarPais() {
-    //this.loading.cambiarestadoloading(true);
+    
     if (this.ingresarFormGroup.valid) {
       const objeto: Paises = { pais_id: 0, nombre_pais: this.Ingresanombre, capital: this.Ingresacapital, region: this.Ingresaregion, poblacion: this.Ingresapoblacion, usuario: sessionStorage.getItem('user')! };
       this.mantenedorService.IngresarPais(objeto).subscribe((datos) => {
@@ -452,12 +435,12 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        //this.loading.cambiarestadoloading(false);
+        
       });
     }
   }
   IngresarCiudad() {
-    //this.loading.cambiarestadoloading(true);
+    
     if (this.ingresarCiudadFormGroup.valid && this.locationChose === true) {
       const objeto: Ciudades = { ciudad_id: 0, pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString() };
       this.mantenedorService.IngresarCiudad(objeto).subscribe((datos) => {
@@ -472,12 +455,12 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        //this.loading.cambiarestadoloading(false);
+        
       });
     }
   }
   ModificarPais() {
-    //this.loading.cambiarestadoloading(true);
+    
     if (this.modificarFormGroup.valid) {
       const objeto: Paises = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion, usuario: sessionStorage.getItem('user')! };
       this.mantenedorService.ModificarPais(objeto).subscribe((datos) => {
@@ -493,12 +476,12 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        //this.loading.cambiarestadoloading(false);
+        
       });
     }
   }
   ModificarCiudad() {
-    //this.loading.cambiarestadoloading(true);
+    
     if (this.modificarCiudadFormGroup.valid && this.locationChose === true) {
       const objeto = { pais_id: this.ModificaIdCiudadPais, ciudad_id: this.ModificaIdCiudad, nombre_ciudad: this.ModificanombreCiudad, region: this.ModificaregionCiudad, poblacion: this.ModificapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString() };
       this.mantenedorService.ModificarCiudad(objeto).subscribe((datos) => {
@@ -514,13 +497,13 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        //this.loading.cambiarestadoloading(false);
+        
       });
     }
   }
   EliminarPais(element: any) {
     if (element === undefined) {
-      //this.loading.cambiarestadoloading(false);
+      
       return;
     } else {
       this.mantenedorService.EliminarPais(element.element.pais_id.toString(), sessionStorage.getItem('user')!).subscribe((datos) => {
@@ -529,7 +512,7 @@ export class MantenedorComponent implements OnInit {
       }, (error) => {
         console.log(error);
       }, () => {
-        //this.loading.cambiarestadoloading(false);
+        
       });
     }
   }
@@ -558,7 +541,7 @@ export class MantenedorComponent implements OnInit {
             this.route.navigateByUrl('');
           }
         }, () => {
-          //this.loading.cambiarestadoloading(false);
+          
         });
       };
       fileReader.readAsArrayBuffer(file);
@@ -591,7 +574,7 @@ export class MantenedorComponent implements OnInit {
             this.route.navigateByUrl('');
           }
         }, () => {
-          //this.loading.cambiarestadoloading(false);
+          
         });
       };
       fileReader.readAsArrayBuffer(file);
@@ -606,7 +589,7 @@ export class MantenedorComponent implements OnInit {
   }
   EliminarCiudad(element: Ciudades) {
     if (element === undefined) {
-      //this.loading.cambiarestadoloading(false);
+      
       return;
     } else {
       const objeto: Ciudades = { pais_id: element.pais_id, ciudad_id: element.ciudad_id, nombre_ciudad: "", region: "", poblacion: "", latitud: "", longitud: "" }
@@ -619,13 +602,13 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        //this.loading.cambiarestadoloading(false);
+        
       });
     }
   }
 
   openDialog(element: Paises): void {
-    //this.loading.cambiarestadoloading(true);
+    
     const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
       width: '250px',
       data: { element, 'label': 'pais' }
@@ -638,7 +621,7 @@ export class MantenedorComponent implements OnInit {
     });
   }
   openDialogCiudad(element: Ciudades): void {
-    //this.loading.cambiarestadoloading(true);
+    
     const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
       width: '350px',
       data: { element, 'label': 'ciudad' }

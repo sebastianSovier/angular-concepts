@@ -39,8 +39,7 @@
                         <re-captcha (resolved)="resolveRecaptcha($event)"  (errored)="errored($event)" errorMode="handled"></re-captcha>
                       </div>
                       <div *ngIf="recaptchaToken && recaptchaToken.score >= 0.5 || tokenv2">
-                        <!-- Your content when reCAPTCHA score is acceptable -->
-                        <p>reCAPTCHA verification successful!</p>
+                        <p>reCAPTCHA exitoso</p>
                       </div>
                 </div>
             </div>

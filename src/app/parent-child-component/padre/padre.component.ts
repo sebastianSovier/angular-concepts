@@ -43,13 +43,13 @@ export class PadreComponent implements OnInit {
   get fechaHasta() { return this.busquedaFormGroup.value.fecha_hasta; }
  
   ConsultarPaisesFechas() {
-    //this.loading.cambiarestadoloading(true);
+    
     const objeto = { fecha_desde:this.datePipe.transform(this.fechaDesde,"yyyy-MM-dd"),fecha_hasta:this.datePipe.transform(this.fechaHasta,"yyyy-MM-dd"),usuario: sessionStorage.getItem('user') };
     this.mantenedorService.ObtenerPaisesByFechas(objeto).subscribe((datos) => {
       this.paisesData = datos;
       console.log(datos);
     }, (error) => {
-      //this.loading.cambiarestadoloading(false);
+      
       console.log(error);
       if (error.status !== 200) {
         this.route.navigateByUrl('');
