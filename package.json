@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4200 --configuration production",
+    "start": "ng serve --port 4200 --configuration development",
     "build": "ng build",
     "watch": "ng build --configuration development",
     "test": "ng test"
@@ -24,12 +24,14 @@
     "@angular/router": "^17.1.2",
     "@auth0/angular-jwt": "^5.0.2",
     "@types/crypto-js": "^4.2.1",
+    "chart.js": "^3.9.1",
     "crypto-js": "^4.2.0",
     "css-what": "^5.0.1",
     "dns-packet": "^5.2.4",
     "file-saver": "^2.0.5",
     "firebase": "^10.8.0",
     "ng-recaptcha": "^13.2.1",
+    "ng2-charts": "^4.1.1",
     "normalize-url": "^6.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",

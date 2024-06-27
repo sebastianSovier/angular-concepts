@@ -29,6 +29,7 @@ import { DecryptDataService } from './decrypt-data.service';
 import { FirebaseService } from './shared-components/firebase.service';
 import { RECAPTCHA_SETTINGS, RECAPTCHA_V3_SITE_KEY, RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RecaptchaV3Module } from 'ng-recaptcha';
 import { environment } from 'src/environments/environment';
+import { NgChartsModule } from 'ng2-charts';
 
 registerLocaleData(localeCl, localeClExtra);
 
@@ -53,7 +54,8 @@ registerLocaleData(localeCl, localeClExtra);
         MaterialModule,
         RecaptchaModule,
         RecaptchaFormsModule,
-        RecaptchaV3Module
+        RecaptchaV3Module,
+        NgChartsModule
 
     ],
     providers: [
