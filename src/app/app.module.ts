@@ -30,6 +30,7 @@ import { FirebaseService } from './shared-components/firebase.service';
 import { RECAPTCHA_SETTINGS, RECAPTCHA_V3_SITE_KEY, RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RecaptchaV3Module } from 'ng-recaptcha';
 import { environment } from 'src/environments/environment';
 import { NgChartsModule } from 'ng2-charts';
+import { ChartGenericComponent } from './utilitarios/chart-generic.component';
 
 registerLocaleData(localeCl, localeClExtra);
 
@@ -39,7 +40,8 @@ registerLocaleData(localeCl, localeClExtra);
         LoginComponent,
         MantenedorComponent,
         DialogOverviewExampleDialogComponent,
-        ModalEditarPaisComponent
+        ModalEditarPaisComponent,
+        ChartGenericComponent
     ],
     imports: [
         BrowserModule,
