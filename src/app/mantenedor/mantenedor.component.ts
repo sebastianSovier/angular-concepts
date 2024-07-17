@@ -56,6 +56,7 @@ export class MantenedorComponent implements OnInit {
   private sort!: MatSort;
   private paginatorCiudad!: MatPaginator;
   private sortCiudad!: MatSort;
+  usuario!: string;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -218,6 +219,7 @@ export class MantenedorComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.usuario = sessionStorage.getItem('user')!;
     this.initMap(false);
     if (sessionStorage.length === 0 || sessionStorage.getItem('token') === undefined) {
       this.route.navigateByUrl('');
@@ -296,15 +298,15 @@ export class MantenedorComponent implements OnInit {
     }
   }
   ConsultarPaises() {
-    
+
     const objeto = { usuario: sessionStorage.getItem('user')! };
     this.mantenedorService.ObtenerPaises(objeto.usuario).subscribe((datos) => {
       this.paisesData = datos;
       this.dataSource.data = this.paisesData;
-      
+
       console.log(datos);
     }, (error) => {
-      
+
       console.log(error);
       if (error.status !== 200) {
         this.route.navigateByUrl('');
@@ -319,7 +321,7 @@ export class MantenedorComponent implements OnInit {
       const blob = new Blob([myfile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       saveAs(blob, 'MisPaises.xlsx');
     }, (error) => {
-      
+
       console.log(error);
       if (error.status !== 200) {
         this.route.navigateByUrl('');
@@ -335,25 +337,25 @@ export class MantenedorComponent implements OnInit {
     this.dataSourceCiudad.data = [];
   }
   ConsultarCiudades(elemento: Paises) {
-    
+
     this.pais_id_cache = elemento.pais_id;
     this.mantenedorService.ObtenerCiudades(elemento.pais_id.toString()).subscribe((datos) => {
       this.ciudades = datos;
       this.CiudadesData = datos;
       this.dataSourceCiudad.data = this.CiudadesData;
-      
+
     }, (error) => {
-      
+
       console.log(error);
       if (error.status !== 200) {
         this.route.navigateByUrl('');
       }
     }, () => {
-      
+
     });
   }
   volverListaModifica() {
-    
+
     this.myStepper.previous();
     this.myStepper.previous();
     this.myStepper.reset();
@@ -364,7 +366,7 @@ export class MantenedorComponent implements OnInit {
     this.ConsultarPaises();
   }
   volverListaIngresa() {
-    
+
     this.myStepper.previous();
     this.myStepper.reset();
     this.ingresarFormGroup.reset();
@@ -421,7 +423,7 @@ export class MantenedorComponent implements OnInit {
     this.myStepperCiudades.next();
   }
   IngresarPais() {
-    
+
     if (this.ingresarFormGroup.valid) {
       const objeto: Paises = { pais_id: 0, nombre_pais: this.Ingresanombre, capital: this.Ingresacapital, region: this.Ingresaregion, poblacion: this.Ingresapoblacion, usuario: sessionStorage.getItem('user')! };
       this.mantenedorService.IngresarPais(objeto).subscribe((datos) => {
@@ -435,12 +437,12 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        
+
       });
     }
   }
   IngresarCiudad() {
-    
+
     if (this.ingresarCiudadFormGroup.valid && this.locationChose === true) {
       const objeto: Ciudades = { ciudad_id: 0, pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString() };
       this.mantenedorService.IngresarCiudad(objeto).subscribe((datos) => {
@@ -455,12 +457,12 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        
+
       });
     }
   }
   ModificarPais() {
-    
+
     if (this.modificarFormGroup.valid) {
       const objeto: Paises = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion, usuario: sessionStorage.getItem('user')! };
       this.mantenedorService.ModificarPais(objeto).subscribe((datos) => {
@@ -476,12 +478,12 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        
+
       });
     }
   }
   ModificarCiudad() {
-    
+
     if (this.modificarCiudadFormGroup.valid && this.locationChose === true) {
       const objeto = { pais_id: this.ModificaIdCiudadPais, ciudad_id: this.ModificaIdCiudad, nombre_ciudad: this.ModificanombreCiudad, region: this.ModificaregionCiudad, poblacion: this.ModificapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString() };
       this.mantenedorService.ModificarCiudad(objeto).subscribe((datos) => {
@@ -497,13 +499,13 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        
+
       });
     }
   }
   EliminarPais(element: any) {
     if (element === undefined) {
-      
+
       return;
     } else {
       this.mantenedorService.EliminarPais(element.element.pais_id.toString(), sessionStorage.getItem('user')!).subscribe((datos) => {
@@ -512,7 +514,7 @@ export class MantenedorComponent implements OnInit {
       }, (error) => {
         console.log(error);
       }, () => {
-        
+
       });
     }
   }
@@ -541,7 +543,7 @@ export class MantenedorComponent implements OnInit {
             this.route.navigateByUrl('');
           }
         }, () => {
-          
+
         });
       };
       fileReader.readAsArrayBuffer(file);
@@ -574,7 +576,7 @@ export class MantenedorComponent implements OnInit {
             this.route.navigateByUrl('');
           }
         }, () => {
-          
+
         });
       };
       fileReader.readAsArrayBuffer(file);
@@ -589,7 +591,7 @@ export class MantenedorComponent implements OnInit {
   }
   EliminarCiudad(element: Ciudades) {
     if (element === undefined) {
-      
+
       return;
     } else {
       const objeto: Ciudades = { pais_id: element.pais_id, ciudad_id: element.ciudad_id, nombre_ciudad: "", region: "", poblacion: "", latitud: "", longitud: "" }
@@ -602,13 +604,13 @@ export class MantenedorComponent implements OnInit {
           this.route.navigateByUrl('');
         }
       }, () => {
-        
+
       });
     }
   }
 
   openDialog(element: Paises): void {
-    
+
     const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
       width: '250px',
       data: { element, 'label': 'pais' }
@@ -620,8 +622,9 @@ export class MantenedorComponent implements OnInit {
       }
     });
   }
+
   openDialogCiudad(element: Ciudades): void {
-    
+
     const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
       width: '350px',
       data: { element, 'label': 'ciudad' }

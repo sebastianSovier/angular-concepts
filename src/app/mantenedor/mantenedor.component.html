@@ -414,5 +414,5 @@
         (click)="VolverAtrasPaises();">Volver Atrás</button>
     </div>
   </div>
-  <app-chart-generic></app-chart-generic>
+  <app-chart-generic *ngIf="usuario === 'admin'" [inputPaises]="paisesData"></app-chart-generic>
 </mat-card>
