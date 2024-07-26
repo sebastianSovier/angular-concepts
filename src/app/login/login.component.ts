@@ -63,8 +63,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   nuevoUsuario() {
     this.login = false;
   }
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action);
+  openSnackBar(message: string) {
+    this._snackBar.open(message);
   }
   recaptchaVerificado: boolean = true;
   executeImportantAction(f: UntypedFormGroup): void {
@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.onSubmit(token, f);
       });
   }
-  resolveRecaptcha(event:any): void {
+  resolveRecaptcha(event: any): void {
     if (event) {
       this.recaptchaVerificado = true;
       this.tokenv2 = event;
@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.tokenv2 = "";
     }
   }
-  errored(event:any):void{
+  errored(event: any): void {
     console.log(event);
   }
 
@@ -134,15 +134,17 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   onSubmit(token: string, f: UntypedFormGroup) {
     if (f.valid) {
-      
-      const loginRequest = { Username: this.usuario, Password: this.contrasena, token: token,tokenv2:this.tokenv2 };
+
+      const loginRequest = { Username: this.usuario, Password: this.contrasena, token: token, tokenv2: this.tokenv2 };
       this.loginService.IniciarSesion(loginRequest).subscribe((datos) => {
         if (datos.Error !== undefined) {
           if (datos.Error === "3") {
             this.recaptchaToken = { score: datos.score, token: datos.token };
+            this.openSnackBar("Credenciales Inválidas.");
+          } else if (datos.Error === "93") {
+            this.openSnackBar("Usuario ya se encuentra online.");
           }
           sessionStorage.clear();
-          this.openSnackBar("Credenciales Inválidas.", "Reintente");
         } else {
           if (datos.access_Token.length > 0) {
             const hora = new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds();
@@ -155,35 +157,37 @@ export class LoginComponent implements OnInit, OnDestroy {
           } else {
             this.loginService.enviaCondicion(false);
             sessionStorage.clear();
-            this.openSnackBar("Hubo problemas para validar su usuario", "Reintente");
+            this.openSnackBar("Hubo problemas para validar su usuario");
           }
         }
         console.log(datos);
       }, (error) => {
         console.log(error);
+        sessionStorage.clear();
         if (error.status !== 200) {
           this.router.navigateByUrl('');
         }
       }, () => {
-        
+
       });
     }
   }
   CrearUsuario(f: UntypedFormGroup) {
     if (f.valid) {
-      
+
       const loginRequest = { usuario: this.usuarioCrear, contrasena: this.contrasenaCrear, nombre_completo: this.nombre_completoCrear, correo: this.correoCrear };
+
       this.loginService.CrearUsuario(loginRequest).subscribe((datos) => {
         if (datos.Error !== undefined) {
           sessionStorage.clear();
-          this.openSnackBar("Hubo problemas al crear su usuario Intente nuevamente.", "Reintente");
+          this.openSnackBar("Hubo problemas al crear su usuario Intente nuevamente.");
         } else {
           if (datos.datos === 'ok') {
             this.login = true;
-            this.openSnackBar("Usuario creado exitosamente.", "Ok");
+            this.openSnackBar("Usuario creado exitosamente.");
           } else {
             sessionStorage.clear();
-            this.openSnackBar("Hubo problemas para validar su usuario", "Reintente");
+            this.openSnackBar("Hubo problemas para validar su usuario");
           }
         }
         console.log(datos);
@@ -193,7 +197,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigateByUrl('');
         }
       }, () => {
-        
+
       });
     }
   }

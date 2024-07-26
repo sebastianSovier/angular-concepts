@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DecryptDataService } from './decrypt-data.service';
 import { LoadingPageService } from './loading-page/loading-page.service';
+import { LoginService } from './login/login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ import { LoadingPageService } from './loading-page/loading-page.service';
 export class AuthInterceptorServiceService implements HttpInterceptor {
   url401 = '';
   reload = 0;
-  constructor(private decryptService:DecryptDataService, private router: Router, private _snackBar: MatSnackBar,private _loadingService:LoadingPageService) { }
+  constructor(private loginService: LoginService, private decryptService: DecryptDataService, private router: Router, private _snackBar: MatSnackBar, private _loadingService: LoadingPageService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this._loadingService.cambiarestadoloading(true);
     const token: string = sessionStorage.getItem("token")!;
@@ -21,32 +22,34 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
     return this.decryptService.encrypt(request).pipe(
       switchMap((encryptedBody) => {
         // Clonamos la solicitud original y le asignamos el cuerpo cifrado
-        if(req.method === "GET" || req.method === "DELETE"){
+        if (req.method === "GET" || req.method === "DELETE") {
           if (req.url.indexOf("?") > 0) {
-            let encriptURL = req.url.substring(0, req.url.indexOf("?") + 1) +"data="+ encodeURIComponent(this.decryptService.encryptQuery(req.url.substring(req.url.indexOf("?") + 1, req.url.length)));
-            if(token){
+            let encriptURL = req.url.substring(0, req.url.indexOf("?") + 1) + "data=" + encodeURIComponent(this.decryptService.encryptQuery(req.url.substring(req.url.indexOf("?") + 1, req.url.length)));
+            if (token) {
               request = req.clone({
                 url: encriptURL,
                 setHeaders: {
                   Authorization: 'Bearer ' + token
                 }
-            });
-            }else{
+              });
+            } else {
               request = req.clone({
-                url: encriptURL,   
-            });
-            }     
+                url: encriptURL,
+              });
+            }
           }
-        }else{
-          if(token){
-          const encryptedRequest = request.clone({ body: encryptedBody,setHeaders: {
-            Authorization: 'Bearer ' + token
-          } });
-          return next.handle(encryptedRequest);
-        }else{
-          const encryptedRequest = request.clone({ body: encryptedBody });
-          return next.handle(encryptedRequest);
-        }
+        } else {
+          if (token) {
+            const encryptedRequest = request.clone({
+              body: encryptedBody, setHeaders: {
+                Authorization: 'Bearer ' + token
+              }
+            });
+            return next.handle(encryptedRequest);
+          } else {
+            const encryptedRequest = request.clone({ body: encryptedBody });
+            return next.handle(encryptedRequest);
+          }
         }
         return next.handle(request);
       }),
@@ -69,6 +72,8 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
         return event;
       }),
       catchError(error => {
+        const decryptData = this.decryptService.decryptCatch(error);
+        console.log(decryptData);
         this._loadingService.cambiarestadoloading(false);
         if (error.status === 401 || error.status === 403) {
           if (this.url401 == request.url) {
@@ -82,27 +87,46 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
             this.url401 = request.url;
             this.reload = 0;
           }
-          sessionStorage.clear();
-          this.router.navigateByUrl('');
-          this.openSnackBar("Superó el tiempo limite de sesión.", "Ingrese Nuevamente");
+
+
+          if (decryptData && JSON.parse(decryptData).Error === "93") {
+            sessionStorage.clear();
+            this.router.navigateByUrl('');
+            this.openSnackBar("Usuario ya posee sesión activa.");
+          } else {
+            this.openSnackBar("Superó el tiempo limite de sesión.");
+            const requestLogout = { usuario: sessionStorage.getItem('user')! }
+            this.loginService.CerrarSesion(requestLogout);
+            sessionStorage.clear();
+            this.router.navigateByUrl('');
+
+          }
+
         } else if (error.status === 500) {
+          const requestLogout = { usuario: sessionStorage.getItem('user')! }
+          this.loginService.CerrarSesion(requestLogout);
+          sessionStorage.clear();
           if (this.router.url === '/mantenedor') {
             this.router.navigateByUrl('');
           } else {
             this.router.navigateByUrl('');
           }
-          this.openSnackBar("Hubo problemas, por favor comuniquese con Administrador.", "Reintente");
-        } else if(error.status === 0){
-          this.openSnackBar("Hubo problemas, por favor comuniquese con Administrador.", "Reintente");
-        }else{
+          this.openSnackBar("Hubo problemas, por favor comuniquese con Administrador.");
+        } else if (error.status === 0) {
+
+          const requestLogout = { usuario: sessionStorage.getItem('user')! }
+          this.loginService.CerrarSesion(requestLogout);
+          sessionStorage.clear();
+          this.openSnackBar("Hubo problemas, por favor comuniquese con Administrador.");
+        } else {
           return next.handle(request);
         }
         return throwError(error);
       })
     );
   }
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action);
+  openSnackBar(message: string) {
+    this._snackBar.open(message);
   }
 }
 

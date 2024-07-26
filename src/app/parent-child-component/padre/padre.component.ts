@@ -28,7 +28,6 @@ export class PadreComponent implements OnInit {
   constructor(private validationService:ValidationsService, private datePipe:DatePipe,private route: Router, public dialog: MatDialog, private mantenedorService: MantenedorService, private loading: LoadingPageService,private _formBuilder: UntypedFormBuilder) { }
   paisesData: Paises[] = [];
   busquedaFormGroup = new UntypedFormGroup({});
-
   isValidInput = (fieldName: string | number, form: UntypedFormGroup) => this.validationService.isValidInput(fieldName,form);
   errors = (control: AbstractControl | null) => this.validationService.errors(control);
   errorMessages: Record<string, string> = this.validationService.errorMessages;
@@ -56,7 +55,7 @@ export class PadreComponent implements OnInit {
       }
     });
   }
-
+ 
   editarPais(element:Paises){
     console.log(element);
     

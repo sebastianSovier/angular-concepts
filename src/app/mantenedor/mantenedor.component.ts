@@ -15,6 +15,7 @@ import { saveAs } from 'file-saver';
 import { Paises } from '../models/paises';
 import { Ciudades } from '../models/ciudades';
 import { ValidationsService } from '../shared-components/validations.service';
+import { MatDrawer } from '@angular/material/sidenav';
 
 
 @Component({
@@ -49,6 +50,8 @@ export class MantenedorComponent implements OnInit {
   @ViewChild('stepperCiudad')
   myStepperCiudades!: MatStepper;
   panelOpenState = false;
+  @ViewChild('drawer') drawer!: MatDrawer;
+
   ciudades: Ciudades[] = [];
   modificarCiudadFormGroup = new UntypedFormGroup({});
   ingresarCiudadFormGroup = new UntypedFormGroup({});
@@ -57,6 +60,7 @@ export class MantenedorComponent implements OnInit {
   private paginatorCiudad!: MatPaginator;
   private sortCiudad!: MatSort;
   usuario!: string;
+  toggle: boolean = false;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -297,6 +301,10 @@ export class MantenedorComponent implements OnInit {
       this.dataSourceCiudad.paginator.firstPage();
     }
   }
+  mostrarSidenav(){
+    this.drawer.toggle();
+    
+  }
   ConsultarPaises() {
 
     const objeto = { usuario: sessionStorage.getItem('user')! };
@@ -373,6 +381,7 @@ export class MantenedorComponent implements OnInit {
 
   }
   IrIngresarPais() {
+    this.drawer.close();
     this.myStepper.next();
     this.ingresarFormGroup.reset();
   }
@@ -395,6 +404,7 @@ export class MantenedorComponent implements OnInit {
     this.locationChose = false;
   }
   irAModificar(elemento: Paises) {
+    this.drawer.close();
     this.ConsultarCiudades(elemento);
     this.modificarFormGroup.setValue({ pais_id: elemento.pais_id, nombre: elemento.nombre_pais, capital: elemento.capital, region: elemento.region, poblacion: elemento.poblacion });
     this.myStepper.next();
@@ -402,6 +412,7 @@ export class MantenedorComponent implements OnInit {
 
   }
   iraVerCiudades(elemento: Paises) {
+    this.drawer.close();
     this.consultaCiudades = true;
     this.ConsultarCiudades(elemento);
 

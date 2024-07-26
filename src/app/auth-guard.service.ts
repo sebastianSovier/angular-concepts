@@ -5,8 +5,9 @@ import { AuthService } from './auth.service';
 export class AuthGuardService  {
   constructor(public auth: AuthService, public router: Router) { }
   canActivate(): boolean {
-    if (!this.auth.isAuthenticated()) {
+    if (!this.auth.isAuthenticated() || this.auth.jwtHelper.isTokenExpired(sessionStorage.getItem('token')!)) {
       this.router.navigateByUrl('');
+      
       return false;
     }
     return true;

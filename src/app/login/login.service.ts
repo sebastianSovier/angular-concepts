@@ -15,7 +15,13 @@ export class LoginService {
     this.subject.next({ mostrarMenu });
   }
   IniciarSesion(loginRequest: any) {
+   
     const result: Observable<any> = this.http.post(environment.UrlWebApi +'/Account/Login', loginRequest);
+    return result;
+  }
+  CerrarSesion(requestLogout: any) {
+   
+    const result: Observable<any> = this.http.post(environment.UrlWebApi +'/Account/Logout', requestLogout);
     return result;
   }
   CrearUsuario(loginRequest: any) {

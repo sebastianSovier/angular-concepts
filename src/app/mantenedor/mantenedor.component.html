@@ -1,364 +1,375 @@
 <mat-card class="carta-mantenedor">
-  <div [hidden]="consultaCiudades">
-    <mat-horizontal-stepper id="editarpais" [linear]="isLinear" #stepper>
-      <mat-step completed="false">
-        <form>
-          <ng-template matStepLabel>Tabla Paises</ng-template>
-
-
-          <mat-form-field>
-            <mat-label>Buscador</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Buscar registro" #input>
-          </mat-form-field>
-
-          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows matSort>
-
-            <!-- Name Column -->
-            <ng-container matColumnDef="nombre_pais">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Pais </th>
-              <td mat-cell *matCellDef="let element"> {{element.nombre_pais}} </td>
-            </ng-container>
-
-            <!-- Weight Column -->
-            <ng-container matColumnDef="capital">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Capital </th>
-              <td mat-cell *matCellDef="let element"> {{element.capital}} </td>
-            </ng-container>
-
-            <!-- Symbol Column -->
-            <ng-container matColumnDef="region">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Region </th>
-              <td mat-cell *matCellDef="let element"> {{element.region}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="poblacion">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Población</th>
-              <td mat-cell *matCellDef="let element"> {{element.poblacion | number}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="acciones">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
-              <td mat-cell *matCellDef="let element" style="padding: 4px!important;">
-                <button style="margin-left: -61%;" mat-mini-fab color="primary" aria-label="ver ciudades"
-                  (click)="iraVerCiudades(element);">
-                  <mat-icon>remove_red_eye</mat-icon>
-                </button>
-                <button style="margin-left: 8%;" mat-mini-fab color="primary" aria-label="modificar pais"
-                  (click)="irAModificar(element);">
-                  <mat-icon>edit</mat-icon>
-                </button>
-                <button style="margin-left: 9%;" mat-mini-fab color="secondary" aria-label="eliminar pais"
-                  (click)="openDialog(element);">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="expandedDetail">
-              <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
-              [class.example-expanded-row]="expandedElement === element"
-              (click)="expandedElement = expandedElement === element ? null : element;">
-            </tr>
-            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-            <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell" colspan="4">No existen registros.</td>
-            </tr>
-
-          </table>
-          <mat-paginator [pageSizeOptions]="[10]"></mat-paginator>
-          <div class="col-md-5 text-right" style="margin-top:1%;margin-left: 2%;">
-            <button mat-raised-button style="margin-right: 2%;" color="primary" (click)="IrIngresarPais();">Ingresar
-              Nuevo
-              Pais</button>
-            <button style="margin-right: 2%;" mat-raised-button color="primary" (click)="ExcelPaises()">Exportar a
-              Excel</button>
-            <input type="file" hidden accept=".xlsx, .xls" #fileInputPais (change)="ImportarPais($event)">
-            <button mat-raised-button color="primary" (click)="fileInputPais.click()">Importar excel</button>
-          </div>
-
-        </form>
-      </mat-step>
-      <mat-step [stepControl]="ingresarFormGroup" label="Ingrese Pais">
-        <form [formGroup]="ingresarFormGroup" (ngSubmit)="IngresarPais()">
-          <mat-form-field style="width: 80%;">
-            <mat-label>Nombre Pais</mat-label>
-            <input matInput formControlName="nombre" type="text" placeholder="Chile" required autocomplete="country">
-
-            <mat-error *ngIf="isValidInput('nombre',ingresarFormGroup)">
-              <ng-container *ngFor="let error of errors(ingresarFormGroup.get('nombre')) ">
-                {{ errorMessages[error] }} <br>
-              </ng-container>
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field style="width: 80%;">
-            <mat-label>Capital</mat-label>
-            <input matInput formControlName="capital" placeholder="Santiago" autocomplete="address-level2" required>
-            <mat-error *ngIf="isValidInput('capital',ingresarFormGroup)">
-              <ng-container *ngFor="let error of errors(ingresarFormGroup.get('capital'))">
-                {{ errorMessages[error] }} <br>
-              </ng-container>
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field style="width: 80%;">
-            <mat-label>Region</mat-label>
-            <input matInput formControlName="region" placeholder="América del Sur" autocomplete="address-level3"
-              required>
-            <mat-error *ngIf="isValidInput('region',ingresarFormGroup)">
-              <ng-container *ngFor="let error of errors(ingresarFormGroup.get('region')) ">
-                {{ errorMessages[error] }} <br>
-              </ng-container>
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field style="width: 80%;">
-            <mat-label>Población</mat-label>
-            <input matInput formControlName="poblacion" placeholder="150000000" autocomplete="address-level4" required>
-            <mat-error *ngIf="isValidInput('poblacion',ingresarFormGroup)">
-              <ng-container *ngFor="let error of errors(ingresarFormGroup.get('poblacion')) ">
-                {{ errorMessages[error] }} <br>
-              </ng-container>
-            </mat-error>
-          </mat-form-field>
-          <div class="col-md-5 text-right" style="margin-top:5%;">
-            <button mat-raised-button color="primary" [disabled]="!ingresarFormGroup.valid">Ingresar</button>
-            <button mat-raised-button color="accent" type="button" (click)="volverListaIngresa();"
-              style="margin-left: 10%;">Volver</button>
-          </div>
-        </form>
-      </mat-step>
-      <mat-step [stepControl]="modificarFormGroup" label="Modificar Pais">
-        <ng-template matStepLabel>Modificar Pais</ng-template>
-        <form [formGroup]="modificarFormGroup" (ngSubmit)="ModificarPais()">
-          <mat-form-field class="invisible" style="width: 80%;">
-            <mat-label>Pais Id</mat-label>
-            <input matInput formControlName="pais_id">
-          </mat-form-field>
-          <mat-form-field style="width: 80%;">
-            <mat-label>Nombre Pais</mat-label>
-            <input matInput formControlName="nombre" placeholder="Chile" autocomplete="country" required>
-            <mat-error *ngIf="isValidInput('nombre',ingresarCiudadFormGroup)">
-              <ng-container *ngFor="let error of errors(modificarFormGroup.get('nombre'))">
-                {{ errorMessages[error] }} <br>
-              </ng-container>
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field style="width: 80%;">
-            <mat-label>Capital</mat-label>
-            <input matInput formControlName="capital" placeholder="Santiago" autocomplete="address-level2" required>
-            <mat-error *ngIf="isValidInput('capital',ingresarCiudadFormGroup)">
-              <ng-container *ngFor="let error of errors(modificarFormGroup.get('capital'))">
-                {{ errorMessages[error] }} <br>
-              </ng-container>
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field style="width: 80%;">
-            <mat-label>Region</mat-label>
-            <input matInput formControlName="region" placeholder="América del Sur" autocomplete="address-level3"
-              required>
-            <mat-error *ngIf="isValidInput('region',ingresarCiudadFormGroup)">
-              <ng-container *ngFor="let error of errors(modificarFormGroup.get('region'))">
-                {{ errorMessages[error] }} <br>
-              </ng-container>
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field style="width: 80%;">
-            <mat-label>Población</mat-label>
-            <input matInput formControlName="poblacion" placeholder="150000000" autocomplete="address-level4" required>
-            <mat-error *ngIf="isValidInput('poblacion',ingresarCiudadFormGroup)">
-              <ng-container *ngFor="let error of errors(modificarFormGroup.get('poblacion'))">
-                {{ errorMessages[error] }} <br>
-              </ng-container>
-            </mat-error>
-          </mat-form-field>
-          <div class="col-md-5 text-right" style="margin-top:1%;">
-            <button mat-raised-button color="primary" [disabled]="!modificarFormGroup.valid">Guardar Modificación
-              Pais</button>
-            <button mat-raised-button color="accent" type="button" (click)="volverListaModifica();"
-              style="margin-left: 10%;">Volver Atrás</button>
-          </div>
-        </form>
-        <mat-horizontal-stepper style="margin-top:1%;" [linear]="isLinearCiudad" #stepperCiudad>
+  <mat-sidenav-container>
+    <mat-sidenav #drawer mode="side">
+      <app-chart-generic *ngIf="usuario === 'admin'" [inputPaises]="paisesData"></app-chart-generic>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div [hidden]="consultaCiudades">
+        <mat-horizontal-stepper id="editarpais" [linear]="isLinear" #stepper>
           <mat-step completed="false">
-            <ng-template matStepLabel>Tabla Ciudades</ng-template>
-
-            <mat-form-field>
-              <mat-label>Buscador</mat-label>
-              <input matInput (keyup)="applyFilterCiudad($event)" placeholder="Buscar ciudad" #inputCiudad>
-            </mat-form-field>
-
-            <table style="width: 80%;margin-left: 10%;" mat-table [dataSource]="dataSourceCiudad"
-              class="mat-elevation-z8" matSort>
-
-              <!-- Name Column -->
-              <ng-container matColumnDef="nombre_ciudad">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Ciudad </th>
-                <td mat-cell *matCellDef="let element"> {{element.nombre_ciudad}} </td>
-              </ng-container>
-
-              <!-- Symbol Column -->
-              <ng-container matColumnDef="region">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Region </th>
-                <td mat-cell *matCellDef="let element"> {{element.region}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="poblacion">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Población</th>
-                <td mat-cell *matCellDef="let element"> {{element.poblacion | number}} </td>
-              </ng-container>
+            <form>
+              <ng-template matStepLabel>Tabla Paises</ng-template>
 
 
-              <ng-container matColumnDef="acciones">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
-                <td mat-cell *matCellDef="let element" style="padding: 4px!important;">
-                  <button style="margin-left: -10%;" mat-mini-fab color="primary" aria-label="modificar Ciudad"
-                    (click)="irAModificarCiudad(element);">
-                    <mat-icon>edit</mat-icon>
-                  </button>
-                  <button style="margin-left: 5%;" mat-mini-fab color="secondary" aria-label="eliminar Ciudad"
-                    (click)="openDialogCiudad(element);">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </td>
-              </ng-container>
+              <mat-form-field>
+                <mat-label>Buscador</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Buscar registro" #input>
+              </mat-form-field>
 
-              <tr mat-header-row *matHeaderRowDef="displayedColumnsCiudad"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumnsCiudad;"></tr>
-              <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" colspan="4">No existen registros.</td>
-              </tr>
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows matSort>
 
-            </table>
-            <mat-paginator style="margin-right: 10%;" [pageSizeOptions]="[2]" #paginatorCiudad></mat-paginator>
-            <div class="col-md-5 text-right" style="margin-top:2%;">
-              <button mat-raised-button color="primary" type="button" (click)="IrIngresarCiudad();">Ingresar Nueva
-                Ciudad</button>
+                <!-- Name Column -->
+                <ng-container matColumnDef="nombre_pais">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Pais </th>
+                  <td mat-cell *matCellDef="let element"> {{element.nombre_pais}} </td>
+                </ng-container>
 
-                <input  type="file" hidden accept=".xlsx, .xls" #fileInputCiudad (change)="ImportarCiudad($event)">
-                <button  mat-raised-button color="primary" (click)="fileInputCiudad.click()">Importar excel</button>
-            </div>
+                <!-- Weight Column -->
+                <ng-container matColumnDef="capital">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Capital </th>
+                  <td mat-cell *matCellDef="let element"> {{element.capital}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="region">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Region </th>
+                  <td mat-cell *matCellDef="let element"> {{element.region}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="poblacion">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Población</th>
+                  <td mat-cell *matCellDef="let element"> {{element.poblacion | number}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="acciones">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
+                  <td mat-cell *matCellDef="let element" style="padding: 4px!important;">
+                    <button style="margin-left: -61%;" mat-mini-fab color="primary" aria-label="ver ciudades"
+                      (click)="iraVerCiudades(element);">
+                      <mat-icon>remove_red_eye</mat-icon>
+                    </button>
+                    <button style="margin-left: 8%;" mat-mini-fab color="primary" aria-label="modificar pais"
+                      (click)="irAModificar(element);">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button style="margin-left: 9%;" mat-mini-fab color="secondary" aria-label="eliminar pais"
+                      (click)="openDialog(element);">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="expandedDetail">
+                  <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+                  [class.example-expanded-row]="expandedElement === element"
+                  (click)="expandedElement = expandedElement === element ? null : element;">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell" colspan="4">No existen registros.</td>
+                </tr>
+
+              </table>
+              <mat-paginator [pageSizeOptions]="[10]"></mat-paginator>
+              <div class="col-md-5 text-right" style="margin-top:1%;margin-left: 2%;">
+                <button mat-raised-button style="margin-right: 2%;" color="primary" (click)="IrIngresarPais();">Ingresar
+                  Nuevo
+                  Pais</button>
+                <button style="margin-right: 2%;" mat-raised-button color="primary" (click)="ExcelPaises()">Exportar a
+                  Excel</button>
+                <input type="file" hidden accept=".xlsx, .xls" #fileInputPais (change)="ImportarPais($event)">
+                <button mat-raised-button color="primary" (click)="fileInputPais.click()">Importar excel</button>
+                <button mat-raised-button color="primary" (click)="mostrarSidenav();">Mostrar graficos</button>
+              </div>
+
+            </form>
           </mat-step>
-          <mat-step [stepControl]="ingresarCiudadFormGroup" label="Ingresar Ciudad">
-            <form style="margin-top: 2% !important;width: 50%;" [formGroup]="ingresarCiudadFormGroup"
-              (ngSubmit)="IngresarCiudad()">
+          <mat-step [stepControl]="ingresarFormGroup" label="Ingrese Pais">
+            <form [formGroup]="ingresarFormGroup" (ngSubmit)="IngresarPais()">
+              <mat-form-field style="width: 80%;">
+                <mat-label>Nombre Pais</mat-label>
+                <input matInput formControlName="nombre" type="text" placeholder="Chile" required
+                  autocomplete="country">
 
+                <mat-error *ngIf="isValidInput('nombre',ingresarFormGroup)">
+                  <ng-container *ngFor="let error of errors(ingresarFormGroup.get('nombre')) ">
+                    {{ errorMessages[error] }} <br>
+                  </ng-container>
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field style="width: 80%;">
+                <mat-label>Capital</mat-label>
+                <input matInput formControlName="capital" placeholder="Santiago" autocomplete="address-level2" required>
+                <mat-error *ngIf="isValidInput('capital',ingresarFormGroup)">
+                  <ng-container *ngFor="let error of errors(ingresarFormGroup.get('capital'))">
+                    {{ errorMessages[error] }} <br>
+                  </ng-container>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field style="width: 80%;">
+                <mat-label>Region</mat-label>
+                <input matInput formControlName="region" placeholder="América del Sur" autocomplete="address-level3"
+                  required>
+                <mat-error *ngIf="isValidInput('region',ingresarFormGroup)">
+                  <ng-container *ngFor="let error of errors(ingresarFormGroup.get('region')) ">
+                    {{ errorMessages[error] }} <br>
+                  </ng-container>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field style="width: 80%;">
+                <mat-label>Población</mat-label>
+                <input matInput formControlName="poblacion" placeholder="150000000" autocomplete="address-level4"
+                  required>
+                <mat-error *ngIf="isValidInput('poblacion',ingresarFormGroup)">
+                  <ng-container *ngFor="let error of errors(ingresarFormGroup.get('poblacion')) ">
+                    {{ errorMessages[error] }} <br>
+                  </ng-container>
+                </mat-error>
+              </mat-form-field>
+              <div class="col-md-5 text-right" style="margin-top:5%;">
+                <button mat-raised-button color="primary" [disabled]="!ingresarFormGroup.valid">Ingresar</button>
+                <button mat-raised-button color="accent" type="button" (click)="volverListaIngresa();"
+                  style="margin-left: 10%;">Volver</button>
+              </div>
+            </form>
+          </mat-step>
+          <mat-step [stepControl]="modificarFormGroup" label="Modificar Pais">
+            <ng-template matStepLabel>Modificar Pais</ng-template>
+            <form [formGroup]="modificarFormGroup" (ngSubmit)="ModificarPais()">
               <mat-form-field class="invisible" style="width: 80%;">
                 <mat-label>Pais Id</mat-label>
                 <input matInput formControlName="pais_id">
               </mat-form-field>
-              <mat-form-field class="invisible" style="width: 80%;">
-                <mat-label>Ciudad Id</mat-label>
-                <input matInput formControlName="ciudad_id">
+              <mat-form-field style="width: 80%;">
+                <mat-label>Nombre Pais</mat-label>
+                <input matInput formControlName="nombre" placeholder="Chile" autocomplete="country" required>
+                <mat-error *ngIf="isValidInput('nombre',ingresarCiudadFormGroup)">
+                  <ng-container *ngFor="let error of errors(modificarFormGroup.get('nombre'))">
+                    {{ errorMessages[error] }} <br>
+                  </ng-container>
+                </mat-error>
               </mat-form-field>
               <mat-form-field style="width: 80%;">
-                <mat-label>Nombre Ciudad</mat-label>
-                <input matInput formControlName="nombre_ciudad" placeholder="Santiago" autocomplete="address-level2"
+                <mat-label>Capital</mat-label>
+                <input matInput formControlName="capital" placeholder="Santiago" autocomplete="address-level2" required>
+                <mat-error *ngIf="isValidInput('capital',ingresarCiudadFormGroup)">
+                  <ng-container *ngFor="let error of errors(modificarFormGroup.get('capital'))">
+                    {{ errorMessages[error] }} <br>
+                  </ng-container>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field style="width: 80%;">
+                <mat-label>Region</mat-label>
+                <input matInput formControlName="region" placeholder="América del Sur" autocomplete="address-level3"
                   required>
-                <mat-error *ngIf="isValidInput('nombre_ciudad',ingresarCiudadFormGroup)">
-
-                  <ng-container *ngFor="let error of errors(ingresarCiudadFormGroup.get('nombre_ciudad'))">
-                    {{ errorMessages[error] }} <br>
-                  </ng-container>
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field style="width: 80%;">
-                <mat-label>Region Perteneciente</mat-label>
-                <input matInput formControlName="region" placeholder="Region metropolitana"
-                  autocomplete="address-level3" required>
                 <mat-error *ngIf="isValidInput('region',ingresarCiudadFormGroup)">
-                  <ng-container *ngFor="let error of errors(ingresarCiudadFormGroup.get('region'))">
+                  <ng-container *ngFor="let error of errors(modificarFormGroup.get('region'))">
                     {{ errorMessages[error] }} <br>
                   </ng-container>
                 </mat-error>
               </mat-form-field>
               <mat-form-field style="width: 80%;">
-                <mat-label>Población Ciudad</mat-label>
+                <mat-label>Población</mat-label>
                 <input matInput formControlName="poblacion" placeholder="150000000" autocomplete="address-level4"
                   required>
                 <mat-error *ngIf="isValidInput('poblacion',ingresarCiudadFormGroup)">
-                  <ng-container *ngFor="let error of errors(ingresarCiudadFormGroup.get('poblacion'))">
+                  <ng-container *ngFor="let error of errors(modificarFormGroup.get('poblacion'))">
                     {{ errorMessages[error] }} <br>
                   </ng-container>
                 </mat-error>
               </mat-form-field>
-              <!--<input
+              <div class="col-md-5 text-right" style="margin-top:1%;">
+                <button mat-raised-button color="primary" [disabled]="!modificarFormGroup.valid">Guardar Modificación
+                  Pais</button>
+                <button mat-raised-button color="accent" type="button" (click)="volverListaModifica();"
+                  style="margin-left: 10%;">Volver Atrás</button>
+              </div>
+            </form>
+            <mat-horizontal-stepper style="margin-top:1%;" [linear]="isLinearCiudad" #stepperCiudad>
+              <mat-step completed="false">
+                <ng-template matStepLabel>Tabla Ciudades</ng-template>
+
+                <mat-form-field>
+                  <mat-label>Buscador</mat-label>
+                  <input matInput (keyup)="applyFilterCiudad($event)" placeholder="Buscar ciudad" #inputCiudad>
+                </mat-form-field>
+
+                <table style="width: 80%;margin-left: 10%;" mat-table [dataSource]="dataSourceCiudad"
+                  class="mat-elevation-z8" matSort>
+
+                  <!-- Name Column -->
+                  <ng-container matColumnDef="nombre_ciudad">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Ciudad </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nombre_ciudad}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="region">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Region </th>
+                    <td mat-cell *matCellDef="let element"> {{element.region}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="poblacion">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Población</th>
+                    <td mat-cell *matCellDef="let element"> {{element.poblacion | number}} </td>
+                  </ng-container>
+
+
+                  <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones</th>
+                    <td mat-cell *matCellDef="let element" style="padding: 4px!important;">
+                      <button style="margin-left: -10%;" mat-mini-fab color="primary" aria-label="modificar Ciudad"
+                        (click)="irAModificarCiudad(element);">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button style="margin-left: 5%;" mat-mini-fab color="secondary" aria-label="eliminar Ciudad"
+                        (click)="openDialogCiudad(element);">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsCiudad"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsCiudad;"></tr>
+                  <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No existen registros.</td>
+                  </tr>
+
+                </table>
+                <mat-paginator style="margin-right: 10%;" [pageSizeOptions]="[2]" #paginatorCiudad></mat-paginator>
+                <div class="col-md-5 text-right" style="margin-top:2%;">
+                  <button mat-raised-button color="primary" type="button" (click)="IrIngresarCiudad();">Ingresar Nueva
+                    Ciudad</button>
+
+                  <input type="file" hidden accept=".xlsx, .xls" #fileInputCiudad (change)="ImportarCiudad($event)">
+                  <button mat-raised-button color="primary" (click)="fileInputCiudad.click()">Importar excel</button>
+                </div>
+              </mat-step>
+              <mat-step [stepControl]="ingresarCiudadFormGroup" label="Ingresar Ciudad">
+                <form style="margin-top: 2% !important;width: 50%;" [formGroup]="ingresarCiudadFormGroup"
+                  (ngSubmit)="IngresarCiudad()">
+
+                  <mat-form-field class="invisible" style="width: 80%;">
+                    <mat-label>Pais Id</mat-label>
+                    <input matInput formControlName="pais_id">
+                  </mat-form-field>
+                  <mat-form-field class="invisible" style="width: 80%;">
+                    <mat-label>Ciudad Id</mat-label>
+                    <input matInput formControlName="ciudad_id">
+                  </mat-form-field>
+                  <mat-form-field style="width: 80%;">
+                    <mat-label>Nombre Ciudad</mat-label>
+                    <input matInput formControlName="nombre_ciudad" placeholder="Santiago" autocomplete="address-level2"
+                      required>
+                    <mat-error *ngIf="isValidInput('nombre_ciudad',ingresarCiudadFormGroup)">
+
+                      <ng-container *ngFor="let error of errors(ingresarCiudadFormGroup.get('nombre_ciudad'))">
+                        {{ errorMessages[error] }} <br>
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field style="width: 80%;">
+                    <mat-label>Region Perteneciente</mat-label>
+                    <input matInput formControlName="region" placeholder="Region metropolitana"
+                      autocomplete="address-level3" required>
+                    <mat-error *ngIf="isValidInput('region',ingresarCiudadFormGroup)">
+                      <ng-container *ngFor="let error of errors(ingresarCiudadFormGroup.get('region'))">
+                        {{ errorMessages[error] }} <br>
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field style="width: 80%;">
+                    <mat-label>Población Ciudad</mat-label>
+                    <input matInput formControlName="poblacion" placeholder="150000000" autocomplete="address-level4"
+                      required>
+                    <mat-error *ngIf="isValidInput('poblacion',ingresarCiudadFormGroup)">
+                      <ng-container *ngFor="let error of errors(ingresarCiudadFormGroup.get('poblacion'))">
+                        {{ errorMessages[error] }} <br>
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                  <!--<input
               id="pac-input"
               class="controls"
               type="text"
               placeholder="Search Box"
             />-->
-              <div class="google-maps-desing-ingresa" #googleMap id="hello-world-map">
-              </div>
-              <div class="col-md-5 text-right" style="margin-top:0%;">
-                <button mat-raised-button color="primary"
-                  [disabled]="!ingresarCiudadFormGroup.valid || !locationChose">Ingresar
-                  Ciudad</button>
-                <button mat-raised-button type="button" style="margin-left: 5%;" color="accent"
-                  (click)="volverListaCiudadIngresa();">Volver Atrás</button>
-              </div>
-            </form>
-          </mat-step>
-          <mat-step [stepControl]="modificarCiudadFormGroup" label="Modificar Ciudad">
-            <form style="margin-top: 2% !important;width: 50%;" [formGroup]="modificarCiudadFormGroup"
-              (ngSubmit)="ModificarCiudad()">
+                  <div class="google-maps-desing-ingresa" #googleMap id="hello-world-map">
+                  </div>
+                  <div class="col-md-5 text-right" style="margin-top:0%;">
+                    <button mat-raised-button color="primary"
+                      [disabled]="!ingresarCiudadFormGroup.valid || !locationChose">Ingresar
+                      Ciudad</button>
+                    <button mat-raised-button type="button" style="margin-left: 5%;" color="accent"
+                      (click)="volverListaCiudadIngresa();">Volver Atrás</button>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step [stepControl]="modificarCiudadFormGroup" label="Modificar Ciudad">
+                <form style="margin-top: 2% !important;width: 50%;" [formGroup]="modificarCiudadFormGroup"
+                  (ngSubmit)="ModificarCiudad()">
 
-              <mat-form-field class="invisible" style="width: 80%;">
-                <mat-label>Pais Id</mat-label>
-                <input matInput formControlName="pais_id">
-              </mat-form-field>
-              <mat-form-field class="invisible" style="width: 80%;">
-                <mat-label>Ciudad Id</mat-label>
-                <input matInput formControlName="ciudad_id">
-              </mat-form-field>
-              <mat-form-field style="width: 80%;">
-                <mat-label>Nombre Ciudad</mat-label>
-                <input matInput formControlName="nombre_ciudad" placeholder="Santiago" autocomplete="address-level2"
-                  required>
-                <mat-error *ngIf="isValidInput('nombre_ciudad',modificarCiudadFormGroup)">
-                  <ng-container *ngFor="let error of errors(modificarCiudadFormGroup.get('nombre_ciudad'))">
-                    {{ errorMessages[error] }} <br>
-                  </ng-container>
-                </mat-error>
-              </mat-form-field>
+                  <mat-form-field class="invisible" style="width: 80%;">
+                    <mat-label>Pais Id</mat-label>
+                    <input matInput formControlName="pais_id">
+                  </mat-form-field>
+                  <mat-form-field class="invisible" style="width: 80%;">
+                    <mat-label>Ciudad Id</mat-label>
+                    <input matInput formControlName="ciudad_id">
+                  </mat-form-field>
+                  <mat-form-field style="width: 80%;">
+                    <mat-label>Nombre Ciudad</mat-label>
+                    <input matInput formControlName="nombre_ciudad" placeholder="Santiago" autocomplete="address-level2"
+                      required>
+                    <mat-error *ngIf="isValidInput('nombre_ciudad',modificarCiudadFormGroup)">
+                      <ng-container *ngFor="let error of errors(modificarCiudadFormGroup.get('nombre_ciudad'))">
+                        {{ errorMessages[error] }} <br>
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
 
-              <mat-form-field style="width: 80%;">
-                <mat-label>Region Perteneciente</mat-label>
-                <input matInput formControlName="region" placeholder="Region metropolitana"
-                  autocomplete="address-level3" required>
-                <mat-error *ngIf="isValidInput('region',modificarCiudadFormGroup)">
-                  <ng-container *ngFor="let error of errors(modificarCiudadFormGroup.get('region'))">
-                    {{ errorMessages[error] }} <br>
-                  </ng-container>
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field style="width: 80%;">
-                <mat-label>Población Ciudad</mat-label>
-                <input matInput formControlName="poblacion" placeholder="150000000" autocomplete="address-level4"
-                  required>
-                <mat-error *ngIf="isValidInput('poblacion',modificarCiudadFormGroup)">
-                  <ng-container *ngFor="let error of errors(modificarCiudadFormGroup.get('poblacion'))">
-                    {{ errorMessages[error] }} <br>
-                  </ng-container>
-                </mat-error>
-              </mat-form-field>
-              <div class="google-maps-desing" #googleMapMod id="hello-world-map">
-              </div>
-              <div class="col-md-5 text-right" style="margin-top: 5%;">
-                <button mat-raised-button color="primary" [disabled]="!modificarCiudadFormGroup.valid">Modificar
-                  Ciudad</button>
-                <button mat-raised-button type="button" style="margin-left: 5%;" color="accent"
-                  (click)="volverListaCiudad();">Volver Atrás</button>
-              </div>
-            </form>
+                  <mat-form-field style="width: 80%;">
+                    <mat-label>Region Perteneciente</mat-label>
+                    <input matInput formControlName="region" placeholder="Region metropolitana"
+                      autocomplete="address-level3" required>
+                    <mat-error *ngIf="isValidInput('region',modificarCiudadFormGroup)">
+                      <ng-container *ngFor="let error of errors(modificarCiudadFormGroup.get('region'))">
+                        {{ errorMessages[error] }} <br>
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field style="width: 80%;">
+                    <mat-label>Población Ciudad</mat-label>
+                    <input matInput formControlName="poblacion" placeholder="150000000" autocomplete="address-level4"
+                      required>
+                    <mat-error *ngIf="isValidInput('poblacion',modificarCiudadFormGroup)">
+                      <ng-container *ngFor="let error of errors(modificarCiudadFormGroup.get('poblacion'))">
+                        {{ errorMessages[error] }} <br>
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                  <div class="google-maps-desing" #googleMapMod id="hello-world-map">
+                  </div>
+                  <div class="col-md-5 text-right" style="margin-top: 5%;">
+                    <button mat-raised-button color="primary" [disabled]="!modificarCiudadFormGroup.valid">Modificar
+                      Ciudad</button>
+                    <button mat-raised-button type="button" style="margin-left: 5%;" color="accent"
+                      (click)="volverListaCiudad();">Volver Atrás</button>
+                  </div>
+                </form>
+              </mat-step>
+            </mat-horizontal-stepper>
           </mat-step>
         </mat-horizontal-stepper>
-      </mat-step>
-    </mat-horizontal-stepper>
-  </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
   <div [hidden]="!consultaCiudades">
 
     <mat-form-field>
@@ -414,5 +425,5 @@
         (click)="VolverAtrasPaises();">Volver Atrás</button>
     </div>
   </div>
-  <app-chart-generic *ngIf="usuario === 'admin'" [inputPaises]="paisesData"></app-chart-generic>
+
 </mat-card>

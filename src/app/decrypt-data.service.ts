@@ -1,4 +1,4 @@
-import { HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as CryptoJS from 'crypto-js';
 import { Observable, of } from 'rxjs';
@@ -20,6 +20,16 @@ export class DecryptDataService {
       return of(resp);
     } else {
       return of(data.body.data);
+    }
+
+  }
+  public decryptCatch(data: HttpErrorResponse): string {
+    if (environment.encrypt) {
+      const bytes = CryptoJS.AES.decrypt(data.error.data, environment.secretKey);
+      const resp = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+      return resp;
+    } else {
+      return data.error.data;
     }
 
   }
