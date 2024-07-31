@@ -17,7 +17,7 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
   constructor(private loginService: LoginService, private decryptService: DecryptDataService, private router: Router, private _snackBar: MatSnackBar, private _loadingService: LoadingPageService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this._loadingService.cambiarestadoloading(true);
-    const token: string = sessionStorage.getItem("token")!;
+    const token: string = localStorage.getItem("token")!;
     let request = req;
     return this.decryptService.encrypt(request).pipe(
       switchMap((encryptedBody) => {
@@ -90,22 +90,22 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
 
 
           if (decryptData && JSON.parse(decryptData).Error === "93") {
-            sessionStorage.clear();
+            localStorage.clear();
             this.router.navigateByUrl('');
             this.openSnackBar("Usuario ya posee sesión activa.");
           } else {
             this.openSnackBar("Superó el tiempo limite de sesión.");
-            const requestLogout = { usuario: sessionStorage.getItem('user')! }
+            const requestLogout = { usuario: localStorage.getItem('user')! }
             this.loginService.CerrarSesion(requestLogout);
-            sessionStorage.clear();
+            localStorage.clear();
             this.router.navigateByUrl('');
 
           }
 
         } else if (error.status === 500) {
-          const requestLogout = { usuario: sessionStorage.getItem('user')! }
+          const requestLogout = { usuario: localStorage.getItem('user')! }
           this.loginService.CerrarSesion(requestLogout);
-          sessionStorage.clear();
+          localStorage.clear();
           if (this.router.url === '/mantenedor') {
             this.router.navigateByUrl('');
           } else {
@@ -114,9 +114,9 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
           this.openSnackBar("Hubo problemas, por favor comuniquese con Administrador.");
         } else if (error.status === 0) {
 
-          const requestLogout = { usuario: sessionStorage.getItem('user')! }
+          const requestLogout = { usuario: localStorage.getItem('user')! }
           this.loginService.CerrarSesion(requestLogout);
-          sessionStorage.clear();
+          localStorage.clear();
           this.openSnackBar("Hubo problemas, por favor comuniquese con Administrador.");
         } else {
           return next.handle(request);

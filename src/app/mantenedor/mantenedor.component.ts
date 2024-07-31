@@ -223,9 +223,9 @@ export class MantenedorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.usuario = sessionStorage.getItem('user')!;
+    this.usuario = localStorage.getItem('user')!;
     this.initMap(false);
-    if (sessionStorage.length === 0 || sessionStorage.getItem('token') === undefined) {
+    if (localStorage.length === 0 || localStorage.getItem('token') === undefined) {
       this.route.navigateByUrl('');
       return;
     }
@@ -307,7 +307,7 @@ export class MantenedorComponent implements OnInit {
   }
   ConsultarPaises() {
 
-    const objeto = { usuario: sessionStorage.getItem('user')! };
+    const objeto = { usuario: localStorage.getItem('user')! };
     this.mantenedorService.ObtenerPaises(objeto.usuario).subscribe((datos) => {
       this.paisesData = datos;
       this.dataSource.data = this.paisesData;
@@ -323,7 +323,7 @@ export class MantenedorComponent implements OnInit {
   }
   ExcelPaises() {
     this.loading.cambiarestadoloading(true);
-    const objeto = { usuario: sessionStorage.getItem('user')! };
+    const objeto = { usuario: localStorage.getItem('user')! };
     this.mantenedorService.ObtenerExcelPaises(objeto.usuario).subscribe((datos) => {
       const myfile = this.base64ToBlob(datos);
       const blob = new Blob([myfile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -436,7 +436,7 @@ export class MantenedorComponent implements OnInit {
   IngresarPais() {
 
     if (this.ingresarFormGroup.valid) {
-      const objeto: Paises = { pais_id: 0, nombre_pais: this.Ingresanombre, capital: this.Ingresacapital, region: this.Ingresaregion, poblacion: this.Ingresapoblacion, usuario: sessionStorage.getItem('user')! };
+      const objeto: Paises = { pais_id: 0, nombre_pais: this.Ingresanombre, capital: this.Ingresacapital, region: this.Ingresaregion, poblacion: this.Ingresapoblacion, usuario: localStorage.getItem('user')! };
       this.mantenedorService.IngresarPais(objeto).subscribe((datos) => {
         this.paisesData = datos;
         this.dataSource.data = this.paisesData;
@@ -475,7 +475,7 @@ export class MantenedorComponent implements OnInit {
   ModificarPais() {
 
     if (this.modificarFormGroup.valid) {
-      const objeto: Paises = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion, usuario: sessionStorage.getItem('user')! };
+      const objeto: Paises = { pais_id: this.ModificaIdPais, nombre_pais: this.Modificanombre, capital: this.Modificacapital, region: this.Modificaregion, poblacion: this.Modificapoblacion, usuario: localStorage.getItem('user')! };
       this.mantenedorService.ModificarPais(objeto).subscribe((datos) => {
         this.paisesData = datos;
         this.dataSource.data = this.paisesData;
@@ -519,7 +519,7 @@ export class MantenedorComponent implements OnInit {
 
       return;
     } else {
-      this.mantenedorService.EliminarPais(element.element.pais_id.toString(), sessionStorage.getItem('user')!).subscribe((datos) => {
+      this.mantenedorService.EliminarPais(element.element.pais_id.toString(), localStorage.getItem('user')!).subscribe((datos) => {
         this.paisesData = datos;
         this.dataSource.data = this.paisesData;
       }, (error) => {
@@ -544,7 +544,7 @@ export class MantenedorComponent implements OnInit {
         if (this.fileInputPais) {
           this.fileInputPais.nativeElement.value = null;
         }
-        const objeto = { base64string: base64String, usuario: sessionStorage.getItem('user')! }
+        const objeto = { base64string: base64String, usuario: localStorage.getItem('user')! }
         this.mantenedorService.ImportarPaises(objeto).subscribe((datos) => {
           this.paisesData = datos;
           this.dataSource.data = this.paisesData;
@@ -577,7 +577,7 @@ export class MantenedorComponent implements OnInit {
         if (this.fileInputCiudad) {
           this.fileInputCiudad.nativeElement.value = null;
         }
-        const objeto = { base64string: base64String, usuario: sessionStorage.getItem('user')!, pais_id: this.ModificaIdPais }
+        const objeto = { base64string: base64String, usuario: localStorage.getItem('user')!, pais_id: this.ModificaIdPais }
         this.mantenedorService.ImportarCiudades(objeto).subscribe((datos) => {
           this.CiudadesData = datos;
           this.dataSourceCiudad.data = this.CiudadesData;

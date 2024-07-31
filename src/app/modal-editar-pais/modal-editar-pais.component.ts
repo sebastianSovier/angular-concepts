@@ -45,7 +45,7 @@ export class ModalEditarPaisComponent implements OnInit {
   editarPais() {
    // this.loading.cambiarestadoloading(true);
     if (this.editarPaisFormGroup.valid) {
-      const objeto = { pais_id: this.paisId, nombre_pais: this.nombrePais, capital: this.capital, region: this.region, poblacion: this.poblacion, usuario: sessionStorage.getItem('user') };
+      const objeto = { pais_id: this.paisId, nombre_pais: this.nombrePais, capital: this.capital, region: this.region, poblacion: this.poblacion, usuario: localStorage.getItem('user') };
       this.dialogRef.close(objeto);
 
     }

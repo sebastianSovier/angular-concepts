@@ -29,11 +29,11 @@ export class AppComponent implements OnInit, OnDestroy {
       })*/
   }
   async ngOnDestroy() {
-    await this.LogOut();
+    this.LogOut();
   }
   ngOnInit() {
-    if (!sessionStorage.getItem('user') || !sessionStorage.getItem('token')) {
-      sessionStorage.clear();
+    if (!localStorage.getItem('user') || !localStorage.getItem('token')) {
+      localStorage.clear();
       this.route.navigateByUrl('');
       this.mostrar = false;
     } else {
@@ -41,9 +41,11 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
   LogOut() {
-    const requestLogout = { usuario: sessionStorage.getItem('user')! }
+    const requestLogout = { usuario: localStorage.getItem('user')! }
     this.loginService.CerrarSesion(requestLogout).subscribe((datos) => {
-      sessionStorage.clear();
+      localStorage.clear();
+      this.mostrar = false;
+      this.route.navigateByUrl('');
     });
 
   }

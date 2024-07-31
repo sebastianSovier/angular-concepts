@@ -43,7 +43,7 @@ export class PadreComponent implements OnInit {
  
   ConsultarPaisesFechas() {
     
-    const objeto = { fecha_desde:this.datePipe.transform(this.fechaDesde,"yyyy-MM-dd"),fecha_hasta:this.datePipe.transform(this.fechaHasta,"yyyy-MM-dd"),usuario: sessionStorage.getItem('user') };
+    const objeto = { fecha_desde:this.datePipe.transform(this.fechaDesde,"yyyy-MM-dd"),fecha_hasta:this.datePipe.transform(this.fechaHasta,"yyyy-MM-dd"),usuario: localStorage.getItem('user') };
     this.mantenedorService.ObtenerPaisesByFechas(objeto).subscribe((datos) => {
       this.paisesData = datos;
       console.log(datos);

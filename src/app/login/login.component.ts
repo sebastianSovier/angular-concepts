@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   recaptchaToken: Recaptcha = new Recaptcha;
   tokenv2: string = '';
   constructor(private recaptchaV3Service: ReCaptchaV3Service, private validationService: ValidationsService, private datepipe: DatePipe, private firebaseService: FirebaseService, fb: UntypedFormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
-    sessionStorage.clear();
+    //localStorage.clear();
     this.loginForm = fb.group(
       {
         usuario: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
@@ -118,7 +118,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    sessionStorage.clear();
+    //localStorage.clear();
     this.loading.cambiarestadoloading(false);
 
   }
@@ -144,26 +144,26 @@ export class LoginComponent implements OnInit, OnDestroy {
           } else if (datos.Error === "93") {
             this.openSnackBar("Usuario ya se encuentra online.");
           }
-          sessionStorage.clear();
+          //localStorage.clear();
         } else {
           if (datos.access_Token.length > 0) {
             const hora = new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds();
             this.firebaseService.conexionFirebase(this.usuario, datos.access_Token, this.datepipe.transform(new Date(), "dd/MM/YYYY"), hora, datos.tokenFirebase);
             this.loginService.enviaCondicion(true);
             this._snackBar.dismiss();
-            sessionStorage.setItem('token', datos.access_Token);
-            sessionStorage.setItem('user', this.usuario);
+            localStorage.setItem('token', datos.access_Token);
+            localStorage.setItem('user', this.usuario);
             this.router.navigateByUrl('/mantenedor');
           } else {
             this.loginService.enviaCondicion(false);
-            sessionStorage.clear();
+            localStorage.clear();
             this.openSnackBar("Hubo problemas para validar su usuario");
           }
         }
         console.log(datos);
       }, (error) => {
         console.log(error);
-        sessionStorage.clear();
+        localStorage.clear();
         if (error.status !== 200) {
           this.router.navigateByUrl('');
         }
@@ -179,14 +179,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       this.loginService.CrearUsuario(loginRequest).subscribe((datos) => {
         if (datos.Error !== undefined) {
-          sessionStorage.clear();
+          //localStorage.clear();
           this.openSnackBar("Hubo problemas al crear su usuario Intente nuevamente.");
         } else {
           if (datos.datos === 'ok') {
             this.login = true;
             this.openSnackBar("Usuario creado exitosamente.");
           } else {
-            sessionStorage.clear();
+            localStorage.clear();
             this.openSnackBar("Hubo problemas para validar su usuario");
           }
         }
