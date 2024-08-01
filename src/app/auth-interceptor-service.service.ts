@@ -96,7 +96,8 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
           } else {
             this.openSnackBar("Superó el tiempo limite de sesión.");
             const requestLogout = { usuario: localStorage.getItem('user')! }
-            this.loginService.CerrarSesion(requestLogout);
+            this.loginService.CerrarSesion(requestLogout).toPromise();
+            this.loginService.enviaCondicion(false);
             localStorage.clear();
             this.router.navigateByUrl('');
 
@@ -104,7 +105,8 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
 
         } else if (error.status === 500) {
           const requestLogout = { usuario: localStorage.getItem('user')! }
-          this.loginService.CerrarSesion(requestLogout);
+          this.loginService.CerrarSesion(requestLogout).toPromise();
+          this.loginService.enviaCondicion(false);
           localStorage.clear();
           if (this.router.url === '/mantenedor') {
             this.router.navigateByUrl('');
@@ -115,7 +117,8 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
         } else if (error.status === 0) {
 
           const requestLogout = { usuario: localStorage.getItem('user')! }
-          this.loginService.CerrarSesion(requestLogout);
+          this.loginService.CerrarSesion(requestLogout).toPromise();
+          this.loginService.enviaCondicion(false);
           localStorage.clear();
           this.openSnackBar("Hubo problemas, por favor comuniquese con Administrador.");
         } else {
