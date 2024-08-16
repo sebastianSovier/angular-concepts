@@ -5,5 +5,6 @@ export class Ciudades {
     region!: string;
     poblacion!: string;
     latitud!: string;
-    longitud!: string;
+    longitud!: string
+    usuario!:string;
 }

@@ -46,8 +46,8 @@ export class MantenedorService {
      const result: Observable<any> = this.http.delete(environment.UrlWebApi +'/Countries/EliminarPais?"pais_id"='+'"'+pais_id+'"'+"&'usuario'="+'"'+usuario+'"');
      return result;
    }
-   ObtenerCiudades(pais_id:string) {
-     const result: Observable<any> = this.http.get(environment.UrlWebApi +'/Ciudades/CiudadesPais?"pais_id"='+'"'+pais_id+'"');
+   ObtenerCiudades(pais_id:string,usuario:string) {
+     const result: Observable<any> = this.http.get(environment.UrlWebApi +'/Ciudades/CiudadesPais?"pais_id"='+'"'+pais_id+'"'+"&'usuario'="+'"'+usuario+'"');
      return result;
    }
    IngresarCiudad(ciudad:Ciudades) {
@@ -58,8 +58,8 @@ export class MantenedorService {
       const result: Observable<any> = this.http.put(environment.UrlWebApi +'/Ciudades/ModificarCiudad',ciudad );
       return result;
     }
-    EliminarCiudad(element:any) {
-      const result: Observable<any> = this.http.delete(environment.UrlWebApi +'/Ciudades/EliminarCiudad?"ciudad_id"='+'"'+element.ciudad_id+'"'+"&'pais_id'="+'"'+element.pais_id+'"');
+    EliminarCiudad(element:any,usuario:string) {
+      const result: Observable<any> = this.http.delete(environment.UrlWebApi +'/Ciudades/EliminarCiudad?"ciudad_id"='+'"'+element.ciudad_id+'"'+"&'pais_id'="+'"'+element.pais_id+'"'+"&'usuario'="+'"'+usuario+'"');
       return result;
     }
 }

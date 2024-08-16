@@ -95,8 +95,11 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
             this.openSnackBar("Usuario ya posee sesión activa.");
           } else {
             this.openSnackBar("Superó el tiempo limite de sesión.");
-            const requestLogout = { usuario: localStorage.getItem('user')! }
-            this.loginService.CerrarSesion(requestLogout).toPromise();
+            if(localStorage.getItem('user') != null){
+              const requestLogout = { usuario: localStorage.getItem('user')! }
+              this.loginService.CerrarSesion(requestLogout).toPromise();
+            }
+            
             this.loginService.enviaCondicion(false);
             localStorage.clear();
             this.router.navigateByUrl('');
@@ -104,8 +107,10 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
           }
 
         } else if (error.status === 500) {
-          const requestLogout = { usuario: localStorage.getItem('user')! }
-          this.loginService.CerrarSesion(requestLogout).toPromise();
+          if(localStorage.getItem('user') != null){
+            const requestLogout = { usuario: localStorage.getItem('user')! }
+            this.loginService.CerrarSesion(requestLogout).toPromise();
+          }
           this.loginService.enviaCondicion(false);
           localStorage.clear();
           if (this.router.url === '/mantenedor') {
@@ -116,8 +121,10 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
           this.openSnackBar("Hubo problemas, por favor comuniquese con Administrador.");
         } else if (error.status === 0) {
 
-          const requestLogout = { usuario: localStorage.getItem('user')! }
-          this.loginService.CerrarSesion(requestLogout).toPromise();
+          if(localStorage.getItem('user') != null){
+            const requestLogout = { usuario: localStorage.getItem('user')! }
+            this.loginService.CerrarSesion(requestLogout).toPromise();
+          }
           this.loginService.enviaCondicion(false);
           localStorage.clear();
           this.openSnackBar("Hubo problemas, por favor comuniquese con Administrador.");

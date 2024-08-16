@@ -7,11 +7,13 @@ export class AuthGuardService {
   constructor(private auth: AuthService, private router: Router, private loginService: LoginService) { }
   canActivate(): boolean {
     if (!this.auth.isAuthenticated() || this.auth.jwtHelper.isTokenExpired(localStorage.getItem('token')!)) {
-      this.router.navigateByUrl('');
-      if (localStorage.getItem('user')) {
+     
+      if (localStorage.getItem('user') != null) {
         const requestLogout = { usuario: localStorage.getItem('user')! }
         this.loginService.CerrarSesion(requestLogout).toPromise();
       }
+      this.loginService.enviaCondicion(false);
+      this.router.navigateByUrl('');
       return false;
     }
     return true;

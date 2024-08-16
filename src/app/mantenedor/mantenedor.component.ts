@@ -347,7 +347,7 @@ export class MantenedorComponent implements OnInit {
   ConsultarCiudades(elemento: Paises) {
 
     this.pais_id_cache = elemento.pais_id;
-    this.mantenedorService.ObtenerCiudades(elemento.pais_id.toString()).subscribe((datos) => {
+    this.mantenedorService.ObtenerCiudades(elemento.pais_id.toString(),localStorage.getItem('user')!).subscribe((datos) => {
       this.ciudades = datos;
       this.CiudadesData = datos;
       this.dataSourceCiudad.data = this.CiudadesData;
@@ -455,7 +455,7 @@ export class MantenedorComponent implements OnInit {
   IngresarCiudad() {
 
     if (this.ingresarCiudadFormGroup.valid && this.locationChose === true) {
-      const objeto: Ciudades = { ciudad_id: 0, pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString() };
+      const objeto: Ciudades = { ciudad_id: 0, pais_id: this.IngresaPaisIdCiudad, nombre_ciudad: this.IngresanombreCiudad, region: this.IngresaregionCiudad, poblacion: this.IngresapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString(),usuario:localStorage.getItem('user')! };
       this.mantenedorService.IngresarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;
@@ -496,7 +496,7 @@ export class MantenedorComponent implements OnInit {
   ModificarCiudad() {
 
     if (this.modificarCiudadFormGroup.valid && this.locationChose === true) {
-      const objeto = { pais_id: this.ModificaIdCiudadPais, ciudad_id: this.ModificaIdCiudad, nombre_ciudad: this.ModificanombreCiudad, region: this.ModificaregionCiudad, poblacion: this.ModificapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString() };
+      const objeto = { pais_id: this.ModificaIdCiudadPais, ciudad_id: this.ModificaIdCiudad, nombre_ciudad: this.ModificanombreCiudad, region: this.ModificaregionCiudad, poblacion: this.ModificapoblacionCiudad, latitud: this.lat!.toString(), longitud: this.lng!.toString(),usuario: localStorage.getItem('user')! };
       this.mantenedorService.ModificarCiudad(objeto).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;
@@ -605,8 +605,8 @@ export class MantenedorComponent implements OnInit {
 
       return;
     } else {
-      const objeto: Ciudades = { pais_id: element.pais_id, ciudad_id: element.ciudad_id, nombre_ciudad: "", region: "", poblacion: "", latitud: "", longitud: "" }
-      this.mantenedorService.EliminarCiudad(objeto).subscribe((datos) => {
+      const objeto: Ciudades = { pais_id: element.pais_id, ciudad_id: element.ciudad_id, nombre_ciudad: "", region: "", poblacion: "", latitud: "", longitud: "",usuario:"" }
+      this.mantenedorService.EliminarCiudad(objeto,localStorage.getItem('user')!).subscribe((datos) => {
         this.CiudadesData = datos;
         this.dataSourceCiudad.data = this.CiudadesData;
       }, (error) => {
