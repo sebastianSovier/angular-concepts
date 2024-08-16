@@ -10,7 +10,7 @@ export class AuthGuardService {
       this.router.navigateByUrl('');
       if (localStorage.getItem('user')) {
         const requestLogout = { usuario: localStorage.getItem('user')! }
-        this.loginService.CerrarSesion(requestLogout);
+        this.loginService.CerrarSesion(requestLogout).toPromise();
       }
       return false;
     }
