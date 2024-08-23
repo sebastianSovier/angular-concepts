@@ -45,7 +45,7 @@
             </div>
             <div>
                 <a target="_blank" (click)="nuevoUsuario();" style="color: white;margin-right: 15%;">Crear cuenta</a>
-                <a target="_blank" style="color: white;">Recuperar cuenta</a>
+                <a   routerLink="/recuperar" style="color: white;">Recuperar Password</a>
             </div>
             <div class="col-md-5 text-right" style="margin-top:5%;">
                 <button mat-raised-button color="primary" [disabled]="!loginForm.valid && recaptchaToken && recaptchaToken.score < 0.5">Ingresar</button>
@@ -56,7 +56,7 @@
 </mat-card>
 <ng-template #crearUsuario>
     <mat-card class="carta-crearusuario">
-        <form [formGroup]="crearCuentaForm" (ngSubmit)="CrearUsuario(crearCuentaForm)">
+        <form [formGroup]="crearCuentaForm" (ngSubmit)="executeImportantActionCrear(crearCuentaForm)">
             <div class="example-container" style="color: black;text-align: center;margin-top: 6%;margin-bottom: 20%;">
                 <div style="margin-right: 2%;">
                     <div>
@@ -118,10 +118,18 @@
                                     </ng-container>
                                   </mat-error>
                         </mat-form-field>
+                        <div *ngIf="recaptchaToken === null || recaptchaToken && recaptchaToken.score < 0.5">
+                            <recaptcha-v3 ></recaptcha-v3>
+                            
+                            <re-captcha (resolved)="resolveRecaptcha($event)"  (errored)="errored($event)" errorMode="handled"></re-captcha>
+                          </div>
+                          <div *ngIf="recaptchaToken && recaptchaToken.score >= 0.5 || tokenv2">
+                            <p>reCAPTCHA exitoso</p>
+                          </div>
                 </div>
                 </div>
                 <div class="col-md-5 text-right" style="margin-top:5%;">
-                    <button mat-raised-button color="primary" [disabled]="!crearCuentaForm.valid">Crear Usuario</button>
+                    <button mat-raised-button color="primary" [disabled]="!crearCuentaForm.valid && recaptchaToken && recaptchaToken.score < 0.5">Crear Usuario</button>
                     <button mat-raised-button color="accent" type="button" (click)="volver();"
                         style="margin-left: 10%;">Volver</button>
                 </div>

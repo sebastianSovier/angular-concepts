@@ -28,4 +28,18 @@ export class LoginService {
     const result: Observable<any> = this.http.post(environment.UrlWebApi +'/Account/IngresarUsuario', loginRequest);
     return result;
   }
+
+  SolicitarCodigo(loginRequest: any){
+    const result: Observable<any> = this.http.post(environment.UrlWebApi +'/Account/SolicitarCodigo', loginRequest);
+    return result;
+  }
+  ValidarCodigo(loginRequest: any){
+    const result: Observable<any> = this.http.post(environment.UrlWebApi +'/Account/ValidaCodigo', loginRequest);
+    return result;
+  }
+  
+  CambiarPassword(loginRequest: any){
+    const result: Observable<any> = this.http.post(environment.UrlWebApi +'/Account/CambiarPassword', loginRequest);
+    return result;
+  }
 }

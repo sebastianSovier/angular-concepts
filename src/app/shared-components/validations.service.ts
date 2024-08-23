@@ -49,4 +49,32 @@ export class ValidationsService {
       return control.errors ? Object.keys(control.errors) : [];
     }
   }
+  ConfirmedValidator(crearCuentaForm:UntypedFormGroup): ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const passwordConfirm = group.value as string;
+      const password = crearCuentaForm.value.contrasena as string;
+      if (crearCuentaForm && passwordConfirm) {
+        if (password !== passwordConfirm) {
+          return { notEquivalent: true };
+        }
+      } else {
+        return null;
+      }
+      return null;
+    };
+  }
+  ConfirmedValidatorPass(crearCuentaForm:UntypedFormGroup): ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const password = group.value as string;
+      const passwordConfirm = crearCuentaForm.value.contrasenaRepetir as string;
+      if (crearCuentaForm && passwordConfirm) {
+        if (password !== passwordConfirm) {
+          return { notEquivalent: true };
+        }
+      } else {
+        return null;
+      }
+      return null;
+    };
+  }
 }

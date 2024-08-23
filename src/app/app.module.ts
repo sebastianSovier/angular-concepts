@@ -31,6 +31,7 @@ import { RECAPTCHA_SETTINGS, RECAPTCHA_V3_SITE_KEY, RecaptchaFormsModule, Recapt
 import { environment } from 'src/environments/environment';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartGenericComponent } from './utilitarios/chart-generic.component';
+import { PasswordRecoverComponent } from './password-recover/password-recover.component';
 
 registerLocaleData(localeCl, localeClExtra);
 
@@ -41,7 +42,8 @@ registerLocaleData(localeCl, localeClExtra);
         MantenedorComponent,
         DialogOverviewExampleDialogComponent,
         ModalEditarPaisComponent,
-        ChartGenericComponent
+        ChartGenericComponent,
+        PasswordRecoverComponent
     ],
     imports: [
         BrowserModule,

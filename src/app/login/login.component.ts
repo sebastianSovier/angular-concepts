@@ -74,6 +74,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.onSubmit(token, f);
       });
   }
+  executeImportantActionCrear(f: UntypedFormGroup): void {
+    this.recaptchaSubscription = this.recaptchaV3Service.execute('create_user_action')
+      .subscribe((token) => {
+        this.recaptchaVerificado = false;
+        this.CrearUsuario(token, f);
+      });
+  }
   resolveRecaptcha(event: any): void {
     if (event) {
       this.recaptchaVerificado = true;
@@ -140,7 +147,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         if (datos.Error !== undefined) {
           if (datos.Error === "3") {
             this.recaptchaToken = { score: datos.score, token: datos.token };
-            this.openSnackBar("Credenciales Inválidas.");
+            this.openSnackBar("Recaptcha Fallido.");
           } else if (datos.Error === "93") {
             this.openSnackBar("Usuario ya se encuentra online.");
           }
@@ -172,13 +179,17 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
     }
   }
-  CrearUsuario(f: UntypedFormGroup) {
+  CrearUsuario(token: string,f: UntypedFormGroup) {
     if (f.valid) {
 
-      const loginRequest = { usuario: this.usuarioCrear, contrasena: this.contrasenaCrear, nombre_completo: this.nombre_completoCrear, correo: this.correoCrear };
+      const loginRequest = { usuario: this.usuarioCrear, contrasena: this.contrasenaCrear, nombre_completo: this.nombre_completoCrear, correo: this.correoCrear,token: token, tokenv2: this.tokenv2 };
 
       this.loginService.CrearUsuario(loginRequest).subscribe((datos) => {
         if (datos.Error !== undefined) {
+          if (datos.Error === "3") {
+            this.recaptchaToken = { score: datos.score, token: datos.token };
+            this.openSnackBar("Recaptcha fallido.");
+          }
           //localStorage.clear();
           this.openSnackBar("Hubo problemas al crear su usuario Intente nuevamente.");
         } else {
