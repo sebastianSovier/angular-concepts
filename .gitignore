@@ -1,49 +1,70 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# compiled output
-/dist
-/tmp
-/out-tsc
-# Only exists if Bazel was run
-/bazel-out
+# Dependency directories
+node_modules/
+jspm_packages/
 
-# dependencies
-/node_modules
+# Angular build output
+dist/
+out-tsc/
+build/
 
-# profiling files
-chrome-profiler-events*.json
+# Environment files
+src/environments/*.ts
+!src/environments/environment.prod.ts  # If you want to keep the production environment file
 
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+# Angular cache
+.angular/
 
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
+# IDE-specific files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
 
-# misc
-/.angular/cache
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
+# Compiled output
+*.dll
+*.exe
 
-# System Files
+# System files
 .DS_Store
 Thumbs.db
-/src/environments
-src/environments
-src\environments
+
+# Miscellaneous
+*.tgz
+*.lock
+package-lock.json
+yarn.lock
+
+# Temporary files for debugging
+.npm/
+.tmp/
+temp/
+
+# Compiled TypeScript
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm/
+.pnp/
+.pnp.js
+
+# Coverage directory used by testing tools
+coverage/
+
+# Ignore generated JSON files for local development
+src/assets/*.json
+!src/assets/i18n/*.json # Allow i18n files if used
+
+# Angular CLI
+.angular/cache
+
+# Other
+.vscode/
