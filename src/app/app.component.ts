@@ -10,7 +10,7 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'Proyecto Angular 17 aaa / Angular Material 15/ Express.js Middleware / Mysql/ Firebase Y Firebase Admin /Api Net Core 6 /Recaptcha v3 /Google maps ';
+  title = 'Proyecto Angular 17 / Angular Material 15/ Express.js Middleware / Mysql/ Firebase Y Firebase Admin /Api Net Core 6 /Recaptcha v3 /Google maps ';
   mostrar = false;
   recarga: boolean = false;
   constructor(private route: Router, private loginService: LoginService) {
