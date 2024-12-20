@@ -6,7 +6,7 @@ import { LoginService } from './login.service';
 import { FirebaseService } from '../shared-components/firebase.service';
 import { DatePipe } from '@angular/common';
 import { ValidationsService } from '../shared-components/validations.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ReCaptchaV3Service, } from 'ng-recaptcha';
 import { Subscription } from 'rxjs';
 import { Recaptcha } from '../models/recaptcha';
@@ -23,18 +23,27 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginRequest: any = {};
   login = true;
   private recaptchaSubscription: Subscription = new Subscription;
+  private validationService =  inject(ValidationsService);
+  private datepipe = inject(DatePipe);
+   private firebaseService = inject(FirebaseService);
+   
+  private fb =  inject(UntypedFormBuilder);
+  private loginService = inject(LoginService);
+  private router = inject(Router) 
+  private loading = inject(LoadingPageService)
+
   recaptchaToken: Recaptcha = new Recaptcha;
   tokenv2: string = '';
-  constructor(private recaptchaV3Service: ReCaptchaV3Service, private validationService: ValidationsService, private datepipe: DatePipe, private firebaseService: FirebaseService, fb: UntypedFormBuilder, private loginService: LoginService, private router: Router, private loading: LoadingPageService, private _snackBar: MatSnackBar) {
+  constructor(private recaptchaV3Service: ReCaptchaV3Service,private _snackBar: MatSnackBar) {
     //localStorage.clear();
-    this.loginForm = fb.group(
+    this.loginForm = this.fb.group(
       {
         usuario: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
         contrasena: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]]
 
       }
     );
-    this.crearCuentaForm = fb.group(
+    this.crearCuentaForm = this.fb.group(
       {
         usuario: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
         contrasena: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20), this.validationService.createPasswordStrengthValidator(), this.ConfirmedValidatorPass()]],
@@ -127,8 +136,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     //localStorage.clear();
     this.loading.cambiarestadoloading(false);
+    this.loginService.GetTokenCrsf().subscribe({next:(response)=>{
 
+    },error:()=>{
+      
+    }})
   }
+
+
+
 
   get usuario() { return this.loginForm.value.usuario }
   get contrasena() { return this.loginForm.value.contrasena; }

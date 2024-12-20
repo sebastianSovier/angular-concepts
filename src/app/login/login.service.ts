@@ -14,6 +14,11 @@ export class LoginService {
   enviaCondicion(mostrarMenu:boolean) {
     this.subject.next({ mostrarMenu });
   }
+  GetTokenCrsf() {
+   
+    const result: Observable<any> = this.http.get(environment.UrlWebApi +'/api/csrf-token',{ withCredentials: true });
+    return result;
+  }
   IniciarSesion(loginRequest: any) {
    
     const result: Observable<any> = this.http.post(environment.UrlWebApi +'/Account/Login', loginRequest);

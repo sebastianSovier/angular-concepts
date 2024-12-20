@@ -83,7 +83,7 @@
                   Excel</button>
                 <input type="file" hidden accept=".xlsx, .xls" #fileInputPais (change)="ImportarPais($event)">
                 <button mat-raised-button color="primary" (click)="fileInputPais.click()">Importar excel</button>
-                <button mat-raised-button color="primary" (click)="mostrarSidenav();">Mostrar graficos</button>
+                <button mat-raised-button color="primary" *ngIf="usuario === 'admin'" (click)="mostrarSidenav();">Mostrar graficos</button>
               </div>
 
             </form>

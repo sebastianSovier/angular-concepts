@@ -1,12 +1,18 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { Router } from "@angular/router";
-import { Observable, throwError, from } from "rxjs";
-import { catchError, map, switchMap } from "rxjs/operators";
-import { DecryptDataService } from "./decrypt-data.service";
-import { LoadingPageService } from "./loading-page/loading-page.service";
-import { LoginService } from "./login/login.service";
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse,
+} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { Observable, throwError, from } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { DecryptDataService } from './decrypt-data.service';
+import { LoadingPageService } from './loading-page/loading-page.service';
+import { LoginService } from './login/login.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -22,12 +28,16 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
     private _loadingService: LoadingPageService
   ) {}
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
     this._loadingService.cambiarestadoloading(true);
 
     const token: string = localStorage.getItem('token')!;
     let request = req;
-
+    const csrfToken = this.getCookie('XSRF-TOKEN');
+    let clonedRequest: HttpRequest<any> = req;
     return this.decryptService.encrypt(request).pipe(
       switchMap((encryptedBody) => {
         // Procesar la solicitud
@@ -41,27 +51,26 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
                   req.url.substring(req.url.indexOf('?') + 1, req.url.length)
                 )
               );
-            request = req.clone({
-              url: encriptURL,
-              ...(token && { setHeaders: { Authorization: 'Bearer ' + token } }),
-            });
+              request = req.clone({
+              url: encriptURL});
           }
         } else {
           request = req.clone({
-            body: encryptedBody,
-            ...(token && { setHeaders: { Authorization: 'Bearer ' + token } }),
-          });
+            body: encryptedBody});
         }
+        clonedRequest =  this.addAuthHeader(request,token,csrfToken);
 
-        return next.handle(request).pipe(
+        return next.handle(clonedRequest).pipe(
           switchMap(async (event: HttpEvent<any>) => {
             if (event instanceof HttpResponse && event.ok) {
               const contentType = event.headers.get('Content-Type');
               this._loadingService.cambiarestadoloading(false);
-  
+
               if (contentType?.includes('application/json')) {
                 // Uso de await para desencriptar el cuerpo
-                const decryptedBody = JSON.parse(await this.decryptService.decrypt(event).toPromise());
+                const decryptedBody = JSON.parse(
+                  await this.decryptService.decrypt(event).toPromise()
+                );
                 return event.clone({ body: decryptedBody });
               }
             }
@@ -73,7 +82,18 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
       catchError((error) => throwError(() => error)) // Catch genérico
     );
   }
-
+  private addAuthHeader(req: HttpRequest<any>,token:any,csrfToken:any): HttpRequest<any> {
+    const xsrfToken = csrfToken;
+        return req.clone({
+      withCredentials:true,
+      setHeaders: {
+        'Accept': 'application/json',
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        'X-XSRF-TOKEN': xsrfToken || ''    
+      },
+    });
+  }
   private handleError(
     error: any,
     next: HttpHandler,
@@ -98,8 +118,7 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
           }
         } else if ([500, 0].includes(error.status)) {
           this.handleServerError();
-        }
-        else {
+        } else {
           return next.handle(request);
         }
         return throwError(() => error);
@@ -125,10 +144,17 @@ export class AuthInterceptorServiceService implements HttpInterceptor {
     this.loginService.enviaCondicion(false);
     localStorage.clear();
     this.router.navigateByUrl('');
-    this.openSnackBar('Hubo problemas, por favor comuniquese con Administrador.');
+    this.openSnackBar(
+      'Hubo problemas, por favor comuniquese con Administrador.'
+    );
   }
 
   openSnackBar(message: string): void {
     this._snackBar.open(message);
+  }
+  private getCookie(name: string): string | null {
+    const xsrfToken = document.cookie.split(';').find((cookie) => cookie.trim().startsWith('XSRF-TOKEN='));
+    return xsrfToken ? decodeURIComponent(xsrfToken.split('=')[1]) : '';
+
   }
 }

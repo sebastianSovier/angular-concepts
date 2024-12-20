@@ -7,7 +7,14 @@ import { LoginComponent } from './login/login.component';
 import { MantenedorComponent } from './mantenedor/mantenedor.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { HttpClient, HttpClientJsonpModule, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  HttpClientJsonpModule,
+  HttpClientModule,
+  HTTP_INTERCEPTORS,
+  withXsrfConfiguration,
+  withInterceptorsFromDi,
+  provideHttpClient,
+} from '@angular/common/http';
 import { LoadingPageModule } from './loading-page/loading-page.module';
 import { LoadingPageService } from './loading-page/loading-page.service';
 
@@ -27,7 +34,14 @@ import { ModalEditarPaisComponent } from './modal-editar-pais/modal-editar-pais.
 import { MaterialModule } from './material/material.module';
 import { DecryptDataService } from './decrypt-data.service';
 import { FirebaseService } from './shared-components/firebase.service';
-import { RECAPTCHA_SETTINGS, RECAPTCHA_V3_SITE_KEY, RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings, RecaptchaV3Module } from 'ng-recaptcha';
+import {
+  RECAPTCHA_SETTINGS,
+  RECAPTCHA_V3_SITE_KEY,
+  RecaptchaFormsModule,
+  RecaptchaModule,
+  RecaptchaSettings,
+  RecaptchaV3Module,
+} from 'ng-recaptcha';
 import { environment } from 'src/environments/environment';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartGenericComponent } from './utilitarios/chart-generic.component';
@@ -36,57 +50,62 @@ import { PasswordRecoverComponent } from './password-recover/password-recover.co
 registerLocaleData(localeCl, localeClExtra);
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        LoginComponent,
-        MantenedorComponent,
-        DialogOverviewExampleDialogComponent,
-        ModalEditarPaisComponent,
-        ChartGenericComponent,
-        PasswordRecoverComponent
-    ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        HttpClientJsonpModule,
-        FormsModule,
-        ReactiveFormsModule,
-        CommonModule,
-        LoadingPageModule,
-        MaterialModule,
-        RecaptchaModule,
-        RecaptchaFormsModule,
-        RecaptchaV3Module,
-        NgChartsModule
-
-    ],
-    providers: [
-        DatePipe,
-        LoadingPageService,
-        AuthGuardService,
-        FirebaseService,
-        AuthService,
-        DecryptDataService,
-        { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-        JwtHelperService,
-        HttpClient, { provide: LOCALE_ID, useValue: 'es-CL' },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthInterceptorServiceService,
-            multi: true
-        },
-        {
-            provide: RECAPTCHA_SETTINGS,
-            useValue: {
-                siteKey: environment.recaptchakeyv2,
-            } as RecaptchaSettings,
-        },
-        { provide: RECAPTCHA_V3_SITE_KEY, useValue: environment.recaptchakey }
-    ],
-    bootstrap: [AppComponent], schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-    ]
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    MantenedorComponent,
+    DialogOverviewExampleDialogComponent,
+    ModalEditarPaisComponent,
+    ChartGenericComponent,
+    PasswordRecoverComponent,
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    HttpClientJsonpModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    LoadingPageModule,
+    MaterialModule,
+    RecaptchaModule,
+    RecaptchaFormsModule,
+    RecaptchaV3Module,
+    NgChartsModule,
+  ],
+  providers: [
+    DatePipe,
+    LoadingPageService,
+    AuthGuardService,
+    FirebaseService,
+    AuthService,
+    DecryptDataService,
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService,
+    { provide: LOCALE_ID, useValue: 'es-CL' },
+    provideHttpClient(
+      withXsrfConfiguration({
+        cookieName: 'XSRF-TOKEN', // Nombre de la cookie CSRF
+        headerName: 'X-XSRF-TOKEN', // Nombre del encabezado CSRF
+      }),
+      withInterceptorsFromDi()
+    ),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorServiceService,
+      multi: true,
+    },
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: {
+        siteKey: environment.recaptchakeyv2,
+      } as RecaptchaSettings,
+    },
+    { provide: RECAPTCHA_V3_SITE_KEY, useValue: environment.recaptchakey },
+  ],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule { }
+export class AppModule {}
